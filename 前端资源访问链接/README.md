@@ -9,6 +9,8 @@
 
 -   [瓶子君](https://github.com/sisterAn/JavaScript-Algorithms)
 
+-   [前端工匠](https://github.com/ljianshu/Blog)
+
 -   [github-Bulandent](https://github.com/Bulandent/blog/issues/)
 
 
@@ -27,7 +29,7 @@
 
 -   [高阶的函数技术](https://mp.weixin.qq.com/s/MtlazhwlKObRUgVDgaNtEQ)
 
-
+-   [25个你不得不知道的数组reduce高级用法](https://juejin.cn/post/6844904063729926152)
 
 
 # ES6
