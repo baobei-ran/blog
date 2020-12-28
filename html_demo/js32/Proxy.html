@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="https://mp.weixin.qq.com/s/YvqJJmDv75zyvxZEZ97zPQ" target="_blank">为什么采用Proxy重构响应系统 | Vue3源码系列</a>
+
+    <script>
+
+        /*
+            1. 语法     const proxy = new Proxy(target, handle)
+
+                * target 要使用 Proxy 包装的目标对象（可以是任何类型的对象，包括原生数组，函数，甚至另一个代理
+                * handler 一个通常以函数作为属性的对象，用来定制拦截行为
+        
+        */
+
+
+
+            // 例子：
+
+                const origins = { };
+
+                const obj = new Proxy(origins, {
+                    get: function (target, propKey, receiver) {
+                        return '10'
+                    }
+                })
+
+                console.log(obj.a)          // 10
+                console.log(origins.a)      // undefined
+
+
+            // 上方代码我们给一个空对象的get架设了一层代理，所有get操作都会直接返回我们定制的数字10，需要注意的是，代理只会对proxy对象生效，如上方的origin就没有任何效果
+
+
+            /*
+                                        Handler 对象常用的方法
+
+                    方法	                         描述
+                    ------------------------------------------------------------------------------------------------------------|
+                    handler.has()	              |  in 操作符的捕捉器。
+                    handler.get()	              |  属性读取操作的捕捉器。
+                    handler.set()	              |  属性设置操作的捕捉器。
+                    handler.deleteProperty()	  |  delete 操作符的捕捉器。
+                    handler.ownKeys()	          |  Object.getOwnPropertyNames 方法和 Object.getOwnPropertySymbols 方法的捕捉器。
+                    handler.apply()	              |  函数调用操作的捕捉器。
+                    handler.construct()	          |  new 操作符的捕捉器
+                    -------------------------------------------------------------------------------------------------------------|
+
+                    下面挑handler.get重点讲一下，其它方法的使用也都大同小异，不同的是参数的区别
+
+
+
+            */
+
+
+                
+
+            /*
+
+                handler.get
+
+
+                get我们在上面例子已经体验过了，现在详细介绍一下，用于代理目标对象的属性读取操作
+                
+                授收三个参数 get(target, propKey, ?receiver)
+                    * target 目标对象
+                    * propkey 属性名
+                    * receiver Proxy 实例本身
+
+            */
+
+
+            // 例如：
+
+                const person = {
+                    like: 'vuejs'
+                };
+
+                const obj2 = new Proxy(person, {
+                    get: function (target, propKey) {
+                        if (propKey in target) {
+                            return target[propKey]
+                        } else {
+                            throw new ReferenceError("Prop name \"" + propKey + "\" does not exist.");
+                        }
+                    }
+                })
+
+                console.log(obj2.like);
+                // console.log(obj2.test)   // 报错 Uncaught ReferenceError: Prop name "test" does not exist.
+
+            // 上面的代码表示在读取代理目标的值时，如果有值则直接返回，没有值就抛出一个自定义的错误
+
+            
+            /*
+                注意:
+                    如果要访问的目标属性是不可写以及不可配置的，则返回的值必须与该目标属性的值相同
+                    如果要访问的目标属性没有配置访问方法，即get方法是undefined的，则返回值必须为undefined
+
+
+
+                    如下面的例子
+            */
+
+                const obj3 = {}
+
+                Object.defineProperty(obj3, 'a', {
+                    configurable: false,
+                    enumerable: false,
+                    value: 10,
+                    writable: false
+                })
+
+
+                const p = new Proxy(obj3, {
+                    get: function (target, prop) {
+                        return 20
+                    }
+                })
+
+                // console.log(p.a)    // 报错： Uncaught TypeError: 'get' on proxy: property 'a' is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value (expected '10' but got '20')
+
+
+
+
+
+            
+        /**
+
+                可撤消的Proxy
+
+
+                    proxy有一个唯一的静态方法，Proxy.revocable(target, handler)
+                    Proxy.revocable()方法可以用来创建一个可撤销的代理对象
+                    该方法的返回值是一个对象，其结构为：{"proxy": proxy, "revoke": revoke}
+
+                        * proxy 表示新生成的代理对象本身，和用一般方式 new Proxy(target, handler) 创建的代理对象没什么不同，只是它可以被撤销掉。
+                        * revoke 撤销方法，调用的时候不需要加任何参数，就可以撤销掉和它一起生成的那个代理对象。
+
+                    该方法常用于完全封闭对目标对象的访问, 如下示例
+
+        */
+
+
+                const handle = {
+                    get: function (target, prop) {
+                        return target[prop]
+                    },
+                    set: function (target, prop, newProp) {
+                        if (target[prop] !== newProp) {
+                            target[prop] = newProp
+                        }
+                    }
+                }
+                const target = { name: 'vuejs' }
+                
+
+                const { proxy, revoke } = Proxy.revocable(target, handle);
+
+
+                console.log(proxy.name)
+                proxy.name = 'aa'
+                revoke()       // 取值完成对proxy进行封闭，撤消代理
+                // console.log(proxy.name) // 报错 无法在已撤消的代理上执行“get”
+
+
+
+        /*
+                Proxy的应用场景
+
+
+                Proxy的应用范围很广，下方列举几个典型的应用场景
+
+
+                校验器
+
+
+                    想要一个number，拿回来的却是string，惊不惊喜？意不意外？
+                    下面我们使用Proxy实现一个逻辑分离的数据格式验证器
+                    嗯，真香!
+        */
+
+
+            const target2 = {
+                _id: '1024',
+                name: 'vuejs'
+            }
+
+            const validators = {
+                name (val) {
+                    return typeof val === 'string'
+                },
+                _id (val) {
+                    return typeof val === 'number' && val > 1024;
+                }
+            }
+
+            const createValidators = (target, validator) => {
+                return new Proxy(target, {
+                    _validator: validator,
+                    set (target, propKey, value, proxy) {
+                        let validator1 = this._validator[propKey](value);
+                        if (validator1) {
+                            return Reflect.set(target, propKey, value, proxy)
+                        } else {
+                            console.log(propKey)
+                            throw Error(`Cannot set ${propKey} to ${value}. Invalid type.`)
+                        }
+                    }
+                })
+            }
+
+
+            const proxy2 = createValidators(target2, validators);
+            proxy2.name = 'v3.vuejs.com'
+            // proxy2.name = 888           // Uncaught Error: Cannot set name to 888. Invalid type.
+            proxy2._id = 10086
+            // proxy2._id = 110        // Uncaught Error: Cannot set _id to 110. Invalid type.
+            console.log(proxy2)
+
+
+
+
+
+        /*
+            私有属性
+
+                在日常编写代码的过程中，我们想定义一些私有属性，通常是在团队中进行约定，大家按照约定在变量名之前添加下划线 _ 或者其它格式来表明这是一个私有属性，但我们不能保证他能真正‘私有化’，
+                下面使用Proxy轻松实现私有属性拦截
+        
+        
+        */
+
+
+            const target3 = {
+                _id: '1024',
+                name:  'vuejs'
+            }
+
+            const proxy3 = new Proxy(target, {
+                get(target, propkey, proxy) {
+                    if(propkey[0] === '_') {
+                    throw Error(`${propkey} is restricted`)
+                    }
+                    return Reflect.get(target, propkey, proxy)
+                },
+                set(target, propkey, value, proxy) {
+                    if(propkey[0] === '_') {
+                    throw Error(`${propkey} is restricted`)
+                    }
+                    return Reflect.get(target, propkey, value, proxy)
+                }
+            })
+
+            proxy3.name // vuejs
+            // proxy3._id // Uncaught Error: _id is restricted
+            // proxy3._id = '1025' // Uncaught Error: _id is restricted
+
+        
+        // Proxy 使用场景还有很多很多，不再一一列举，如果你需要在某一个动作的生命周期内做一些特定的处理，那么Proxy 都是适合的
+
+
+                
+
+
+
+
+    </script>
+</body>
+</html>

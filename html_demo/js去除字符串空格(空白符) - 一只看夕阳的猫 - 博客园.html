@@ -1,0 +1,1843 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://www.cnblogs.com/a-cat/p/8872498.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin">
+    <meta name="description" content="使用js去除字符串内所带有空格，有以下三种方法： ( 1 ) replace正则匹配方法 去除字符串内所有的空格：str = str.replace(/\s*/g,&amp;quot;&amp;quot;); 去除字">
+    <meta property="og:description" content="使用js去除字符串内所带有空格，有以下三种方法： ( 1 ) replace正则匹配方法 去除字符串内所有的空格：str = str.replace(/\s*/g,&amp;quot;&amp;quot;); 去除字">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="https://common.cnblogs.com/favicon.svg" type="image/svg+xml">
+    
+    <link rel="stylesheet" href="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/blog-common.min.css">
+    <link id="MainCss" rel="stylesheet" href="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/bundle-codinglife.min.css">
+    <link type="text/css" rel="stylesheet" href="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/custom.css">
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/bundle-codinglife-mobile.min.css">
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/a-cat/rss">
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/a-cat/rsd.xml">
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/a-cat/wlwmanifest.xml">
+    <script src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/osd.js"></script><script async="" src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/analytics.js"></script><script type="text/javascript" src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/encoder.js"></script><script>
+        var currentBlogId = 413172;
+        var currentBlogApp = 'a-cat';
+        var cb_enable_mathjax = false;
+        var isLogined = false;
+        var isBlogOwner = false;
+        var skinName = 'CodingLife';
+        var visitorUserId = '';
+    </script>
+        <script>
+            var currentPostDateAdded = '2018-04-18 10:29';
+        </script>
+    <script src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/jquery-2.2.0.min.js"></script>
+    <script src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/blog-common.min.js"></script>
+    
+    
+    
+<script src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/pubads_impl_2020102901.js" async=""></script><link rel="preload" href="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/f.txt" as="script"><script type="text/javascript" src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/f.txt"></script><link rel="prefetch" href="https://63ea12d239540f8fb00367d523037697.safeframe.googlesyndication.com/safeframe/1-0-37/html/container.html"></head>
+<body class="no-navbar">
+    <a name="top"></a> 
+    <div id="top_nav" class="navbar navbar-custom">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding"><a href="https://www.cnblogs.com/" title="开发者的网上家园"><img src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/logo.svg" alt="博客园Logo"></a></li>
+                <li><a href="https://www.cnblogs.com/" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;skin-navbar-sitehome&#39;)">首页</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;skin-navbar-news&#39;)">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;skin-navbar-q&#39;)">博问</a></li>
+                <li><a id="nav_brandzone" href="https://brands.cnblogs.com/" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;skin-navbar-brands&#39;)">专区</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;skin-navbar-ing&#39;)">闪存</a></li>
+                <li><a href="https://edu.cnblogs.com/" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;skin-navbar-edu&#39;)">班级</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search" action="https://zzk.cnblogs.com/s" method="get">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="text" tabindex="3">
+                        <button type="submit" id="zzk_search_button">
+                            <img src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/search.svg" alt="搜索">
+                        </button>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx" alt="我的博客" title="我的博客" style="display: none;">
+                        <img id="myblog_icon" class="navbar-icon" src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/myblog.svg" alt="我的博客">
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息" style="display: none;">
+                        <img id="msg_icon" class="navbar-icon" src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/message.svg" alt="短消息">
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown" style="display: none;">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/">
+                            <img id="user_icon" class="navbar-avatar" src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/avatar-default.svg" alt="用户头像">
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://passport.cnblogs.com/GetBlogApplyStatus.aspx">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" onclick="logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup/" style="display: inline;">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="login()" style="display: inline;">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <div id="page_begin_html">
+        <div id="background" class="container" style="background-color: rgb(70, 156, 206);">
+    <!-- svg file -->
+    <svg id="svgout" height="100%" width="100%" viewBox="0 0 550 400" style="transform: matrix(1, 0, 0, 1, 0, 0);">
+        <defs>
+            <g id="bottomShadow">
+                <path fill="#000000" stroke="none" d="
+		M 270.5 225.95
+		L 127.35 316.65 266.8 400 409.6 309.25 270.5 225.95 Z"></path>
+            </g>
+            <g id="Layer52_0_FILL">
+                <path class="topGrass" fill="#B9D668" stroke="none" d="
+	M 397.85 229.3
+	L 397.85 225.6 269.85 152 135.75 228.6 135.75 233.65 262.1 306.55 397.85 229.3 Z"></path>
+            </g>
+
+            <g id="Layer51_0_FILL">
+                <path class="leftSideGrass" fill="#6E9E4F" stroke="none" d="
+	M 135.1 229.95
+	L 135.1 256.85 262.1 328.4 262.1 301.85 135.1 229.95 Z"></path>
+            </g>
+
+            <g id="Layer50_0_FILL">
+                <path class="rightGrassTop" fill="#8CB154" stroke="none" d="
+	M 397.85 225.95
+	L 395.8 225.95 261.75 301.55 261.75 328.4 397.85 251.15 397.85 225.95 Z"></path>
+            </g>
+
+            <g id="Layer48_0_FILL">
+                <path class="crustLeftTop" fill="#955541" stroke="none" d="
+	M 135.45 282.4
+	L 135.75 298.15 262.1 372.1 261.75 355.65 135.45 282.4 Z"></path>
+            </g>
+
+            <g id="Layer47_0_FILL">
+                <path class="middleLeftCrust" fill="#C77E61" stroke="none" d="
+	M 135.1 270.3
+	L 135.1 283.05 275.9 364.35 271.85 348.9 135.1 270.3 Z"></path>
+            </g>
+
+            <g id="Layer46_0_FILL">
+                <path class="crustLeftTop" fill="#955541" stroke="none" d="
+	M 135.1 255.15
+	L 135.1 270.3 262.1 343.55 262.1 328.05 135.1 255.15 Z"></path>
+            </g>
+
+            <g id="Layer45_0_FILL">
+                <path class="topRightCrust" fill="#A47237" stroke="none" d="
+	M 397.5 294.5
+	L 397.5 277 261.75 355.3 261.75 372.75 397.5 294.5 Z"></path>
+            </g>
+
+            <g id="Layer44_0_FILL">
+                <path class="middleRightCrust" fill="#C89451" stroke="none" d="
+	M 397.5 269.95
+	L 397.15 266.6 262.1 343.2 262.1 355.95 397.5 279.7 397.5 269.95 Z"></path>
+            </g>
+
+            <g id="Layer43_0_FILL">
+                <path class="topRightCrust" fill="#A47237" stroke="none" d="
+	M 397.5 266.6
+	L 397.5 250.45 261.75 328.4 261.75 343.85 397.5 266.6 Z"></path>
+            </g>
+
+            <g id="Layer41_0_FILL">
+                <path class="greyRoad" fill="#B2B2B1" stroke="none" d="
+	M 295.05 283.05
+	Q 299.05 280.35 308.45 275.3 317.85 269.95 323.6 266.9
+	L 268.8 233.65 338.05 191.35 309.15 174.55 177.75 254.5
+	Q 191.55 262.2 198.25 266.25 204.65 269.95 209.7 271.95
+	L 241.6 250.45 295.05 283.05 Z"></path>
+            </g>
+
+            <g id="Layer40_0_FILL">
+                <path fill="#FFFFFF" stroke="none" d="
+	M 199.95 256.85
+	Q 194.55 261.2 191.9 262.2
+	L 194.9 263.9 200.95 259.2 199.95 256.85
+	M 225.8 243.75
+	L 224.8 241.75 211.05 250.8 212.05 252.8 225.8 243.75
+	M 308.15 275.65
+	L 296.7 266.6 295.35 268.6 306.8 277.7 308.15 275.65
+	M 275.9 253.5
+	L 274.55 255.5 285.95 264.55 287.3 262.55 275.9 253.5
+	M 251.7 227.3
+	L 250.7 225.25 236.9 234.35 237.9 236.35 251.7 227.3
+	M 257.05 240.7
+	L 254.05 240.7 268.8 249.8 269.5 247.75 257.05 240.7
+	M 277.2 207.8
+	L 263.45 216.85 264.45 218.9 278.25 209.8 277.2 207.8
+	M 305.1 192.65
+	L 304.1 190.65 290.3 199.75 291.35 201.75 305.1 192.65 Z"></path>
+            </g>
+
+            <g id="Layer38_0_FILL">
+                <path class="frontFascia" fill="#ECB27B" stroke="none" d="
+	M 359.25 187.95
+	L 346.4 174.95 333.85 202.9 359.25 187.95 Z"></path>
+            </g>
+
+            <g id="Layer37_0_FILL">
+                <path class="frontWall" fill="#EFA258" stroke="none" d="
+	M 334 201.05
+	L 334.35 232 359.2 217.55 359.25 187.95 334 201.05 Z"></path>
+            </g>
+
+            <g id="Layer36_0_FILL">
+                <path class="leftWall" fill="#C57F42" stroke="none" d="
+	M 334.35 232.3
+	L 334.35 205.1 305.1 191.35 305.1 216.85 334.35 232.3 Z"></path>
+            </g>
+
+            <g id="Layer35_0_FILL">
+                <path class="rightRoof" fill="#EF4427" stroke="none" d="
+	M 329.7 167.9
+	L 331.05 167.9 344.55 176.7 347.85 176.7 363 192.25 363.15 189.55 350.65 176.7 350.55 176.7 334.25 167.5 334.25 159.1 329.7 159.1 329.7 164.9 322.65 160.95 322.3 162.15 329.7 167 329.7 167.9 Z"></path>
+            </g>
+
+            <g id="Layer34_0_FILL">
+                <path class="leftRoof" fill="#F2563B" stroke="none" d="
+	M 334.05 207.05
+	L 350.65 176.7 322.1 160.45 302.1 192.05 334.05 207.05 Z"></path>
+            </g>
+
+            <g id="Layer30_0_FILL">
+                <path id="windowFour" class="windows" stroke="none" fill="#975A42" d="
+	M 341.35 203.3
+	Q 340.9 203.45 340.5 203.8 340.1 204.2 339.85 204.75 339.7 205 339.7 205.3 339.6 205.75 339.7 206.1 339.7 206.15 339.7 206.2 339.8 206.5 340 206.8 340.55 207.4 341.45 207.4 342.35 207.4 343 206.8 343.4 206.5 343.65 206.1 343.85 205.75 343.95 205.3 344.05 204.4 343.55 203.8 343.3 203.45 343 203.3 342.65 203.15 342.2 203.15 341.8 203.15 341.35 203.3
+	M 355.85 198.45
+	Q 355.8 198.2 355.6 198 355.1 197.4 354.2 197.4 353.35 197.4 352.6 198 351.85 198.65 351.7 199.55 351.7 199.7 351.7 199.85 351.6 200.5 352 201.05 352.55 201.65 353.45 201.65 354.3 201.65 355.05 201.05 355.45 200.7 355.7 200.25 355.8 200.05 355.9 199.85 355.95 199.7 355.95 199.55 356.05 198.95 355.85 198.45 Z"></path>
+
+                <path class="door" fill="#B65041" stroke="none" d="
+	M 351.95 211.2
+	L 351.8 211.2 346.05 215.1 346.05 225.2 351.95 221.6 351.95 211.2
+	M 351.2 211.2
+	L 351.35 211.2 351.35 211.1 351.2 211.2 Z"></path>
+            </g>
+
+            <g>
+                <path id="Layer30_0_FILL" fill="#000000" fill-opacity="1" stroke="none" d="
+	M 183.7 215.3
+	L 183.7 215.6
+	Q 187.25 231.75 212.25 234.35
+	L 183.7 215.3 Z"></path>
+            </g>
+
+            <g id="Layer29_0_FILL">
+                <path fill="#000000" fill-opacity="0.4" stroke="none" d="
+	M 305.1 216.85
+	L 305.15 217.2
+	Q 309.45 233.2 334.35 232.3
+	L 305.1 216.85 Z"></path>
+            </g>
+
+            <g id="Layer27_0_FILL">
+                <path class="vegetation" fill="#78A950" stroke="none" d="
+	M 177.45 231.65
+	Q 175.75 235.35 181.8 239.35 185.5 235.7 185.15 231.3 182.8 230.65 181.45 234 179.45 231.3 177.45 231.65
+	M 236.9 266.6
+	Q 235.2 270.3 241.25 274.3 244.95 270.6 244.65 266.25 242.3 265.6 240.95 268.95 238.9 266.25 236.9 266.6
+	M 254.7 277
+	Q 253.05 280.7 259.1 284.75 262.75 281.05 262.45 276.65 260.1 276 258.75 279.35 256.7 276.65 254.7 277
+	M 315.5 245.75
+	Q 313.5 243.05 311.5 243.4 309.8 247.1 315.85 251.15 319.55 247.45 319.2 243.05 316.85 242.4 315.5 245.75
+	M 295.35 232.65
+	Q 293.7 236.35 299.75 240.4 303.45 236.7 303.1 232.3 300.75 231.65 299.4 235 297.4 232.3 295.35 232.65
+	M 277.2 171.85
+	Q 275.55 175.55 281.6 179.55 285.3 175.85 284.95 171.5 282.6 170.85 281.25 174.2 279.25 171.5 277.2 171.85 Z"></path>
+            </g>
+
+            <g id="Layer26_0_FILL">
+                <path class="treeWood" fill="#AE663D" stroke="none" d="
+	M 175.1 177.55
+	L 172.05 177.55 172.05 191.1 159.3 172.85
+	Q 154.6 171.5 172.05 195.7
+	L 172.05 212.5 175.1 212.5 175.1 177.55
+	M 252.7 151.35
+	L 249 151.35 249 176.9 252.7 176.9 252.7 151.35 Z"></path>
+            </g>
+
+            <g id="Layer25_0_FILL">
+                <path class="vegetation" fill="#77A951" stroke="none" d="
+	M 192.55 179.55
+	Q 200.95 173.5 200.95 165.1 200.95 156.4 192.55 150 184.15 144.3 172.05 144.3 160.3 144.3 151.9 150 143.15 156.4 143.15 165.1 143.15 173.5 151.9 179.55 160.3 185.95 172.05 185.95 184.15 185.95 192.55 179.55
+	M 236.25 106.65
+	Q 230.2 116.05 230.2 129.15 230.2 142.25 236.25 151.35 242.3 160.75 250.7 160.75 258.75 160.75 264.8 151.35 270.85 142.25 270.85 129.15 270.85 116.05 264.8 106.65 258.75 97.6 250.7 97.6 242.3 97.6 236.25 106.65 Z"></path>
+            </g>
+
+            <g id="Layer24_0_FILL">
+                <path class="vegetation" fill="#77A951" stroke="none" d="
+	M 158.3 221.9
+	Q 160.65 221.9 161.95 220.2 163 219.55 163.3 218.55 164.65 218.9 166.35 218.9 170.05 218.9 172.4 216.2 175.1 213.85 175.1 210.15 175.1 206.45 172.4 203.75 170.05 201.4 166.35 201.4 162.65 201.4 159.95 203.75 157.6 206.45 157.6 210.15 157.6 210.8 157.6 211.15 155.95 211.5 154.6 212.5 152.9 214.15 152.9 216.55 152.9 218.9 154.6 220.2 156.25 221.9 158.3 221.9
+	M 338.35 240.05
+	Q 341.05 237.7 341.05 234 341.05 230.3 338.35 227.6 336 225.25 332.3 225.25 328.65 225.25 325.95 227.6 323.6 230.3 323.6 234 323.6 237.7 325.95 240.05 328.65 242.75 332.3 242.75 336 242.75 338.35 240.05 Z"></path>
+            </g>
+
+            <g id="Layer22_0_FILL">
+                <path class="rightRoof" fill="#D05041" stroke="none" d="
+	M 220 173.85
+	L 236.8 186.7 264.35 171.15 244.5 159.55 220 173.85 Z"></path>
+            </g>
+
+            <g id="Layer21_0_FILL">
+                <path class="leftWall" fill="#C57F42" stroke="none" d="
+	M 212.25 191.35
+	L 183.35 172.3 183.7 215.3 212.25 234.35 212.25 191.35 Z"></path>
+            </g>
+
+            <g id="Layer20_0_FILL">
+                <path class="rightRoof" fill="#EF4427" stroke="none" d="
+	M 192.1 149.85
+	L 236.45 174.8 243.1 171.4
+	Q 220.05 150.55 196.3 139.95
+	L 192.1 149.85 Z"></path>
+            </g>
+
+            <g id="Layer19_0_FILL">
+                <path class="frontFascia" fill="#EBB17B" stroke="none" d="
+	M 226.85 160.95
+	L 212 190.6 229.75 192.6 239.75 172.85 226.85 160.95 Z"></path>
+            </g>
+
+            <g id="Layer18_0_FILL">
+                <path class="frontWall" fill="#EFA258" stroke="none" d="
+	M 240.15 172.65
+	L 211.9 191.6 212.25 233.65 264.35 201.7 264.35 170.8 240.8 184.45 240.15 172.65 Z"></path>
+            </g>
+
+            <g id="Layer17_0_FILL">
+                <path class="rightRoof" fill="#EF4427" stroke="none" d="
+	M 210.9 142.2
+	L 205.9 142.2 205.9 152.65 210.9 152.65 210.9 142.2 Z"></path>
+            </g>
+
+            <g>
+                <path id="Layer16_0_FILL" class="leftRoof" fill="#F2563B" stroke="none" d="
+	M 210.25 195.5
+	L 227.4 160.95 195.45 141.35 177.65 175.85 210.25 195.5 Z"></path>
+            </g>
+
+            <g>
+                <path id="sun" fill="#E3BD0E" stroke="none" d="
+	M 257.05 15.95
+	Q 251.7 15.95 248 19.65 244.3 23.35 244.3 28.7 244.3 34.1 248 37.8 251.7 41.5 257.05 41.5 262.45 41.5 266.15 37.8 269.85 34.1 269.85 28.7 269.85 23.35 266.15 19.65 262.45 15.95 257.05 15.95 Z" data-svg-origin="244.3000030517578 15.949999809265137" transform="matrix(1,0,0,1,0,0)"></path>
+            </g>
+
+            <g id="Layer8_0_FILL">
+                <path fill="#975A42" stroke="none" d="
+	M 238.45 189.65
+	Q 238.295703125 189.362109375 238.05 189.1 237.35 188.3 236.2 188.3 235.05 188.3 234.15 189.1 233.3 189.9 233.2 191.05 233.1 192.2 233.8 193 234.55 193.8 235.7 193.8 236.85 193.8 237.7 193 238.1970703125 192.558203125 238.45 192 238.6552734375 191.56484375 238.7 191.05 238.7671875 190.276953125 238.45 189.65
+	M 220.55 197.55
+	Q 220 197.55 219.5 197.75 218.95 197.95 218.5 198.35 217.933203125 198.8833984375 217.7 199.55 217.5833984375 199.916796875 217.55 200.3 217.4923828125 200.96171875 217.7 201.5 217.852734375 201.9103515625 218.15 202.25 218.95 203.05 220.1 203.05 221.25 203.05 222.05 202.25 222.95 201.45 223.05 200.3 223.15 199.15 222.4 198.35 222.05 197.95 221.65 197.75 221.15 197.55 220.55 197.55 Z"></path>
+            </g>
+
+            <g id="Layer7_0_FILL">
+                <path class="door" fill="#B65041" stroke="none" d="
+	M 233.55 206.75
+	L 225.9 211.95 226.25 225.5 233.95 220.35 233.55 206.75 Z"></path>
+            </g>
+
+            <g>
+                <path id="windowOne" class="windows" fill="#975A42" stroke="none" d="
+	M 188.65 198.4
+	L 188.8 204.1 198.65 210.45 198.55 204.75 188.65 198.4
+	M 208.45 216.8
+	L 208.35 211.1 198.55 204.75 198.65 210.45 208.45 216.8
+	M 188.8 204.1
+	L 188.95 209.8 198.8 216.15 198.65 210.45 188.8 204.1
+	M 208.6 222.5
+	L 208.45 216.8 198.65 210.45 198.8 216.15 208.6 222.5 Z"></path>
+            </g>
+
+            <g>
+                <path id="windowThree" class="windows" fill="#975A42" stroke="none" d="
+	M 311.7 214.1
+	L 318.55 217.55 318.45 211.9 311.6 208.45 311.7 214.1
+	M 325.4 221
+	L 325.25 215.35 318.45 211.9 318.55 217.55 325.4 221
+	M 318.4 206.2
+	L 311.5 202.75 311.6 208.45 318.45 211.9 318.4 206.2
+	M 325.25 215.35
+	L 325.2 209.7 318.4 206.2 318.45 211.9 325.25 215.35 Z"></path>
+            </g>
+
+            <g id="Layer2_0_FILL">
+                <path class="door" fill="#B65041" stroke="none" d="
+	M 259.7 183.25
+	L 244.6 191.9 244.6 213.8 259.7 204.55 259.7 183.25 Z"></path>
+            </g>
+
+
+            <path id="windowTwo" fill="#975A42" class="windows" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" d="
+	M 223.05 200.3
+	Q 222.95 201.45 222.05 202.25 221.25 203.05 220.1 203.05 218.95 203.05 218.15 202.25 217.852734375 201.9103515625 217.7 201.5 217.4923828125 200.96171875 217.55 200.3 217.5833984375 199.916796875 217.7 199.575 217.933203125 198.8833984375 218.5 198.35 218.95 197.95 219.5 197.75 220 197.55 220.55 197.55 221.15 197.55 221.65 197.75 222.05 197.95 222.4 198.35 223.15 199.15 223.05 200.3 Z
+	M 238.7 191.05
+	Q 238.6552734375 191.56484375 238.45 192 238.1970703125 192.558203125 237.7 193 236.85 193.8 235.7 193.8 234.55 193.8 233.8 193 233.1 192.2 233.2 191.05 233.3 189.9 234.15 189.1 235.05 188.3 236.2 188.3 237.35 188.3 238.05 189.1 238.295703125 189.362109375 238.45 189.65 238.7671875 190.276953125 238.7 191.05 Z"></path>
+
+            <path fill="#F2563B" stroke="none" d=" M 351.95 211.2 L 351.8 211.2 346.05 215.1 346.05 225.2 351.95 221.6 351.95 211.2 Z"></path>
+
+            <path id="Layer6_0_1_STROKES" class="windowRims" stroke="#AE663D" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+	M 198.55 204.75
+	L 208.35 211.1 208.45 216.8 208.6 222.5 198.8 216.15 188.95 209.8 188.8 204.1 188.65 198.4 198.55 204.75 198.65 210.45 208.45 216.8
+	M 198.8 216.15
+	L 198.65 210.45 188.8 204.1"></path>
+
+            <path id="Layer5_0_1_STROKES" class="windowRims" stroke="#AE663D" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+	M 325.25 215.35
+	L 325.4 221 318.55 217.55 311.7 214.1 311.6 208.45 311.5 202.75 318.4 206.2 325.2 209.7 325.25 215.35 318.45 211.9 318.55 217.55
+	M 318.4 206.2
+	L 318.45 211.9 311.6 208.45"></path>
+        </defs>
+
+        <g id="shadow" style="opacity: 0.0309;">
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use xlink:href="#bottomShadow"></use>
+            </g>
+        </g>
+
+
+        <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+            <use xlink:href="#sun"></use>
+        </g>
+
+        <g id="earth" data-svg-origin="135.10000610351562 97.5999984741211" transform="matrix(1,0,0,1,0,2.550640443420429)">
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer52_0_FILL" data-svg-origin="135.75 152" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer51_0_FILL" data-svg-origin="135.10000610351562 229.9499969482422" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer50_0_FILL" data-svg-origin="261.75 225.9499969482422" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer48_0_FILL" data-svg-origin="135.4499969482422 282.3999938964844" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer47_0_FILL" data-svg-origin="135.10000610351562 270.29998779296875" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer46_0_FILL" data-svg-origin="135.10000610351562 255.14999389648438" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer45_0_FILL" data-svg-origin="261.75 277" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer44_0_FILL" data-svg-origin="262.1000061035156 266.6000061035156" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer43_0_FILL" data-svg-origin="261.75 250.4499969482422" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer41_0_FILL" data-svg-origin="177.75 174.5500030517578" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer40_0_FILL" data-svg-origin="191.89999389648438 190.64999389648438" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer38_0_FILL" data-svg-origin="333.8500061035156 174.9499969482422" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer37_0_FILL" data-svg-origin="334 187.9499969482422" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer36_0_FILL" data-svg-origin="305.1000061035156 191.35000610351562" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer35_0_FILL" data-svg-origin="322.29998779296875 159.10000610351562" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer34_0_FILL" data-svg-origin="302.1000061035156 160.4499969482422" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#windowFour" data-svg-origin="339.6500244140625 197.39999389648438" transform="matrix(1,0,0,1,0,0)"></use>
+
+                <use class="element" xlink:href="#Layer32_0_1_STROKES" data-svg-origin="0 0" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer30_0_FILL" data-svg-origin="339.6500244140625 197.39999389648438" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer27_0_FILL" data-svg-origin="177.0771026611328 171.39437866210938" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer26_0_FILL" data-svg-origin="158.30271911621094 151.35000610351562" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer25_0_FILL" data-svg-origin="143.14999389648438 97.5999984741211" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer24_0_FILL" data-svg-origin="152.89999389648438 201.39999389648438" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer22_0_FILL" data-svg-origin="220 159.5500030517578" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer21_0_FILL" data-svg-origin="183.35000610351562 172.3000030517578" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer20_0_FILL" data-svg-origin="192.10000610351562 139.9499969482422" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer19_0_FILL" data-svg-origin="212 160.9499969482422" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer18_0_FILL" data-svg-origin="211.89999389648438 170.8000030517578" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer17_0_FILL" data-svg-origin="205.89999389648438 142.1999969482422" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer16_0_FILL" data-svg-origin="177.64999389648438 141.35000610351562" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+
+
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer8_0_FILL" data-svg-origin="217.53749084472656 188.3000030517578" transform="matrix(1,0,0,1,0,0)"></use>
+
+                <use class="element" xlink:href="#windowTwo" data-svg-origin="217.53749084472656 188.3000030517578" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer7_0_FILL" data-svg-origin="225.89999389648438 206.75" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#windowOne" data-svg-origin="188.64999389648438 198.39999389648438" transform="matrix(1,0,0,1,0,0)"></use>
+
+                <use class="element" xlink:href="#Layer6_0_1_STROKES" data-svg-origin="188.64999389648438 198.39999389648438" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#windowThree" data-svg-origin="311.5 202.75" transform="matrix(1,0,0,1,0,0)"></use>
+
+                <use class="element" xlink:href="#Layer5_0_1_STROKES" data-svg-origin="311.5 202.75" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+            <g transform="matrix( 1, 0, 0, 1, 0,0) ">
+                <use class="element" xlink:href="#Layer2_0_FILL" data-svg-origin="244.60000610351562 183.25" transform="matrix(1,0,0,1,0,0)"></use>
+            </g>
+
+
+        </g>
+
+    </svg>
+    <!-- -- End of SVG file ---->
+    <!-- -- Moon/Sun Toggle ---->
+    <div id="toggleButton" class="day-toggle" style="transform: matrix(1, 0, 0, 1, 0, 0);">
+        <div class="sun-icon"></div>
+        <label class="switch">
+            <input id="toggleCheckbox" type="checkbox">
+            <div class="slider"></div>
+        </label>
+        <div class="cloud-icon"></div>
+    </div>
+    <!-- -- Moon/Sun Toggle ---->
+
+    <div class="new-year">Happy New Year!</div>
+
+    <!-- -- End of Container ---->
+</div>
+    </div>
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/a-cat/"><img id="blogLogo" src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/logo.gif" alt="返回主页"></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/a-cat/">一只看夕阳的猫</a>
+</h1>
+<h2>
+享受孤独，向往美好...
+</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/a-cat/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E4%B8%80%E5%8F%AA%E7%9C%8B%E5%A4%95%E9%98%B3%E7%9A%84%E7%8C%AB">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/a-cat/rss/">
+订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<span id="stats_post_count">随笔 - 
+49&nbsp; </span>
+<span id="stats_article_count">文章 - 
+2&nbsp; </span>
+<span id="stats-comment_count">评论 - 
+43</span>
+
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class="postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/a-cat/p/8872498.html">
+    <span>js去除字符串空格(空白符)</span>
+    
+
+
+</a>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                
+<div id="cnblogs_post_body" class="blogpost-body">
+    <p>使用js去除字符串内所带有空格，有以下三种方法：</p>
+<p><span style="font-size: 16px"><strong>( 1 ) replace正则匹配方法</strong></span></p>
+<p>　　去除字符串内所有的空格：str = str.replace(/\s*/g,"");</p>
+<p>　　去除字符串内两头的空格：str = str.replace(/^\s*|\s*$/g,"");</p>
+<p>　　去除字符串内左侧的空格：str = str.replace(/^\s*/,"");</p>
+<p>　　去除字符串内右侧的空格：str = str.replace(/(\s*$)/g,"");</p>
+<p>　　<strong>示例：</strong></p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 255, 1)">var</span> str = " 6 6 "<span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 0, 255, 1)">var</span> str_1 = str.replace(/\s*/g,""<span style="color: rgba(0, 0, 0, 1)">);
+console.log(str_1); </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">66</span></pre>
+</div>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 255, 1)">var</span> str = " 6 6 "<span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 0, 255, 1)">var</span> str_1 = str.replace(/^\s*|\s*$/g,"");<span style="color: rgba(0, 0, 0, 1)">
+console.log(str_1); </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">6 6</span>//输出左右侧均无空格</pre>
+<pre></pre>
+</div>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 255, 1)">var</span> str = " 6 6 "<span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 0, 255, 1)">var</span> str_1 = str.replace(/^\s*/,"");<span style="color: rgba(0, 0, 0, 1)">
+console.log(str_1); </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">6 6 //输出右侧有空格左侧无空格</span></pre>
+</div>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 255, 1)">var</span> str = " 6 6 "<span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 0, 255, 1)">var</span> str_1 = str.replace(/(\s*$)/g,"");<span style="color: rgba(0, 0, 0, 1)">
+console.log(str_1); </span><span style="color: rgba(0, 128, 0, 1)">// </span><span style="color: rgba(0, 128, 0, 1)">6 6/</span>/输出左侧有空格右侧无空格</pre>
+<pre></pre>
+</div>
+<p>&nbsp;</p>
+<p><span style="font-size: 16px"><strong>( 2 ) str.trim()方法</strong></span></p>
+<p>　　trim()方法是用来删除字符串两端的空白字符并返回，trim方法并不影响原来的字符串本身，它返回的是一个新的字符串。</p>
+<p>　　缺陷：只能去除字符串两端的空格，不能去除中间的空格</p>
+<p>　　<strong>示例：</strong></p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 255, 1)">var</span> str = " 6 6 "<span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 0, 255, 1)">var</span> str_1 = str.trim()<span style="color: rgba(0, 0, 0, 1)">;
+console.log(str_1); </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">6 6//输出左右侧均无空格</span></pre>
+</div>
+<p>　　单独去除左侧空格则使用 str.trimLeft(); //var str_1 = str.trimLeft();</p>
+<p>　　单独去除右侧空格则使用&nbsp;str.trimRight();//var str_1 = str.trimRight();</p>
+<p>&nbsp;</p>
+<p><strong><span style="font-size: 16px">( 3 ) JQ方法：$.trim(str)方法</span></strong></p>
+<p>　　$.trim() 函数用于去除字符串两端的空白字符。</p>
+<p>　　<strong>注意：</strong>$.trim()函数会移除字符串开始和末尾处的所有换行符，空格(包括连续的空格)和制表符。如果这些空白字符在字符串中间时，它们将被保留，不会被移除。</p>
+<p>　　<strong>示例：</strong></p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 255, 1)">var</span> str = " 6 6 "<span style="color: rgba(0, 0, 0, 1)">;
+</span><span style="color: rgba(0, 0, 255, 1)">var</span> str_1 =<span style="color: rgba(0, 0, 0, 1)"> $.trim(str);
+console.log(str_1); </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">6 6//输出左右侧均无空格</span></pre>
+</div>
+<p>&nbsp;</p>
+</div>
+<div id="MySignature" style="display: block;"> ———————————— 方向错了，停下来就是进步 ————————————</div>
+<div class="clear"></div>
+<div id="blog_post_info_block"><div id="BlogPostCategory">
+    分类: 
+            <a href="https://www.cnblogs.com/a-cat/category/1167922.html" target="_blank">js</a></div>
+<div id="EntryTag">
+    标签: 
+            <a href="https://www.cnblogs.com/a-cat/tag/js%E5%8E%BB%E9%99%A4%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%A9%BA%E6%A0%BC/">js去除字符串空格</a>,             <a href="https://www.cnblogs.com/a-cat/tag/%E5%8E%BB%E9%99%A4%E7%A9%BA%E7%99%BD%E7%AC%A6/">去除空白符</a>,             <a href="https://www.cnblogs.com/a-cat/tag/%E5%8E%BB%E9%99%A4%E7%A9%BA%E6%A0%BC/">去除空格</a></div>
+
+    <div id="blog_post_info">
+<div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(8872498,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+        <a id="green_channel_follow" onclick="follow(&#39;5a095855-884e-4655-9419-08d5782f1af4&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/a-cat/" target="_blank"><img src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/20180226151349.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/a-cat/">一只看夕阳的猫</a><br>
+            <a href="https://home.cnblogs.com/u/a-cat/followees/">关注 - 3</a><br>
+            <a href="https://home.cnblogs.com/u/a-cat/followers/">粉丝 - 115</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;5a095855-884e-4655-9419-08d5782f1af4&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(8872498,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">10</span>
+    </div>
+    <div class="buryit" onclick="votePost(8872498,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+    <div class="clear"></div>
+    <div id="post_next_prev">
+
+    <a href="https://www.cnblogs.com/a-cat/p/8856144.html" class="p_n_p_prefix">« </a> 上一篇：    <a href="https://www.cnblogs.com/a-cat/p/8856144.html" title="发布于 2018-04-16 15:38">js抽奖概率随机取出数据(简单示例)</a>
+    <br>
+    <a href="https://www.cnblogs.com/a-cat/p/8948019.html" class="p_n_p_prefix">» </a> 下一篇：    <a href="https://www.cnblogs.com/a-cat/p/8948019.html" title="发布于 2018-04-25 23:04">微信小程序跳转页面</a>
+
+</div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date">2018-04-18 10:29</span>&nbsp;
+<a href="https://www.cnblogs.com/a-cat/">一只看夕阳的猫</a>&nbsp;
+阅读(<span id="post_view_count">149458</span>)&nbsp;
+评论(<span id="post_comment_count">9</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=8872498" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(8872498);return false;">收藏</a></div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+<script src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/highlight.min.js"></script>
+<script>markdown_highlight();</script>
+<script>
+    var allowComments = true, cb_blogId = 413172, cb_blogApp = 'a-cat', cb_blogUserGuid = '5a095855-884e-4655-9419-08d5782f1af4';
+    var cb_entryId = 8872498, cb_entryCreatedDate = '2018-04-18 10:29', cb_postType = 1;
+    loadViewCount(cb_entryId);
+</script>
+<a name="!comments"></a>
+<div id="blog-comments-placeholder">
+
+<div id="comment_pager_top">
+    
+</div>
+
+<br>
+<div class="feedback_area_title">评论列表</div>
+<div class="feedbackNoItems">
+    <div class="feedbackNoItems"></div>
+</div>
+    <div class="feedbackItem">
+        <div class="feedbackListSubtitle">
+            <div class="feedbackManage">
+                &nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+            </div>
+            
+<a href="https://www.cnblogs.com/a-cat/p/8872498.html#4203993" class="layer">#1楼</a>
+<a name="4203993" id="comment_anchor_4203993"></a>
+ 
+<span class="comment_date">2019-03-16 09:53</span>
+
+ 
+        <a id="a_comment_author_4203993" href="https://www.cnblogs.com/liuyihao1456/" target="_blank">夜雨浮丘</a>
+
+        </div>
+        <div class="feedbackCon">
+            
+<div id="comment_body_4203993" data-format-type="Ubb" class="blog_comment_body cnblogs-ubb">
+    空间很不错
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4203993, &#39;Digg&#39;, this.parentElement, false);">
+                支持(1)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4203993, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        <span id="comment_4203993_avatar" style="display:none">
+            https://pic.cnblogs.com/face/891444/20160202135348.png
+        </span>
+
+        </div>
+    </div>
+    <div class="feedbackItem">
+        <div class="feedbackListSubtitle">
+            <div class="feedbackManage">
+                &nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+            </div>
+            
+<a href="https://www.cnblogs.com/a-cat/p/8872498.html#4204220" class="layer">#2楼</a>
+<a name="4204220" id="comment_anchor_4204220"></a>
+[<span class="louzhu">楼主</span>] 
+<span class="comment_date">2019-03-16 15:19</span>
+
+ 
+        <a id="a_comment_author_4204220" href="https://www.cnblogs.com/a-cat/" target="_blank">一只看夕阳的猫</a>
+
+        </div>
+        <div class="feedbackCon">
+            
+<div id="comment_body_4204220" data-format-type="Ubb" class="blog_comment_body cnblogs-ubb">
+    <a href="https://www.cnblogs.com/a-cat/p/8872498.html#4203993" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,4203993);">@</a>
+夜雨浮丘<br>谢谢🙏
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4204220, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4204220, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        <span id="comment_4204220_avatar" style="display:none">
+            https://pic.cnblogs.com/face/1337908/20180226151349.png
+        </span>
+
+        </div>
+    </div>
+    <div class="feedbackItem">
+        <div class="feedbackListSubtitle">
+            <div class="feedbackManage">
+                &nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+            </div>
+            
+<a href="https://www.cnblogs.com/a-cat/p/8872498.html#4306671" class="layer">#3楼</a>
+<a name="4306671" id="comment_anchor_4306671"></a>
+ 
+<span class="comment_date">2019-07-23 10:10</span>
+
+ 
+        <a id="a_comment_author_4306671" href="https://www.cnblogs.com/chtzz/" target="_blank">chtzz</a>
+
+        </div>
+        <div class="feedbackCon">
+            
+<div id="comment_body_4306671" data-format-type="Ubb" class="blog_comment_body cnblogs-ubb">
+    主题设计的挺好，羡慕。。
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4306671, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4306671, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        <span id="comment_4306671_avatar" style="display:none">
+            https://pic.cnblogs.com/face/1447615/20190722130753.png
+        </span>
+
+        </div>
+    </div>
+    <div class="feedbackItem">
+        <div class="feedbackListSubtitle">
+            <div class="feedbackManage">
+                &nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+            </div>
+            
+<a href="https://www.cnblogs.com/a-cat/p/8872498.html#4324845" class="layer">#4楼</a>
+<a name="4324845" id="comment_anchor_4324845"></a>
+ 
+<span class="comment_date">2019-08-13 17:00</span>
+
+ 
+        <a id="a_comment_author_4324845" href="https://home.cnblogs.com/u/1722083/" target="_blank">起风的角落</a>
+
+        </div>
+        <div class="feedbackCon">
+            
+<div id="comment_body_4324845" data-format-type="Ubb" class="blog_comment_body cnblogs-ubb">
+    请问师徒四人的动画用什么插件做的
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4324845, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4324845, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+        </div>
+    </div>
+    <div class="feedbackItem">
+        <div class="feedbackListSubtitle">
+            <div class="feedbackManage">
+                &nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+            </div>
+            
+<a href="https://www.cnblogs.com/a-cat/p/8872498.html#4324871" class="layer">#5楼</a>
+<a name="4324871" id="comment_anchor_4324871"></a>
+[<span class="louzhu">楼主</span>] 
+<span class="comment_date">2019-08-13 17:22</span>
+
+ 
+        <a id="a_comment_author_4324871" href="https://www.cnblogs.com/a-cat/" target="_blank">一只看夕阳的猫</a>
+
+        </div>
+        <div class="feedbackCon">
+            
+<div id="comment_body_4324871" data-format-type="Ubb" class="blog_comment_body cnblogs-ubb">
+    <a href="https://www.cnblogs.com/a-cat/p/8872498.html#4324845" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,4324845);">@</a>
+起风的角落<br>一张不同动作的图片，通过animation css让它动起来的，您可以右键审查元素看下
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4324871, &#39;Digg&#39;, this.parentElement, false);">
+                支持(1)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4324871, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        <span id="comment_4324871_avatar" style="display:none">
+            https://pic.cnblogs.com/face/1337908/20180226151349.png
+        </span>
+
+        </div>
+    </div>
+    <div class="feedbackItem">
+        <div class="feedbackListSubtitle">
+            <div class="feedbackManage">
+                &nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+            </div>
+            
+<a href="https://www.cnblogs.com/a-cat/p/8872498.html#4334113" class="layer">#6楼</a>
+<a name="4334113" id="comment_anchor_4334113"></a>
+ 
+<span class="comment_date">2019-08-22 18:21</span>
+
+ 
+        <a id="a_comment_author_4334113" href="https://www.cnblogs.com/zhuxingqing/" target="_blank">zhuxq</a>
+
+        </div>
+        <div class="feedbackCon">
+            
+<div id="comment_body_4334113" data-format-type="Ubb" class="blog_comment_body cnblogs-ubb">
+    去除字符串内左侧的空格：str = str.replace(/^\s*/,"");<br><br>　　去除字符串内右侧的空格：str = str.replace(/(\s*$)/g,"");<br><br>这两句感觉改成 去除头部空格和尾部空格更合适呢~
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4334113, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4334113, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        
+
+        </div>
+    </div>
+    <div class="feedbackItem">
+        <div class="feedbackListSubtitle">
+            <div class="feedbackManage">
+                &nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+            </div>
+            
+<a href="https://www.cnblogs.com/a-cat/p/8872498.html#4346236" class="layer">#7楼</a>
+<a name="4346236" id="comment_anchor_4346236"></a>
+[<span class="louzhu">楼主</span>] 
+<span class="comment_date">2019-09-05 14:28</span>
+
+ 
+        <a id="a_comment_author_4346236" href="https://www.cnblogs.com/a-cat/" target="_blank">一只看夕阳的猫</a>
+
+        </div>
+        <div class="feedbackCon">
+            
+<div id="comment_body_4346236" data-format-type="Ubb" class="blog_comment_body cnblogs-ubb">
+    <a href="https://www.cnblogs.com/a-cat/p/8872498.html#4334113" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,4334113);">@</a>
+zhuxq<br>谢谢
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4346236, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4346236, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        <span id="comment_4346236_avatar" style="display:none">
+            https://pic.cnblogs.com/face/1337908/20180226151349.png
+        </span>
+
+        </div>
+    </div>
+    <div class="feedbackItem">
+        <div class="feedbackListSubtitle">
+            <div class="feedbackManage">
+                &nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+            </div>
+            
+<a href="https://www.cnblogs.com/a-cat/p/8872498.html#4411273" class="layer">#8楼</a>
+<a name="4411273" id="comment_anchor_4411273"></a>
+ 
+<span class="comment_date">2019-11-01 09:19</span>
+
+ 
+        <a id="a_comment_author_4411273" href="https://www.cnblogs.com/youngniu/" target="_blank">youngniu</a>
+
+        </div>
+        <div class="feedbackCon">
+            
+<div id="comment_body_4411273" data-format-type="Ubb" class="blog_comment_body cnblogs-ubb">
+    好棒的页面
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4411273, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4411273, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        <span id="comment_4411273_avatar" style="display:none">
+            https://pic.cnblogs.com/face/901157/20170627110703.png
+        </span>
+
+        </div>
+    </div>
+    <div class="feedbackItem">
+        <div class="feedbackListSubtitle">
+            <div class="feedbackManage">
+                &nbsp;&nbsp;
+
+<span class="comment_actions">
+    
+    
+    
+    
+</span>
+
+
+            </div>
+            
+<a href="https://www.cnblogs.com/a-cat/p/8872498.html#4411330" class="layer">#9楼</a>
+<a name="4411330" id="comment_anchor_4411330"></a>
+[<span class="louzhu">楼主</span>]    <span id="comment-maxId" style="display: none">4411330</span>
+    <span id="comment-maxDate" style="display: none">2019/11/1 上午9:53:35</span>
+ 
+<span class="comment_date">2019-11-01 09:53</span>
+
+ 
+        <a id="a_comment_author_4411330" href="https://www.cnblogs.com/a-cat/" target="_blank">一只看夕阳的猫</a>
+
+        </div>
+        <div class="feedbackCon">
+            
+<div id="comment_body_4411330" data-format-type="Ubb" class="blog_comment_body cnblogs-ubb">
+    <a href="https://www.cnblogs.com/a-cat/p/8872498.html#4411273" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,4411273);">@</a>
+youngniu<br>谢谢哈
+</div>
+        <div class="comment_vote">
+            <span class="comment_error" style="color: red"></span>
+            <a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4411330, &#39;Digg&#39;, this.parentElement, false);">
+                支持(0)
+            </a>
+            <a href="javascript:void(0);" class="comment_burry" onclick="return voteComment(4411330, &#39;Bury&#39;, this.parentElement, false);">
+                反对(0)
+            </a>
+        </div>
+        <span id="comment_4411330_avatar" style="display:none">
+            https://pic.cnblogs.com/face/1337908/20180226151349.png
+        </span>
+
+        </div>
+    </div>
+
+<div id="comment_pager_bottom">
+    
+</div>
+
+
+</div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/a-cat/p/8872498.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/a-cat/p/8872498.html#top">返回顶部</a></div>
+    <div id="comment_form_container" style="visibility: visible;"><div class="login_tips">
+    登录后才能发表评论，立即 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或
+    <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，
+    <a href="https://www.cnblogs.com/">访问</a> 网站首页
+</div>
+<div class="under-comment-nav under-comment-box-nav">
+        <a href="https://brands.cnblogs.com/aws/free" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-login-tip-aws&#39;)">【福利】博客园派送云上免费午餐，AWS注册立享12个月免费套餐</a>
+</div></div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+    <div id="ad_t2"><a href="http://www.softbam.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-ucancode-1103&#39;)">【免费下载】News: 大型组态、工控、仿真、CAD\GIS 50万行VC++源码!</a><br><a href="https://edu.51cto.com/activity/37.html?utm_platform=pc&amp;utm_source=mianfei&amp;utm_medium=zhannei&amp;utm_content=%E7%B2%BE%E5%9F%B9&amp;rtm_plan=%E6%96%87%E5%AD%97%E9%93%BE%E4%B8%80&amp;rtm_unit=&amp;rtm_keyword=&amp;rtm_frd=1111" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-51CTO-双11活动&#39;)">【推荐】#双11学习节# IT技能、厂商认证、软考、PMP，多款好课为你战斗力加持</a><br><a href="https://www.cnblogs.com/himmr/p/13920512.html" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-Himmr&#39;)">【推荐】博客园 &amp; 陌上花开HIMMR 给单身的程序员小哥哥助力脱单啦～</a><br><a href="http://click.aliyun.com/m/1000196436/" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-阿里云双11&#39;)">【推荐】 阿里云双十一上云狂欢节，0.73折起爆品提前开抢</a><br><a href="https://brands.cnblogs.com/agora" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-声网专区&#39;)">【推荐】未知数的距离，毫秒间的传递，声网与你实时互动</a><br><a href="https://brands.cnblogs.com/huawei" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-华为专区&#39;)">【推荐】了不起的开发者，挡不住的华为，园子里的品牌专区</a><br></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="c_ad_block">
+        <div id="div-gpt-ad-1592365906576-0" style="width: 300px; height: 250px;" data-google-query-id="CNmojZ-F5uwCFQhdvQodgB4I1w"><div id="google_ads_iframe_/1090369/C1_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C1_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C1_0" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" data-google-container-id="1" style="border: 0px; vertical-align: bottom;" data-load-complete="true" src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/saved_resource.html"></iframe></div></div>
+    </div>
+    <div id="under_post_news"><div class="recomm-block"><b>相关博文：</b><br>·  <a title="JS" href="https://www.cnblogs.com/max1995/p/12012348.html" target="_blank" onclick="clickRecomItmem(12012348)">JS</a><br>·  <a title="Js" href="https://www.cnblogs.com/zhaohangyu/p/12066759.html" target="_blank" onclick="clickRecomItmem(12066759)">Js</a><br>·  <a title="JS" href="https://www.cnblogs.com/yaner2018/p/12012124.html" target="_blank" onclick="clickRecomItmem(12012124)">JS</a><br>·  <a title="js" href="https://www.cnblogs.com/chargeworld/p/12037821.html" target="_blank" onclick="clickRecomItmem(12037821)">js</a><br>·  <a title="js-cookie" href="https://www.cnblogs.com/andyZhang0511/p/12022525.html" target="_blank" onclick="clickRecomItmem(12022525)">js-cookie</a><br>»  <a target="_blank" href="https://recomm.cnblogs.com/blogpost/8872498">更多推荐...</a></div></div>
+    <div id="cnblogs_c2" class="c_ad_block">
+        <div id="div-gpt-ad-1592366332455-0" style="width: 468px; height: 60px;" data-google-query-id="CNqojZ-F5uwCFQhdvQodgB4I1w"><div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" data-google-container-id="2" style="border: 0px; vertical-align: bottom;" data-load-complete="true" src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/saved_resource(1).html"></iframe></div></div>
+    </div>
+    <div id="under_post_kb">
+<div class="itnews c_ad_block">
+    <b>最新 IT 新闻</b>:
+    <br>
+ ·          <a href="https://news.cnblogs.com/n/676473/" target="_blank">洗脑儿歌《鲨鱼宝宝》问鼎YouTube观看量最多宝座</a>
+        <br>
+ ·          <a href="https://news.cnblogs.com/n/676472/" target="_blank">全国网络小贷牌照拟设50亿注资门槛，尚仅蚂蚁、百度、苏宁等5家小贷过关</a>
+        <br>
+ ·          <a href="https://news.cnblogs.com/n/676471/" target="_blank">Alphabet X实验室详细介绍探索抑郁症生物标志物的Project Amber项目</a>
+        <br>
+ ·          <a href="https://news.cnblogs.com/n/676470/" target="_blank">微软终于在美开售HoloLens 2开发版</a>
+        <br>
+ ·          <a href="https://news.cnblogs.com/n/676469/" target="_blank">投资超79亿！大众增持江淮大众股份至75% 获新工厂管理权</a>
+        <br>
+    » <a href="https://news.cnblogs.com/" title="IT 新闻" target="_blank">更多新闻...</a>
+</div></div>
+    <div id="HistoryToday" class="c_ad_block"></div>
+    <script type="text/javascript">
+       var commentManager = new blogCommentManager();
+       commentManager.renderComments(0);
+       fixPostBody();
+       deliverBigBanner();
+setTimeout(function() { incrementViewCount(cb_entryId); }, 50);       deliverT2();
+       deliverC1C2();
+       loadNewsAndKb();
+       loadBlogSignature();
+LoadPostCategoriesTags(cb_blogId, cb_entryId);       LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+       GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+       loadOptUnderPost();
+       GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+   </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem"><!--done-->
+<h3 class="catListTitle">公告</h3>
+
+<div id="blog-news">
+    <div class="clock"><svg data-reactroot="" xmlns="http://www.w3.org/svg/2000" viewBox="0 0 400 400" width="400" height="400" preserveAspectRatio="true"><circle cx="200" cy="200" r="195" class="outerRing"></circle><circle cx="200" cy="200" r="185" class="primCircle"></circle><g><line class="spike" x1="290" x2="287.5" y1="44.11542731880104" y2="48.44555433772325"></line><line class="spike" x1="355.88457268119896" x2="351.55444566227675" y1="110.00000000000001" y2="112.50000000000001"></line><line class="spike" x1="380" x2="375" y1="200" y2="200"></line><line class="spike" x1="355.88457268119896" x2="351.55444566227675" y1="290" y2="287.5"></line><line class="spike" x1="290" x2="287.5" y1="355.88457268119896" y2="351.55444566227675"></line><line class="spike" x1="200" x2="200" y1="380" y2="375"></line><line class="spike" x1="110.00000000000004" x2="112.50000000000004" y1="355.88457268119896" y2="351.55444566227675"></line><line class="spike" x1="44.11542731880104" x2="48.44555433772322" y1="290" y2="287.5"></line><line class="spike" x1="20" x2="25" y1="200.00000000000003" y2="200.00000000000003"></line><line class="spike" x1="44.11542731880104" x2="48.44555433772325" y1="109.99999999999999" y2="112.49999999999999"></line><line class="spike" x1="109.99999999999991" x2="112.49999999999993" y1="44.11542731880107" y2="48.44555433772325"></line><line class="spike" x1="199.99999999999997" x2="199.99999999999997" y1="20" y2="25"></line></g><path class="triangle" d="M200.00000000000006,355 L65.76606241341202,122.49999999999999 L325.39763412811686,108.89328589466666 L200.00000000000006,355"></path><g><circle cx="200.00000000000006" cy="355" r="15" class="secCircle"></circle><circle cx="65.76606241341202" cy="122.49999999999999" r="10" class="secCircle"></circle><circle cx="325.39763412811686" cy="108.89328589466666" r="5" class="secCircle"></circle></g><text x="200" y="200" class="textTime">18 : 50 : 09</text></svg></div>
+<script type="text/javascript">window['__document_write_ajax_callbacks__']['9']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['10']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['1']();</script>
+<script type="text/javascript">window['__document_write_ajax_callbacks__']['11']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['12']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['2']();</script>
+<script type="text/javascript">window['__document_write_ajax_callbacks__']['13']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['14']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['3']();</script>
+<script type="text/javascript">window['__document_write_ajax_callbacks__']['15']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['16']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['4']();</script>
+<script type="text/javascript">window['__document_write_ajax_callbacks__']['17']();</script><script type="text/javascript">window['__document_write_ajax_callbacks__']['18']();</script><script>window['__document_write_ajax_callbacks__']['5']();</script>
+<script type="text/javascript">window['__document_write_ajax_callbacks__']['19']();</script><script>window['__document_write_ajax_callbacks__']['6']();</script>
+
+
+<script type="text/javascript">window['__document_write_ajax_callbacks__']['20']();</script><script>window['__document_write_ajax_callbacks__']['7']();</script>
+    <div id="profile_block">
+        昵称：
+        <a href="https://home.cnblogs.com/u/a-cat/">
+            一只看夕阳的猫
+        </a>
+        <br>
+        园龄：
+        <a href="https://home.cnblogs.com/u/a-cat/" title="入园时间：2018-02-26">
+            2年8个月
+        </a>
+        <br>
+        粉丝：
+        <a href="https://home.cnblogs.com/u/a-cat/followers/">
+            115
+        </a>
+        <br>
+        关注：
+        <a href="https://home.cnblogs.com/u/a-cat/followees/">
+            3
+        </a>
+        <div id="p_b_follow">
+<a href="javascript:void(0)" onclick="follow(&#39;5a095855-884e-4655-9419-08d5782f1af4&#39;)">+加关注</a></div>
+        <script type="text/javascript">window['__document_write_ajax_callbacks__']['21']();</script><script>window['__document_write_ajax_callbacks__']['8']();</script>
+    </div>
+</div>
+
+</div>
+<div id="sidebar_ad"></div>
+			<div id="blog-calendar" style="display:none"></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><!-- 搜索 -->
+<div id="sidebar_search" class="sidebar-block">
+    
+</div>
+
+<!-- 常用链接 -->
+
+
+<!-- 最新随笔 -->
+
+
+<!-- 我的标签 -->
+
+
+<!-- 积分与排名 -->
+<div id="sidebar_scorerank" class="sidebar-block"><div class="catListBlogRank">
+<h3 class="catListTitle">积分与排名</h3>
+<ul>
+	<li class="liScore">
+		积分 -	
+77187
+	</li>
+	<li class="liRank">
+		排名 -	
+11582
+	</li>
+</ul>
+</div>
+
+
+
+</div>
+
+<!-- 随笔分类、随笔档案、文章分类、新闻分类、相册、链接 -->
+<div id="sidebar_categories">
+        <div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+            <h3 class="catListTitle">
+                
+随笔分类
+<span style="font-size:11px;font-weight:normal">(54)</span>
+
+
+            </h3>
+
+
+            <ul>
+
+                        <li>
+                            
+<a href="https://www.cnblogs.com/a-cat/category/1242114.html" rel="" target="">
+    ajax(1)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/a-cat/category/1167379.html" rel="" target="">
+    css/css3(7)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/a-cat/category/1170504.html" rel="" target="">
+    Echarts(1)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/a-cat/category/1167922.html" rel="" target="">
+    js(21)
+</a>
+ 
+
+                        </li>
+                        <li>
+                            
+<a href="https://www.cnblogs.com/a-cat/category/1562125.html" rel="" target="">
+    mySql(1)
+</a>
+ 
+
+                        </li>
+
+            </ul>
+
+
+        </div>
+</div>
+
+<!-- 最新评论 -->
+
+
+
+<!-- 阅读排行榜 -->
+<div id="sidebar_topviewedposts" class="sidebar-block"><div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/a-cat/p/8872498.html">
+                            1. js去除字符串空格(空白符)(149458)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/a-cat/p/9019184.html">
+                            2. div水平垂直居中的六种方法(27235)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/a-cat/p/8528263.html">
+                            3. css关于控制div靠左或靠右的排版布局(17399)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/a-cat/p/8618675.html">
+                            4. css实现瀑布流排版(15351)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/a-cat/p/9269837.html">
+                            5. js分享功能(微信,QQ,微博,空间,豆瓣等)(11824)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+
+</div>
+
+<!-- 评论排行榜 -->
+
+
+<!-- 推荐排行榜 -->
+<div id="sidebar_topdiggedposts" class="sidebar-block">
+<div id="topdigg_posts_wrap">
+    <div class="catListView">
+        <h3 class="catListTitle">推荐排行榜</h3>
+        <div id="TopDiggPostsBlock">
+            <ul style="word-break: break-all">
+                        <li>
+                            <a href="https://www.cnblogs.com/a-cat/p/8872498.html">
+                                1. js去除字符串空格(空白符)(10)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/a-cat/p/9019184.html">
+                                2. div水平垂直居中的六种方法(9)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/a-cat/p/9269837.html">
+                                3. js分享功能(微信,QQ,微博,空间,豆瓣等)(5)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/a-cat/p/8618675.html">
+                                4. css实现瀑布流排版(5)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/a-cat/p/8494510.html">
+                                5. Echarts自定义折线图例,增加选中功能(5)
+                            </a>
+                        </li>
+            </ul>
+        </div>
+    </div>
+</div></div></div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright © 2020 一只看夕阳的猫
+<br><span id="poweredby">Powered by .NET 5.0.0-rc.2.20475.5 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+    <div id="page_end_html">
+        <div id="shangxia2">
+    <span id="gotop1">
+        <img src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/o_huojian.png" alt="返回顶部小火箭">
+    </span>
+</div>
+
+<div class="music">
+    <div class="music-bg">
+        <audio src="http://we.xinfee.com/web/yemao.mp3" id="mp3" autoplay="" controls="">
+    </audio></div>
+    <div class="music-button"></div>
+</div>
+
+<div class="wukong">
+    <div class="message">从善如登，从恶如崩。</div>
+    <div class="wukong-img">
+        <img src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/o_wukong.png">
+    </div>
+</div>
+
+<div class="bajie"></div>
+<div class="tangseng"></div>
+<div class="shaseng"></div>
+<div class="aCatBg show-active">
+    <div class="close-btn">x</div>
+</div>
+<a class="my-blog" href="https://mralins.github.io/" target="_blank">博客主页</a>
+<a class="sina" href="https://weibo.com/5212705856/profile?rightmod=1&amp;wvr=6&amp;mod=personinfo&amp;is_all=1" target="_blank">
+    <img src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/o_200629143244xinlang.png">
+</a>
+<!--<a class="good-books" href="https://k.ruyu.com/UiZFuJrX" target="_blank">-->
+<a class="good-books" href="javascript:void(0)">
+    <div class="books-text"><span class="text">一</span><span class="text">本</span><span class="text">好</span><span class="text">书</span></div>
+    <div class="books-img"><img src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/o_200307112358book.png"></div>
+</a>
+    </div>
+
+
+<script type="text/javascript">
+// 返回顶部，绑定gotop1图标事件
+$("#gotop1").click(function(e) {
+      $("html,body").animate({scrollTop:0}, 500);
+ });
+
+// 点击播放音乐
+var isPlay = true;
+$('.music-button').click(function(){
+    if (isPlay) {
+        document.getElementById('mp3').play();
+        $('.music').addClass('is-pause');
+        isPlay = false;
+    } else {
+        document.getElementById('mp3'). pause();
+        $('.music').removeClass('is-pause');
+        isPlay = true;
+    }
+});
+
+const audio = document.getElementById('mp3');
+audio.src = "http://we.xinfee.com/web/yemao.mp3";
+audio.addEventListener("canplaythrough",
+    function() {
+　　  $(".music").show();
+         audio. pause();
+   },
+false);
+
+// 点击关闭底部背景
+$('.close-btn').click(function(){
+    $('.aCatBg').toggleClass('show-active');
+});
+
+// bg click
+document.addEventListener('click', function(e) {
+  e.target.update && e.target.update();  
+});
+
+//轮播
+var tips = ['有志者事竟成。','热爱生活，学会生活，创造生活。','读书不觉已春深，一寸光阴一寸金。','要么就努力的向上爬，要么就生活在社会最底层。','坚强的信心，能使平凡的人做出惊人的事业。','走的再远，也不要忘记回家的路。','当上帝赐给你荒野时，就意味着，他要你成为高飞的鹰。','过去的事情就应该放下，未来的生活才会没有负担。','你若能作茧自缚，就能破茧成蝶。','高傲的活着，不如平凡做自己。','绳锯木断，水滴石穿。','光阴似箭，日月如梭。','人生在勤，不索何获。','穷则变，变则通，通则久。','百学须先立志。','工欲善其事，必先利其器。','人生如梦，一樽还酹江月。','吾生也有涯，而知也无涯。','莫等闲，白了少年头，空悲切。','少壮不努力，老大徒伤悲。','积土而为山，积水而为海。','书读百遍，其义自见。','海阔凭鱼跃，天高任鸟飞。','穷且益坚，不坠青云之志。','志当存高远。','敏而好学，不耻下问。','一日不书，百事荒芜。','临渊羡鱼，不如退而结网。','人而无仪，不死何为。','言者无罪，闻者足戒。','他山之石，可以攻玉。','投我以桃，报之以李。','满招损，谦受益。','从善如登，从恶如崩。','知人者智，自知者明。','信言不美，美言不信。','君子坦荡荡，小人长戚戚。','尺有所短，寸有所长。','尽信书，不如无书。','当局者迷，旁观者清。','会当凌绝顶，一览众山小。','兼听则明，偏信则暗。','工欲善其事，必先利其器。','不以一眚掩大德。','千经万典，孝悌为先。','君子藏器于身，待时而动。','学而不厌，诲人不倦。','见侮而不斗，辱也。'];
+var __MaxNumber__ = tips.length;
+setInterval(function(){
+    var _number = Math.floor(Math.random()*__MaxNumber__);
+    $('.message').html(tips[_number]);
+}, 5000);
+
+        </script><script type="text/javascript">
+    (function() {
+    var fullSVG = document.getElementById("svgout"),
+        sun = document.getElementById('sun'),
+        bg = document.getElementById('background'),
+        bottomShadow = document.getElementById('bottomShadow'),
+        shadow = document.getElementById('shadow'),
+        earth = document.getElementById('earth'),
+        toggleButton = document.getElementById('toggleButton');
+
+    TweenMax.set(bg, {
+        backgroundColor: "#469CCE"
+    });
+
+    introTimeline = new TimelineLite();
+    introTimeline.from(fullSVG, 1, {
+            scale: 0,
+            rotation: "120",
+            ease: SteppedEase.config(12),
+            y: -500
+        })
+        .staggerFrom('.element', 0.5, {
+            scale: 0,
+            rotation: "120",
+            ease: Back.easeOut.config(1.7),
+            y: -500
+        }, 0.1)
+        .from(sun, 0.51, {
+            scale: 0,
+            rotation: "100",
+            ease: Elastic.easeOut
+        })
+        .fromTo(shadow, 0.2, {
+            opacity: 0,
+            ease: Linear.easeNone
+        }, {
+            opacity: 0,
+            ease: Linear.easeNone
+        })
+        .to(earth, 0.2, {
+            y: "0%",
+            ease: Linear.easeNone,
+            onComplete: floating
+        })
+        .from(toggleButton, 0.5, {
+            scale: 0
+        })
+
+    function floating() {
+        TweenMax.fromTo(shadow, 3, {
+            opacity: 0,
+            ease: Linear.easeNone
+        }, {
+            opacity: 0.1,
+            ease: Linear.easeNone,
+            yoyo: true,
+            repeat: -1
+        });
+        TweenMax.fromTo(earth, 3, {
+            y: "0%",
+            ease: Linear.easeNone
+        }, {
+            y: "3%",
+            ease: Linear.easeNone,
+            yoyo: true,
+            repeat: -1
+        });
+    }
+
+
+
+    function toggleBox() {
+        var checkbox = document.getElementById("toggleCheckbox");
+        checkbox.onchange = function() {
+            if (this.checked) {
+                console.log('night');
+                TweenMax.to(bg, 0.5, {
+                    backgroundColor: "#F2563B)",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(sun, 1, {
+                    fill: "#ffffff",
+                    scale: 2,
+                    rotation: "120",
+                    x: "-20%"
+                });
+                TweenMax.to(".windows", 1, {
+                    fill: "#e3be00",
+                    ease: Elastic.easeOut
+                });
+                TweenMax.to(".vegetation", 1, {
+                    fill: "#955ca2",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".topGrass", 1, {
+                    fill: "#a679d1",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".greyRoad", 1, {
+                    fill: "#c8b1c0",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".treeWood", 1, {
+                    fill: "#5a749b",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".leftWall", 1, {
+                    fill: "#5a749b",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".windowRims", 1, {
+                    stroke: "#334e97",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".leftRoof", 1, {
+                    fill: "#72bad8",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".rightRoof", 1, {
+                    fill: "#5199b7",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".frontWall", 1, {
+                    fill: "#4d6992",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".frontFascia", 1, {
+                    fill: "#8ba2df",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".door", 1, {
+                    fill: "#334e97",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".leftSideGrass", 1, {
+                    fill: "#8f5897",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".rightGrassTop", 1, {
+                    fill: "#8f5897",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".crustLeftTop", 1, {
+                    fill: "#607489",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".middleLeftCrust", 1, {
+                    fill: "#899cbe",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".topRightCrust", 1, {
+                    fill: "#5a6498",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".middleRightCrust", 1, {
+                    fill: "#7c83c0",
+                    ease: Linear.easeOut
+                });
+
+            } else {
+                TweenMax.to(bg, 0.51, {
+                    backgroundColor: "#469CCE",
+                    ease: Bounce.easeOut
+                });
+                TweenMax.to(sun, 0.51, {
+                    fill: "#e3be00",
+                    scale: 1,
+                    rotation: "0",
+                    x: "0%"
+                });
+                TweenMax.to(".windows", 1, {
+                    fill: "#975A42",
+                    ease: Elastic.easeOut
+                });
+                TweenMax.to(".vegetation", 1, {
+                    fill: "#77a951",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".topGrass", 1, {
+                    fill: "#b9d668",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".greyRoad", 1, {
+                    fill: "#b2b2b1",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".treeWood", 1, {
+                    fill: "#ae663d",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".leftWall", 1, {
+                    fill: "#C57F42",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".windowRims", 1, {
+                    stroke: "#AE663D",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".leftRoof", 1, {
+                    fill: "#F2563B",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".rightRoof", 1, {
+                    fill: "#F2563B",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".frontWall", 1, {
+                    fill: "#EFA258",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".frontFascia", 1, {
+                    fill: "#ECB27B",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".door", 1, {
+                    fill: "#B65041",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".leftSideGrass", 1, {
+                    fill: "#6e9e4f",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".rightGrassTop", 1, {
+                    fill: "#8cb154",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".crustLeftTop", 1, {
+                    fill: "#96563d",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".middleLeftCrust", 1, {
+                    fill: "#c67e5c",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".topRightCrust", 1, {
+                    fill: "#a5732a",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".middleRightCrust", 1, {
+                    fill: "#5a6498",
+                    ease: Linear.easeOut
+                });
+                TweenMax.to(".middleRightCrust", 1, {
+                    fill: "#c89451",
+                    ease: Linear.easeOut
+                });
+            }
+        }
+    }
+
+
+    document.getElementById("toggleCheckbox").addEventListener("click", toggleBox);
+
+
+})();
+</script><script type="text/javascript">getFollowStatus('5a095855-884e-4655-9419-08d5782f1af4');</script><iframe id="google_osd_static_frame_8331167151777" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./js去除字符串空格(空白符) - 一只看夕阳的猫 - 博客园_files/saved_resource(2).html"></iframe></body></html>

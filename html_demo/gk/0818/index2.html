@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1,maximum-scale=1">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection"  />
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <link href="css/sweetalert.css" rel="stylesheet">
+    <link href="css/application.css" rel="stylesheet">
+    <title>主页</title>
+</head>
+<style>
+    .w-title {
+        text-align: center;
+        font-size: 1.5rem;
+        line-height: 2.5;
+        letter-spacing: 1rem;
+        color: #fff;
+    }
+    .w-header {
+        height: 12rem;
+        border-radius: 0 0 3rem 3rem;
+        background: url(./img/mine.png);
+        background-size:100% 100%;
+        position: relative; /*关键点*/
+    }
+    .userBase {
+        position:absolute;
+        bottom: 3.5rem;
+        left: 2rem;
+    }
+    .userItem {
+        display: flex;
+        align-items: flex-end;
+        color: #EEF9FF;
+        line-height: 1.5;
+    }
+    .userField {
+        font-size: 1.4rem;
+    }
+    .userName {
+        font-size: 1.3rem;
+        font-weight: bold;
+    }
+    .orderList {
+        position:absolute;
+        top: 9rem;
+        margin: 0 1rem;
+    }
+    .orderItem {
+        padding: 2rem 1.5rem;
+        background: #fff;
+        box-shadow:0px 0px  0px 2px #F9F9F9;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        line-height: 2;
+        margin-bottom: 2rem;
+        height: 10rem;
+    }
+    .orderLeft {
+        flex-shrink: 0;
+    }
+    .orderLable {
+        font-size: 1.5rem;
+        color: #0FA5FF;
+        letter-spacing: 0.4rem;
+        font-weight: bolder;
+    }
+    .orderRight {
+        display: flex;
+        align-items: center;
+    }
+    .orderImge {
+        width: 9rem;
+    }
+    .backImg {
+        margin-left: 1.2rem;
+        margin-right: 0.2rem;
+        width: 1rem;
+    }
+</style>
+<body style="background: #fff">
+<div>
+    <div class="w-header">
+        <div class="w-title">主页</div>
+        <div class="userBase">
+            <div class="userItem">
+                <p class="userField">登陆名：</p>
+                <p class="userName">JLX</p>
+            </div>
+            <div class="userItem">
+                <p>手机号：</p>
+                <p>13176986235</p>
+            </div>
+        </div>
+    </div>
+    <div class="orderList">
+        <a href="lsorder.html"><div class="orderItem">
+            <div class="orderLeft">
+                <p class="orderLable">历史订单</p>
+                <p>查看历史订单记录</p>
+            </div>
+            <div class="orderRight">
+                <img src="img/index2.png" class="orderImge">
+                <img src="img/arrow.png" class="backImg">
+            </div>
+        </div></a>
+        <div class="orderItem">
+            <div class="orderLeft">
+                <p class="orderLable">推送快递订单列表</p>
+                <p>查看历史订单记录</p>
+            </div>
+            <div class="orderRight">
+                <img src="img/index3.png" class="orderImge">
+                <img src="img/arrow.png" class="backImg">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row footbar">
+    <a class="col-4 text-center" href="index.html" ><span class="icon-home"></span>首页</a>
+    <a class="col-4 text-center" href="shopping.html" ><span class="icon-cart2"></span>商城</a>
+    <a class="col-4 text-center" href="dingdan.html" ><span class="icon-order2"></span>订单</a>
+    <a class="col-4 text-center" href="mine.html" ><span class="icon-user2"></span>我的</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS原生面经从初级到高级</title>
+</head>
+<body>
+    
+
+    <script>
+        // 函数
+
+            // 1、函数声明
+
+               // ES5
+                // function getSum () {}
+                // function () {}           // 匿名函数
+
+                // ES6
+                    () => {}  // 如果{}内容只有一行{}和return关键字可省
+            
+            //  2、函数表达式（函数字面量）
+
+                //ES5
+                var test_sum = function(){}
+                //ES6
+                let test_sum2 = ()=>{} // 如果{}内容只有一行{}和return关键字可省
+
+            // 3、构造函数
+
+                const sum = new Function('a', 'b' , 'return a + b')
+
+            /**
+                4、三种方法的对比
+                    1.函数声明有预解析，而且函数声明的优先级高于变量；
+                    2.使用函数构造函数定义函数的方式是一个函数表达式，这种方式会导致解析两次代码，影响性能。第一次解析常规的JavaScript代码，第二次解析重构构造函数的字符串；
+            */
+
+
+
+            // 5、构造函数的调用, new构造函数名（），此指向实例化的对象
+
+                function Person () {
+                    console.log(this)   // //是构造函数调用，指向实例化的对象 newPerson
+                }
+
+                // let newPerson = new Person();   // Person: {}
+                // console.log(newPerson)
+
+            // 6、利用call和apply来实现，this就是call和apply对应的第一个参数，如果不传值或者第一个变量为空，
+            //    未定义时此指向窗口通过call / apply如果第一个参数是string，number，布尔值，请调用内部会调用其相应的构造器String，Numer，Boolean将其转换为相应的实例对象
+
+                function foo () {
+                    console.log(this)
+                }
+
+                let f1 = foo.call('我是call改变的this值');    // 我是call改变的this值
+                let f2 = foo.apply('我是apply改变的this值');   // 我是apply改变的this值
+
+
+
+
+
+
+            // 7、.call，apply和bind
+
+                // 7.1.IE5之前不支持call和apply，bind是ES5出来的; 2.call和apply可以调用函数，更改此值，实现继承和借用别的对象的方法；
+
+                // 7.2 调用和应用定义
+                //   调用方法，用一个对象替换掉另一个对象（this）对象.call（新this对象，实参1，实参2，实参3 .....）对象.apply（新this对象，[实参1，实参2，实参3 .....]）
+
+                // 7.3 致电和申请 
+                //   7.3.1.间接调用函数，更改作用域的此值
+                //   7.3.2.劫持其他对象的方法
+
+                // 示例
+
+                    var bar = {
+                        name: '张三',
+                        logName: function () {
+                            console.log(this.name)
+                        }
+                    }
+
+                    var bar_2 = {
+                        name: '李四'
+                    }
+
+                    bar.logName.call(bar_2); // 李四
+
+                    // 实质是call改变了bar的this指向为bar_2, 并调用该函数
+
+
+                // 7.4 两个函数实现继承
+
+                    function Animal(name) {
+                        this.name = name;
+                        this.showName = function () {
+                            console.log(this.name)
+                        }
+                    }
+
+                    function Cat (name) {
+                        Animal.call(this, name)
+                    }
+
+                    // var animal = new Animal('TEST news');
+                    // animal.showName();
+                    // console.log(animal)
+
+                    // var cat = new Cat("Black Cat");
+                    // cat.showName(); // Black Cat
+                    // console.log(cat)
+
+
+
+                // 7.5 为类枚举（参数和nodeList）添加多个方法push，pop
+
+                    // (function () {
+                    //     Array.prototype.push.call(arguments, "王五");
+                    //     console.log(arguments); // ["王三", "王四", "王五"]
+                    // })("王三", "王四")
+
+                    (function () {
+                        Array.prototype.pop.call(arguments);
+                        console.log(arguments); 
+                    })("王三", "王四", "王六", "完蛋")
+
+
+                // 7.6 合并时间表
+
+                    let arr1 = [1,2,3]
+                    let arr2 = [4,5,6]
+                    Array.prototype.push.apply(arr1, arr2); // 将arr2合并到了arr1中
+                    console.log(arr1, arr2)
+
+                // 7.7 获取最大值和最小值
+                    let arr3 = [10, 11, 12, 13]
+                    let arr4 = Math.max.apply(null,arr3);
+                    let arr5 = Math.min.apply(null,arr3);
+                    console.log(arr4, arr5)
+
+
+                // 7.8 判断字符类型
+                    let obj1 = {};
+                    function isType (val) {
+                        let type = Object.prototype.toString.call(val);
+                        console.log(type)
+                        switch (type) {
+                            case "[object Object]":     return 1;
+                            case "[object Array]" :     return 2;
+                            case "[object String]":     return 3;
+                            case "[object Number]":     return 4;
+                            case "[object Null]"  :     return 5;
+                            case "[object Undefined]":  return 6;
+                            case "[object Function]":   return 7;
+                            case "[object Symbol]" :    return 8;
+                            default:
+                            return 0
+                        }
+                    }
+                    console.log(isType(obj1))
+
+    </script>
+</body>
+</html>

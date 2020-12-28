@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <script>
+
+        /**
+         *  03. 类数组转化为数组
+            
+                类数组是具有length属性，但不具有数组原型上的方法。常见的类数组有arguments、DOM操作方法返回的结果
+        */
+
+
+        // 方法一：Array.from
+
+        const div1 = Array.from(document.querySelectorAll('div'));
+
+            
+        
+        // 方法二：Array.prototype.slice.call()
+            
+        const div2 = Array.prototype.slice.call(document.querySelectorAll('div'))
+
+
+        // 方法三：扩展运算符
+
+            const div3 = [ ...document.querySelectorAll('div') ]
+
+        // 方法四：利用concat
+            function newFrom (args) {
+                return Array.prototype.concat.apply([], args);
+            }   
+            const div4 = newFrom(document.querySelectorAll('div'))
+            console.log(div4);
+
+
+            function newArr (obj) {
+                console.log(obj)
+                var arr = [];
+                for (var _len = obj.length, _key = 0; _key < _len; _key++ ) {
+                    arr[_key] = obj[_key]
+                }
+                return arr;
+            }
+            
+        
+        // 伪数组有 length 但没有数组的方法
+            var objArr = {
+                "0": "aaa",
+                "1": 12,
+                "length": 2,
+                "push": Array.prototype.push,
+                "splice": Array.prototype.splice
+            }
+            console.log(objArr)
+            Array.prototype.push = function () {
+                this.length ++
+            }
+            
+            console.log(newArr(objArr)) // 把伪数组转换成数组
+            
+    </script>
+</body>
+</html>

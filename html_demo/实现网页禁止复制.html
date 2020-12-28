@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        pre {
+            /* -webkit-user-select: none; */
+        }
+    </style>
+</head>
+<body>
+    <h2>一招破解网页复制+网页上如何实现禁止复制粘贴 <br />
+        <a href="https://www.cnblogs.com/kenshinobiy/p/12007065.html">参考链接</a></h2>
+    <input type="text" />
+    <pre>
+        function api (key, value, attributes) {
+            // set 主要逻辑
+            if (arguments.length > 1) {
+            attributes = extend({
+              path: '/'
+            }, api.defaults, attributes);
+          
+            if (typeof attributes.expires === 'number') {
+              var expires = new Date();
+              expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e+5);
+              attributes.expires = expires;
+            }
+          
+            // We're using "expires" because "max-age" is not supported by IE
+            attributes.expires = attributes.expires ? attributes.expires.toUTCString() : '';
+          
+            try {
+              // 这里需要注意，用户有可能要保存json格式的cookie值，所以这里需要转化下
+              result = JSON.stringify(value);
+              if (/^[\{\[]/.test(result)) {
+                // 如果转化成了合法的json，则将value重新赋值为json字符串，如果不含有{或[，则不是json字符串，也就不会走这个分支
+                value = result;
+              }
+            } catch (e) {}
+          
+            // 这里为什么要把value先编码再解码呢？，下面的key也是，不过key要解码的unicode值少些
+            if (!converter.write) {
+              // 内置的编码转换
+              // ["#", "$", "&", "+", ":", "<", ">", "=", "/", "?", "@", "[", "]", "^", "`", "{", "}", "|"]
+              value = encodeURIComponent(String(value))
+                .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent);
+            } else {
+              value = converter.write(value, key);
+            }
+          
+            // 先编码
+            key = encodeURIComponent(String(key));
+            // ["#", "$", "&", "+", "^", "`", "|"]
+            // 再通过字符串替换的方式解码
+            key = key.replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent);
+            // ECMA-262 standard规范已经不推荐用这个escape函数了  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/escape
+            // 而且 ()也不会被编码，所以感觉下面的这句是没有必要的
+            key = key.replace(/[\(\)]/g, escape);
+          
+            // 拼接其它的cookies属性值
+            var stringifiedAttributes = '';
+          
+            for (var attributeName in attributes) {
+              if (!attributes[attributeName]) {
+                continue;
+              }
+              stringifiedAttributes += '; ' + attributeName;
+              if (attributes[attributeName] === true) {
+                continue;
+              }
+              stringifiedAttributes += '=' + attributes[attributeName];
+            }
+            return (document.cookie = key + '=' + value + stringifiedAttributes);
+            }
+          }
+    </pre>
+    
+    <div id='copy'>
+        <h3>无法复制</h3>
+        js-cookie
+        js-cookie库使用起来很简单，支持向浏览器中写入、读取、删除cookie三种操作，API简单也符合我们的使用习惯。那么它是如何实现这三个操作的呢？这就要分析它的源码了。
+        注意：这里分析的是它的releases-v2.2.0版本。github上的master分支源码已经修改，主要是把set和get方法重构了，拆分成了两个单独的方法，releases-v2.2.0版本set和get方法是写在一起的。下面简单分析下它的源码实现：set和get。remove是set的一种特殊情况，增加expires属性即可，这里就不细说了。
+    </div>
+    <script type="text/javascript">
+        // // 禁止右键菜单
+        document.oncontextmenu = function(){ 
+            alert('禁止右键')
+            return false;
+        };
+        // // 禁止文字选择
+        // document.onselectstart = function(){ return false; };
+        // 禁止复制
+        // document.oncopy = function(){ 
+            
+        //     alert('禁止复制')
+            
+        //     return false; 
+        // };
+        // 禁止剪切
+        document.oncut = function(){ 
+            alert('禁止剪切')
+            return false; 
+        };
+        // // 禁止粘贴
+        document.onpaste = function(){ 
+            alert('禁止粘贴')
+            return false; 
+        };
+
+
+        document.querySelector("#copy").oncopy = function(){ 
+            
+            alert('禁止复制')
+            
+            return false; 
+        };
+    </script>
+</body>
+</html>

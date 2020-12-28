@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>32个手撕JS，彻底摆脱初级前端（面试高频）</title>
+</head>
+<body>
+    <a href="https://mp.weixin.qq.com/s/lu9-w5TPXKwGvSqhkzYqpw">学习来源</a>
+    <div id='number-wrap'></div>
+    
+    <script>
+        
+
+        // 04.Array.prototype.filter()
+
+        /*
+            Array.prototype.filter = function (callback, thisArg) {
+                if (this === undefined) {
+                    throw new TypeError('this is null or not undefiend');
+                }
+                if (typeof callback !== 'function') {
+                    throw new TypeError(callback + 'is not a function')
+                }
+                const res = [];
+                // 让 o 成为回调函数的对象传递 （强制转换对象）
+                const o = Object(this);
+
+                // >>>0 保证 len 为 Number 值，并且保证值为正整数
+                const len = o.length >>> 0;
+                for(let i=0; i<len; i++) {
+                    // 检查i是否在O的属性（会检查原型链）
+                    if (i in o) {
+                        // 回调函数调用传参
+                        if (callback.call(thisArg, o[i], i, o)) {
+                            res.push(o[i])
+                        }
+                    }
+                }
+                return res;
+            }
+
+
+        
+
+        // 05.Array.prototype.map()
+
+            
+            Array.prototype.map = function(callback, thisArg) {
+                if (this == undefined) {
+                    throw new TypeError('this is null or not defined');
+                }
+                if (typeof callback !== 'function') {
+                    throw new TypeError(callback + ' is not a function');
+                }
+                const res = [];
+                // 同理
+                const O = Object(this);
+                const len = O.length >>> 0;
+                for (let i = 0; i < len; i++) {
+                    if (i in O) {
+                        // 调用回调函数并传入新数组
+                        res[i] = callback.call(thisArg, O[i], i, this);
+                    }
+                }
+                return res;
+            }
+
+        */
+
+
+        // 06.Array.prototype.forEach()   (forEach跟map类似，唯一不同的是forEach是没有返回值的。)
+
+            
+            Array.prototype.forEach = function (callback, thisArg) { 
+                if (this == null) {
+                    throw new TypeError('this is null or not defiend')
+                }
+                if (typeof callback !== 'function') {
+                    throw new TypeError(callback + 'is not a function')
+                }
+                const o = Object(this);
+                const len = o.length >>> 0;
+                let k = 0;
+                while(k < len) {
+                    if (k in o) {
+                        callback.call(thisArg, o[k], k, o)
+                    }
+                    k++;
+                }
+            }
+
+
+        // 07.Array.prototype.reduce()
+
+           /* Array.prototype.reduce = function (callback, initialValue) { 
+                if (this == null) {
+                    throw new TypeError('this is null or not defiend')
+                }
+                if (typeof callback !== 'function') {
+                    throw new TypeError(callback + 'is not a function')
+                }
+
+                const O = Object(this);
+                const len = this.length >>> 0;
+                let accumulator = initialValue;
+                let k = 0;
+
+                // 如果第二个参数为undefined的情况下
+                // 则数组的第一个有效值作为累加器的初始值
+                if (accumulator === undefined) {
+                    while(k < len && !(k in o)) {
+                        k++;
+                    }
+                    // 如果超出数组界限还没有找到累加器的初始值，则TypeError
+                    if (k >= len) {
+                        throw new TypeError('Reduce of empty array with no initial value');
+                    }
+                    accumulator = O[k++];
+                }
+                while (k < len) {
+                    if (k in O) {
+                        accumulator = callback.call(undefined, accumulator, O[k], k, O);
+                    }
+                    k++;
+                }
+                return accumulator;
+            }
+
+            */
+
+        // 08.Function.prototype.apply() (第一个参数是绑定的this，默认为window，第二个参数是数组或类数组)
+
+
+            Function.prototype.apply = function(context = window, args) {
+                if (typeof this !== 'function') {
+                    throw new TypeError('Type Error');
+                }
+                const fn = Symbol('fn');
+                context[fn] = this;
+
+                const res = context[fn](...args);
+                delete context[fn];
+                return res;
+            }
+
+            
+        // 09.Function.prototype.call （于call唯一不同的是，call()方法接受的是一个参数列表）
+
+
+            Function.prototype.call = function(context = window, ...args) {
+                if (typeof this !== 'function') {
+                    throw new TypeError('Type Error');
+                }
+                const fn = Symbol('fn');
+                context[fn] = this;
+
+                const res = this[fn](...args);
+                delete this.fn;
+                return res;
+            }
+
+
+        // 10.Function.prototype.bind
+
+
+            
+            Function.prototype.bind = function(context, ...args) {
+                if (typeof this !== 'function') {
+                    throw new Error("Type Error");
+                }
+                // 保存this的值
+                var self = this;
+
+                return function F() {
+                    // 考虑new的情况
+                    if(this instanceof F) {
+                        return new self(...args, ...arguments)
+                    }
+                    return self.apply(context, [...args, ...arguments])
+                }
+            }
+
+
+    
+        // 11.debounce（防抖） （触发高频时间后n秒内函数只会执行一次,如果n秒内高频时间再次触发,则重新计算时间）
+
+            //（防抖常应用于用户进行搜索输入节约请求资源，window触发resize事件时进行防抖只触发一次。）
+            const debounce = (fn, time) => { 
+                let timeout = null;
+                return function() {
+                    clearTimeout(timeout)
+                    timeout = setTimeout(() => {
+                        fn.apply(this, arguments);
+                    }, time);
+                }
+            };
+
+
+        // 12.throttle（节流） （高频时间触发,但n秒内只会执行一次,所以节流会稀释函数的执行频率。）
+
+            // （节流常应用于鼠标不断点击触发、监听滚动事件。）
+            const throttle = (fn, time) => {
+                let flag = true;
+                return function() {
+                    if (!flag) return;
+                        flag = false;
+                        setTimeout(() => {
+                        fn.apply(this, arguments);
+                        flag = true;
+                    }, time);
+                }
+            }
+
+
+
+
+        // 13.函数珂里化 （指的是将一个接受多个参数的函数 变为 接受一个参数返回一个函数的固定形式，这样便于再次调用，例如f(1)(2) ）
+
+            // 经典面试题：实现add(1)(2)(3)(4)=10; 、 add(1)(1,2,3)(2)=9;
+
+            function add() { 
+                const _args = [ ...arguments ];
+                function fn() {  
+                    _args.push(...arguments);
+
+                    return fn;
+                }
+                fn.toString = function () {  
+                    return _args.reduce((sum, cur) => sum + cur);
+                }
+                return fn;
+            }
+
+            let num = add(1)(2)(3)(4)(5)
+            let num2 = add(1, 4)(2,3,4,10)(5, 6)
+            console.log(num, num2)
+
+            document.querySelector('#number-wrap').innerHTML = num2
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

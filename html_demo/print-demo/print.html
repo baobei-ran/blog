@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery.js"></script>
+    <script src="jqprint.js"></script>
+</head>
+
+<body>
+    <div id='printMe'>
+        <h1>前端插拔式 SPA 应用架构实现方案</h1>
+
+        背景
+        随着互联网云的兴起，一种将多个不同的服务集中在一个大平台上统一对外开放的概念逐渐为人熟知，越来越多与云相关或不相关的中后台管理系统或企业级信息系统曾经或开始采用了这种「统一平台」的形式。同时，前端领域保持着高速发展，早期的
+        jQuery+Backbone+Bootstrap 的 MVC 解决方案支撑起了业务相当长的一段时间；后来，Angular、Ember 等 MVVM
+        框架开始崭露头角，前后端分离和前端组件化的思想在此时达到了鼎盛期。而在国内，Vue 框架凭着其简洁易懂的 API 和出色的周边生态支持独领鳌头，越来越多的中小型企业和开发者们开始转向 Vue
+        阵营；与此同时，在设计上独树一帜的纯 View 层框架 React 开始兴起，其充满技术感的 Diff DOM
+        思想吸引了大批开发者，成为各大技术社区最火爆的话题，其周边生态也随之快速发展，成为了各大公司搭建技术栈时的首选框架。
+        回到平台的话题。一个集成了不同业务的大平台，很多情况下都是将业务拆分成多个子系统进行开发，最后由平台提供统一的入口。而在当前快速变化的前端大环境下，此类平台需要考虑以下几个难题：
+        1. 怎样将不同业务子系统集中到一个大平台上，统一对外开放？
+        2. 如何给不同用户赋予权限让其能够访问平台的特定业务模块同时禁止其访问无权限的业务模块？
+        3. 如何快速接入新的子系统，并对子系统进行版本管理，保证功能同步？
+        4. 针对于老系统，如何实现从 Backbone 技术栈到 React 技术栈或 Vue 技术栈的平滑升级？
+        接下来，我将分别基于这几个问题介绍我们的实现方案。
+    </div>
+    <button>测试</button>
+    <script>
+        function clickPrint() {
+            try {
+                if (!!window.ActiveXObject) {
+                    var hkey_root, hkey_path, hkey_key;
+                    hkey_root = "HKEY_CURRENT_USER"; hkey_path = "\\Software\\Microsoft\\Internet Explorer\\PageSetup\\";
+                    var RegWsh = new ActiveXObject("WScript.Shell");
+
+                    //设置页眉/脚的字体样式
+                    hkey_key = "font";
+                    RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "font-size: 12px; font-family: 黑体; line-height: 24px");
+
+                    //设置页眉
+                    hkey_key = "header";
+                    RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "打印测试");
+
+                    //设置页脚
+                    hkey_key = "footer";
+                    RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "滚蛋");
+
+                    //设置页边距(0.6 要乘以 2.5为实际打印的尺寸)
+                    hkey_key = "margin_bottom";
+                    RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "0.6");
+
+                    hkey_key = "margin_left"; RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "0.6");
+
+                    hkey_key = "margin_right"; RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "0.6");
+
+                    hkey_key = "margin_top"; RegWsh.RegWrite(hkey_root + hkey_path + hkey_key, "0.6");
+                }
+                window.print();
+            } catch (e) {
+
+            }
+        }
+
+        $('button').click(function () {
+            $("#printMe").jqprint({
+                debug: false,
+                importCSS: true,
+                printContainer: true,
+                operaSupport: true
+            });
+        })
+        
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+
+
+        // 19.深拷贝
+        // 递归的完整版本（考虑到了Symbol属性）：
+
+            // 缺点： 无法拷贝 正则
+
+            const cloneDeep1 = (target, hash = new WeakMap()) => {
+                // 对于传入参数处理
+                if (typeof target !== 'object' || target === null) {
+                    return target;
+                }
+                // 哈希表中存在直接返回
+                if (hash.has(target)) return hash.get(target);
+
+                const cloneTarget = Array.isArray(target) ? [] : {};
+                hash.set(target, cloneTarget);
+
+                // 针对Symbol属性
+                const symKeys = Object.getOwnPropertySymbols(target);
+                if (symKeys.length) {
+                    symKeys.forEach(symKey => {
+                        if (typeof target[symKey] === 'object' && target[symKey] !== null) {
+                            cloneTarget[symKey] = cloneDeep1(target[symKey]);
+                        } else {
+                            cloneTarget[symKey] = target[symKey];
+                        }
+                    })
+                }
+
+                for (const i in target) {
+                    if (Object.prototype.hasOwnProperty.call(target, i)) {
+                        cloneTarget[i] =
+                            typeof target[i] === 'object' && target[i] !== null
+                            ? cloneDeep1(target[i], hash)
+                            : target[i];
+                    }
+                }
+                return cloneTarget;
+            }
+
+            let name = Symbol('name')
+            const obj = { [name]: '小小', age: 22, o: { sex: '女', name: '小红' }, reg: /^1[3456789]\d{9}$/, add: cloneDeep1 }
+
+            // const obj2 = cloneDeep1(obj);
+
+            // obj2[name] = '小花'
+            // obj2['o']['name'] = '然然'
+            // console.log(obj, obj2)
+
+
+
+
+
+
+
+            /**
+            * Get the first item that pass the test
+            * by second argument function
+            *
+            * @param {Array} list
+            * @param {Function} f
+            * @return {*}
+            */
+
+            function find (list, f) {
+                return list.filter(f)[0]
+            }
+
+
+
+            function deepCopy(obj, cache = []) {
+                if (obj === null || typeof obj !== 'object') {
+                    return obj
+                }
+
+                var hit = find(cache, c => c.original === obj);
+
+                if (hit) {
+                    return hit.copy;
+                }
+
+                const copy = Array.isArray(obj) ? [] : {};
+
+                cache.push({
+                    original: obj,
+                    copy
+                })
+
+                Object.keys(obj).forEach(key => {
+                    copy[key] = deepCopy(obj[key], cache);
+                })
+
+                return copy;
+            }
+
+            
+
+
+            console.log(deepCopy(obj))
+    </script>
+</body>
+</html>

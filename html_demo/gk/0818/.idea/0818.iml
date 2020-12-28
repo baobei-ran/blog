@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="H5仿淘宝移动端大型综合购物商城app模板" />
+    <orderEntry type="module" module-name="0817" />
+    <orderEntry type="module" module-name="自适应" />
+    <orderEntry type="module" module-name="CRMEB-H5" />
+    <orderEntry type="module" module-name="商城" />
+    <orderEntry type="module" module-name="导航" />
+    <orderEntry type="module" module-name="jqueryDatePlugin-master" />
+  </component>
+</module>

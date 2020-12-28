@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1,maximum-scale=1">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no"name="format-detection"  />
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <link href="css/sweetalert.css" rel="stylesheet">
+    <link href="css/application.css" rel="stylesheet">
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <title>商品详情</title>
+</head>
+<body>
+<header>
+    <div class="headerbar">
+        <h1>商城订单</h1>
+        <a class="navbar-toggle" href="mine.html">
+            <span class="icon-m_goback"></span>
+        </a>
+    </div>
+</header>
+<div>
+    <div class="head">
+        <div class="headItem headItemValue">已付款</div>
+        <div class="headItem">已完成</div>
+    </div>
+    <div class="list">
+        <!--已付款订单-->
+        <div class="orderList">
+            <div class="orderListItem">
+                <div class="listItemTop">
+                    <div class="listItemTopLeft">
+                        <img src="img/shop1.png" width="100%">
+                    </div>
+                    <div class="listItemTopRight">
+                        <div class="orderContent">
+                            <p class="orderTitle">ins超火元气T恤夏韩版潮ins超火元气少女短袖T...</p>
+                            <p class="orderDesc">这是介绍这是介绍这是介绍这是介绍这是介绍</p>
+                        </div>
+                        <div class="orderStatus">
+                            <p class="w-status">已付款</p>
+                            <p class="w-money">￥29.00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="listItemBot">
+                    <div class="listItemBotLeft"></div>
+                    <div class="listItemBotRight">
+                        <p class="payText">实付款：</p>
+                        <p class="payMoney">￥29.00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="orderListItem">
+                <div class="listItemTop">
+                    <div class="listItemTopLeft">
+                        <img src="img/shop1.png" width="100%">
+                    </div>
+                    <div class="listItemTopRight">
+                        <div class="orderContent">
+                            <p class="orderTitle">ins超火元气T恤夏韩版潮ins超火元气少女短袖T...</p>
+                            <p class="orderDesc">这是介绍这是介绍这是介绍这是介绍这是介绍</p>
+                        </div>
+                        <div class="orderStatus">
+                            <p class="w-status">已付款</p>
+                            <p class="w-money">￥29.00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="listItemBot">
+                    <div class="listItemBotLeft"></div>
+                    <div class="listItemBotRight">
+                        <p class="payText">实付款：</p>
+                        <p class="payMoney">￥29.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--已完成订单-->
+        <div class="orderList displayNode">
+            <div class="orderListItem">
+                <div class="listItemTop">
+                    <div class="listItemTopLeft">
+                        <img src="img/shop1.png" width="100%">
+                    </div>
+                    <div class="listItemTopRight">
+                        <div class="orderContent">
+                            <p class="orderTitle">ins超火元气T恤夏韩版潮ins超火元气少女短袖T...</p>
+                            <p class="orderDesc">这是介绍这是介绍这是介绍这是介绍这是介绍</p>
+                        </div>
+                        <div class="orderStatus">
+                            <p class="w-status">已完成</p>
+                            <p class="w-money">￥29.00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="listItemBot">
+                    <div class="listItemBotLeft"></div>
+                    <div class="listItemBotRight">
+                        <p class="payText">实付款：</p>
+                        <p class="payMoney">￥29.00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="orderListItem">
+                <div class="listItemTop">
+                    <div class="listItemTopLeft">
+                        <img src="img/shop1.png" width="100%">
+                    </div>
+                    <div class="listItemTopRight">
+                        <div class="orderContent">
+                            <p class="orderTitle">ins超火元气T恤夏韩版潮ins超火元气少女短袖T...</p>
+                            <p class="orderDesc">这是介绍这是介绍这是介绍这是介绍这是介绍</p>
+                        </div>
+                        <div class="orderStatus">
+                            <p class="w-status">已完成</p>
+                            <p class="w-money">￥29.00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="listItemBot">
+                    <div class="listItemBotLeft"></div>
+                    <div class="listItemBotRight">
+                        <p class="payText">实付款：</p>
+                        <p class="payMoney">￥29.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".headItem").click(function(){
+        var index = $(this).index();
+        $(".headItem").removeClass('headItemValue');
+        $(this).addClass('headItemValue');
+        $(".list .orderList").addClass('displayNode');
+        $(".list .orderList").eq(index).removeClass('displayNode');
+    })
+</script>
+</body>
+</html>

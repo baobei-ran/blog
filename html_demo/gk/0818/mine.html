@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1,maximum-scale=1">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection"  />
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <link href="css/sweetalert.css" rel="stylesheet">
+    <link href="css/application.css" rel="stylesheet">
+    <title>我的订单</title>
+</head>
+<style>
+    .w-title {
+        text-align: center;
+        font-size: 1.5rem;
+        line-height: 2.5;
+        letter-spacing: 0.5rem;
+        color: #fff;
+    }
+    .w-header {
+        height: 12rem;
+        border-radius: 0 0 3rem 3rem;
+        background: url(./img/mine.png);
+        background-size:100% 100%;
+        background-repeat: no-repeat;
+        position: relative; /*关键点*/
+    }
+    .userBase {
+        position:absolute;
+        bottom: 1rem;
+        margin: 0 2.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: calc(100% - 5rem);
+    }
+    .userName {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-left: 1.5rem;
+    }
+    .shopName {
+        color: #fffcf8;
+        line-height: 1.5;
+    }
+    .userImg {
+        width: 5rem;
+        border: 1px solid #000;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+    .userStar {
+        width: 1.2rem;
+    }
+    .userLable {
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+    }
+    .orderBase {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .orderNum {
+        color: #f00;
+        font-weight: bolder;
+        font-size: 1.4rem;
+    }
+    .orderText {
+        color: #fffcf8;
+    }
+    .w-container {
+        margin: 1rem 0;
+        background: url(./img/mine3.png);
+        background-repeat: no-repeat;
+        background-size:100% 100%;
+        height: 12.5rem;
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        align-items: center;
+    }
+    .w-main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .w-text {
+        font-size: 1.3rem;
+        font-weight: bold;
+    }
+    .w-main-num {
+        color: #f00;
+        font-size: 3rem;
+        line-height: 1.5;
+        font-weight: bolder;
+    }
+    .shelves div {
+        margin: 0 0.5rem;
+    }
+</style>
+<body style="background: #fff">
+<div>
+    <div class="w-header">
+        <div class="w-title">我的账号</div>
+        <div class="userBase">
+            <img src="img/mine4.png" class="userImg"/>
+            <div class="userLable">
+                <div class="userName">
+                    <p class="shopName">旗舰店</p>
+                    <div>
+                        <img src="img/star.png" class="userStar">
+                        <img src="img/star.png" class="userStar">
+                        <img src="img/star.png" class="userStar">
+                        <img src="img/star.png" class="userStar">
+                    </div>
+                </div>
+                <div class="orderBase">
+                    <p class="orderNum">10单</p>
+                    <p class="orderText">本月收送</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-container">
+        <div class="w-main" style="border-right: 2px solid #f00">
+            <p class="w-text">乐收详情</p>
+            <p class="w-main-num">10<span style="font-size: 1.2rem">单</span></p>
+        </div>
+        <div class="w-main">
+            <p class="w-text">乐收详情</p>
+            <p class="w-main-num">10<span style="font-size: 1.2rem">单</span></p>
+        </div>
+    </div>
+    <section class="wrapper cart">
+        <div class="shelves move">
+            <div>
+                <a class="iconmenu" href="lsorder.html"><i class="icon-order" ></i>历史订单 <span class="arrowicon"></span></a>
+            </div>
+            <div>
+                <a class="iconmenu" href="order_pay.html"><i class="icon-cart" ></i>商城订单 <span class="arrowicon"></span></a>
+            </div>
+            <div>
+                <a class="iconmenu" id="return"><i class="icon-circle_close" ></i>退出账号 <span class="arrowicon"></span></a>
+            </div>
+        </div>
+    </section>
+</div>
+<div class="row footbar">
+    <a class="col-4 text-center" href="index.html" ><span class="icon-home"></span>首页</a>
+    <a class="col-4 text-center" href="shopping.html" ><span class="icon-cart2"></span>商城</a>
+    <a class="col-4 text-center" href="dingdan.html" ><span class="icon-order2"></span>订单</a>
+    <a class="col-4 text-center" href="mine.html" ><span class="icon-user2"></span>我的</a>
+</div>
+</body>
+</html>

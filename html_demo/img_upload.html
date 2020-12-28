@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>图片上传upload及预览的几种方式</title>
+</head>
+
+<body>
+    <input type="file" onchange="upload(this)" />
+    <img src="" alt="" id='upload-img' />
+
+
+
+    <script type="text/javascript">
+        // 使用 FileReader 解析预览图片
+        function getFile(event) {
+            if (!event || !window.FileReader) return  // 看支持不支持 FileReader
+            // vue 获取方式 event.target.files 
+            const files = event.files;  // 原生获取方式
+            // const fileReader = new FileReader()                // 内置方法new FileReader()   读取文件
+            // fileReader.addEventListener('load', () => {
+            //     console.log(fileReader.result)
+            // })
+            // fileReader.readAsDataURL(files[0])
+
+
+            //到这里后, 选择图片就可以显示出来了
+           
+            let reader = new FileReader()
+            reader.onloadend = function () {
+                console.log(this.result)
+                document.getElementById('upload-img').src = this.result
+            }
+            reader.readAsDataURL(files[0]) // 这里是最关键的一步，转换就在这里 （参数必须是blob对象）
+
+            event.value = "";       // 这里清空input的value 不然不可以选择相同的文件
+        }
+
+
+
+        // IE10 以下不支持
+        function getObjectURL(event) {
+            console.log(event)
+            var file = event.files[0];
+            var url = null;
+            if (window.createObjectURL != undefined) { // basic
+                url = window.createObjectURL(file);
+            } else if (window.URL != undefined) { // mozilla(firefox)
+                url = window.URL.createObjectURL(file);
+            } else if (window.webkitURL != undefined) { // webkit or chrome
+                url = window.webkitURL.createObjectURL(file);
+            }
+            document.getElementById('upload-img').src = url
+        }
+
+        // 支持 IE 10以下
+        function upload(input) {
+            //支持chrome IE10  
+            if (window.FileReader) {
+                var file = input.files[0];
+                filename = file.name.split(".")[0];
+                var reader = new FileReader();
+                reader.onload = function () {
+                    console.log('111111111111111 FileReader:', this.result, document.getElementById('upload-img'));
+                    document.getElementById('upload-img').src = this.result
+                }
+                reader.readAsDataURL(file);
+            }
+            // 支持IE 7 8 9 10  
+            else if (typeof window.ActiveXObject != 'undefined') {
+                var xmlDoc;
+                xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+                xmlDoc.async = false;
+                xmlDoc.load(input.value);
+                console.log('222222 :', input, '2-22', xmlDoc.xml);
+                document.getElementById('upload-img').src = input.value
+            }
+            //支持FF  
+            else if (document.implementation && document.implementation.createDocument) {
+                var xmlDoc;
+                xmlDoc = document.implementation.createDocument("", "", null);
+                xmlDoc.async = false;
+                xmlDoc.load(input.value);
+                console.log('333333333333', xmlDoc.xml);
+                document.getElementById('upload-img').src = xmlDoc.xml
+            } else {
+                alert('error');
+            }
+        }
+
+
+
+
+    </script>
+
+
+    <div id="localImag"><img id="preview" width="-1" height="-1" style="display:none" /></div> 
+    <input type="file" id="file_head" onchange="setImagePreview(this)" /> 
+
+    <script type="text/javascript">
+        function setImagePreview() {
+            var docObj = document.getElementById("file_head");
+            var fileName = docObj.value;
+            if (!fileName.match(/.jpg|.gif|.png|.bmp/i)) {
+                alert('您上传的图片格式不正确，请重新选择！');
+                return false;
+            }
+
+            var imgObjPreview = document.getElementById("preview");
+            if (docObj.files && docObj.files[0]) {
+                //火狐下，直接设img属性 
+                imgObjPreview.style.display = 'block';
+                imgObjPreview.style.width = '200px';
+                imgObjPreview.style.height = '200px';
+                //imgObjPreview.src = docObj.files[0].getAsDataURL(); 
+                if (window.navigator.userAgent.indexOf("Chrome") >= 1 || window.navigator.userAgent.indexOf("Safari") >= 1) {
+                    imgObjPreview.src = window.webkitURL.createObjectURL(docObj.files[0]);
+                }
+                else {
+                    imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
+                }
+            } else { // 支持IE 7 8 9
+
+                //IE下，使用滤镜 
+                docObj.select();
+                docObj.blur();
+                var imgSrc = document.selection.createRange().text;
+
+                // var fso = new ActiveXObject("Scripting.FileSystemObject");
+                // if(fso.FileExists(imgSrc)){
+                //     var fileObj = fso.GetFile(imgSrc);
+                //     // 获取文件的信息
+                //     console.log(fileObj.name, fileObj.type, fileObj.size)
+                // }
+
+                var localImagId = document.getElementById("localImag");
+                //必须设置初始大小 
+                localImagId.style.width = "63px";
+                localImagId.style.height = "63px";
+                //图片异常的捕捉，防止用户修改后缀来伪造图片 
+                try {
+                    localImagId.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+                    localImagId.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
+                } catch (e) {
+                    alert("您上传的图片格式不正确，请重新选择！");
+                    return false;
+                }
+                imgObjPreview.style.display = 'none';
+                document.selection.empty();
+            }
+            return true;
+        }
+
+    </script>
+</body>
+
+</html>

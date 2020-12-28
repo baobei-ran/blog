@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        var text = "time20201030101206";
+        var datetime = text.substring(4);
+        var y = text.substring(4, 8);
+        var m = text.substring(8, 10);
+        var d = text.substring(10, 12)
+        var h = text.substring(12, 14)
+        var mm = text.substring(14, 16)
+        var s = text.substring(16, 18);
+        var t = y+"-"+m+"-"+ d+" "+h+":"+mm+":"+s
+        console.log(t)
+
+        var timestamp = "2020-10-30 05:49:48"
+        var timestamp2 = Date.parse((new Date(timestamp).toString()));
+        timestamp2 = timestamp2 * 1 + (8*60*60 * 1000);
+        console.log(js_date_time(timestamp2))
+
+        function js_date_time(unixtime) {
+            var date = new Date(unixtime);
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            m = m < 10 ? ('0' + m) : m;
+            var d = date.getDate();
+            d = d < 10 ? ('0' + d) : d;
+            var h = date.getHours();
+            h = h < 10 ? ('0' + h) : h;
+            var minute = date.getMinutes();
+            var second = date.getSeconds();
+            minute = minute < 10 ? ('0' + minute) : minute;
+            second = second < 10 ? ('0' + second) : second;
+            return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+        }
+    </script>
+</body>
+</html>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        function getBleMac(name) {
+            if (!name) return;
+            let arr = name.split("-");
+            let arr1 = arr[1];
+            let arr2 = [];
+            let str1 = arr1.slice(0, 2)
+            let str2 = arr1.slice(2, 4);
+            let str3 = arr1.slice(4, 6);
+            let str4 = arr1.slice(6, 8);
+            let str5 = arr1.slice(8, 10);
+            let str6 = arr1.slice(10, 12);
+            arr2.push(str1)
+            arr2.push(str2)
+            arr2.push(str3)
+            arr2.push(str4)
+            arr2.push(str5)
+            arr2.push(str6)
+            return arr2.join(":")
+        }
+        let name = "SWKECG-E07DEAE74F98";
+        
+        console.log(getBleMac(name))
+
+    </script>
+</body>
+</html>

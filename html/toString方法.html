@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>toString解决面试问题</title>
+</head>
+<body>
+    
+    <script>
+        function add1 (a) {
+            function sum (b) {
+                a = b ? a + b : a;
+                return sum
+            }
+            sum.toString = function () {
+                return a
+            }
+            return sum
+        }
+    
+        console.log(add1(10)(3)(9))     // 
+
+
+
+        function add () {
+            let args = [...arguments];
+            let fn = function () {
+                return add.apply(null, args.concat([...arguments]))
+            }
+            fn.toString = function () {
+                return args.reduce((a, b) => a + b, 0)
+            }
+            return fn
+        }
+        console.log(add(1)(2)(3)(4, 5, 100)(200))
+
+
+
+        function add2 (...args) {
+            let arg = [...args]
+            function sum (...args) {
+                return add.call(null, ...[...arg, ...args])
+            }
+            sum.toString = function () {
+                return arg.reduce((t,v) => t + v)
+            }
+            return sum
+        }
+        
+        console.log(add2(10)(3,4))
+    </script>
+</body>
+</html>

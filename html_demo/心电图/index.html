@@ -1,0 +1,2297 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>   
+    <meta charset="UTF-8">    <title>Echarts实现心电图效果</title>   
+    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.js"></script>
+</head>
+
+<body>
+    <div id="totalFlowRate" style="height:300px;"></div>
+</body>
+
+<script src="./index.js"></script>
+<script type="text/javascript">
+    const Sampling = 125;            // 实时心电数据采样率。每秒数据点个数
+    const TimeLengthPerChart = 4000; // 每个图表窗口显示的数据对应毫秒数
+    const ecgChart = new EcgChart();
+    let totalFlowRate = ecgChart.initChart(document.getElementById('totalFlowRate'))
+    let config = ecgChart.makeConfig(Sampling, TimeLengthPerChart);
+    let option = ecgChart.makeChartOption(config);
+    ecgChart.setOption(totalFlowRate, option);
+   
+    function setChartData(incLength) {
+        const slicedData = [];
+        for (var i=0; i<incLength; i++) {
+            slicedData.push(Math.random())
+        }
+        ecgChart.setData(totalFlowRate, slicedData);
+    }
+
+    setTimeout(() => {
+        setChartData(500)
+    }, 2000)
+
+</script>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/highcharts/8.2.2/css/highcharts.css" rel="stylesheet">
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script> -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.8.0/jquery.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/highcharts/8.2.2/highcharts.js"></script>
+</head>
+
+<body>
+
+    <script>
+        (function () {
+            "use strict";
+            function n(n, t, i, r, u, f, e) {
+                function rr(n) {
+                    return moment(n).format("YYYY-MM-DD HH_mm_ss")
+                }
+                function dr() {
+                    var u, r, f;
+                    for (Highcharts.setOptions({
+                        global: {
+                            useUTC: !1
+                        }
+                    }),
+                        u = document.cookie.split(";"),
+                        r = 0; r < u.length; r++)
+                        if (f = u[r].split("="),
+                            f[0] === "container_heightFix") {
+                            o.heightFix = f[1];
+                            console.dir(o.heightFix);
+                            break
+                        }
+                    $(window).resize(function () {
+                        o.chartContent_alreadyShow = !1;
+                        fi && (hr = fi.element.innerHeight())
+                    });
+                    $("[name='rule-switch']").bootstrapSwitch({
+                        onText: "标准",
+                        offText: "自由",
+                        state: !0,
+                        size: "mini",
+                        labelText: "标尺",
+                        onSwitchChange: nf
+                    });
+                    $("[name='rule-switch']").bootstrapSwitch("state", !0);
+                    $(function () {
+                        function r(n) {
+                            var t = $("#" + n)
+                                , i = t.find(".hw-layer-wrap");
+                            t.fadeIn();
+                            i.css({
+                                "margin-top": -i.outerHeight() / 2
+                            })
+                        }
+                        function n() {
+                            $(".hw-overlay").fadeOut()
+                        }
+                        $("#modal-chart-zoomin").on("show.bs.modal", function () {
+                            var n = $(this)
+                                , t = n.find(".modal-dialog");
+                            n.css("display", "block");
+                            t.css({
+                                "margin-top": Math.max(0, ($(window).height() - t.height()) / 2)
+                            })
+                        });
+                        $("#modal-chart-zoomin-ecgview").on("show.bs.modal", function () {
+                            var n = $(this)
+                                , t = n.find(".modal-dialog");
+                            n.css("display", "block");
+                            t.css({
+                                "margin-top": Math.max(0, ($(window).height() - t.height()) / 4)
+                            })
+                        });
+                        $(".hwLayer-cancel,.hwLayer-close").on("click", function () {
+                            n()
+                        });
+                        $(".show-layer").on("click", function () {
+                            o.type = "";
+                            var n = $(this).data("show-layer");
+                            r(n)
+                        });
+                        $(".hw-overlay").on("click", function (t) {
+                            t.target === this && n();
+                            o.heartShow = !1
+                        });
+                        if ($(document).keyup(function (t) {
+                            t.keyCode === 27 && (n(),
+                                o.heartShow = !1)
+                        }),
+                            $(document).keyup(function (n) {
+                                if (a) {
+                                    var i = a.getGridParam("lastpage"), t;
+                                    n.keyCode === 39 && (it = a.getGridParam("page"),
+                                        it < i && (t = it + 1,
+                                            a.setGridParam({
+                                                page: t
+                                            }).trigger("reloadGrid")));
+                                    n.keyCode === 37 && (it = a.getGridParam("page"),
+                                        it > 1 && (t = it - 1,
+                                            a.setGridParam({
+                                                page: t
+                                            }).trigger("reloadGrid")))
+                                }
+                            }),
+                            fi = $("#splitter1").kendoSplitter({
+                                panes: [{
+                                    min: "260px",
+                                    size: "260px",
+                                    collapsible: !0,
+                                    scrollable: !1,
+                                    resizable: !1
+                                }, {
+                                    collapsible: !1,
+                                    scrollable: !0
+                                }],
+                                resize: function () {
+                                    var n, t;
+                                    for ($("#sp1").css("overflow-y", "scroll"),
+                                        n = 0; n < st; n++)
+                                        t = $("#chart" + (n + 1)).highcharts(),
+                                            t && t.reflow()
+                                }
+                            }).data("kendoSplitter"),
+                            !ft) {
+                            ft = $("#specialEvent-table").DataTable({
+                                searching: !1,
+                                paging: !1,
+                                info: !1,
+                                processing: !0,
+                                data: p,
+                                language: {
+                                    zeroRecords: "Loading..."
+                                },
+                                order: [[2, "asc"]],
+                                columns: [{
+                                    data: "name",
+                                    render: function (n, t, i) {
+                                        return n === "NO" ? "" : n === "正常" ? "<span style='width:80px;color:black' >" + n + "<\/span>" : n === "噪音" ? "<span style='width:80px;color:black' >" + n + "<\/span>" : i.editable ? i.count === 0 ? "<span style='width:80px;color:black'>" + n + "<\/span>" : i.isPoint ? "<a><div style='width:100px;color:#B0802B' ng-click='ecgViewer.gotoIllnessPage(\"" + i.name + "\")'>" + n + "<\/div><\/a>" : "<a><div style='width:100px;color:#B0802B' ng-click='ecgViewer.gotoArtialFibrillationPage()'>" + n + "<\/div><\/a>" : i.count === 0 ? "<span style='width:80px;color:black' >" + n + "<\/span>" : i.name == "排除" ? "<div style='width:80px;color:#B0802B' >" + n + "<\/div>" : i.isPoint ? "<a ng-click='ecgViewer.gotoIllnessPage(\"" + i.name + "\")'><div style='width:80px;color:#B0802B' >" + n + "<\/div><\/a>" : "<a ng-click='ecgViewer.gotoArtialFibrillationPage()'><div style='width:80px;color:#B0802B' >" + n + "<\/div><\/a>"
+                                    },
+                                    orderable: !1
+                                }, {
+                                    data: "count",
+                                    render: function (n, t, i) {
+                                        if (i.name === "NO")
+                                            return n;
+                                        if (i.name === "正常")
+                                            return "<span class='badge badge-primary'>^_^<\/span>";
+                                        if (i.name === "噪音")
+                                            return "<span class='badge badge-primary'>{{ecgViewer.noisePercentOfRecord}}%<\/span>";
+                                        var r = parseInt(n);
+                                        if (r > 0) {
+                                            let n = "";
+                                            return i.name !== "排除" && (n = "<a ng-click='ecgViewer.gotoIllnessPage(\"" + i.name + "\")' >"),
+                                                i.isPoint || (n = "<a ng-click='ecgViewer.gotoArtialFibrillationPage()' >"),
+                                                n + "<span class='badge badge-danger'>" + r + "<\/span><\/a><span class='event-nav'><i style='width:15px' class='btn btn-xs text-muted fa fa-fw fa-lg fa-arrow-circle-left' ng-click='ecgViewer.gotoPrevEventPage(\"" + i.name + '","' + i.isPoint + "\")'><\/i><i style='width:15px' class='btn btn-xs text-muted fa fa-fw fa-lg fa-arrow-circle-right' ng-click='ecgViewer.gotoNextEventPage(\"" + i.name + '","' + i.isPoint + "\")'><\/i><\/span>"
+                                        }
+                                        return "<span class='badge badge-plain' style='width:19px'>" + r + "<\/span>"
+                                    },
+                                    orderable: !1
+                                }, {
+                                    data: "sort",
+                                    render: function (n) {
+                                        return "<span style='0px;display:none'>" + n + "<\/span>"
+                                    }
+                                }],
+                                createdRow: function (n) {
+                                    i(angular.element(n).contents())(t)
+                                }
+                            });
+                            ft.on("mouseover", "tbody tr[role='row'] td", function (n) {
+                                $(n.currentTarget).find(".event-nav").css("display", "inline")
+                            }).on("mouseout", "tbody tr[role='row'] td", function (n) {
+                                $(n.currentTarget).find(".event-nav").css("display", "none")
+                            }).on("mouseover", "tfoot tr[role='row'] td", function (n) {
+                                $(n.currentTarget).find(".event-nav").css("display", "inline")
+                            }).on("mouseout", "tfoot tr[role='row'] td", function (n) {
+                                $(n.currentTarget).find(".event-nav").css("display", "none")
+                            })
+                        }
+                    });
+                    n.$on("iirSwitchChanged", vu);
+                    n.$on("rPeakSwitchChanged", yu);
+                    n.$on("chartRularChanged", pu);
+                    n.$on("RuleSwitchChanged", tf)
+                }
+                function gr(n) {
+                    wt = "";
+                    wt = n;
+                    console.log(wt);
+                    document.getElementById("showpartEcgData").click()
+                }
+                function nu() {
+                    document.getElementById("showNewIllNess").click()
+                }
+                function tu(n) {
+                    var t = document.getElementById(n).innerText;
+                    o.type = t;
+                    wt === "single" ? (o.partEcgValues.length === k + tt ? ti(o.activeAdvisory.record.startTime, o.rPeakindex, o.partEcgValues.concat(o.prePartEcgValues), o.type) : ti(o.activeAdvisory.record.startTime, o.rPeakindex, o.partEcgValues.concat(o.prePartEcgValues), "bad"),
+                        document.getElementById("partEcgData").click(),
+                        $(".hw-overlay").fadeOut()) : iu(wt)
+                }
+                function iu(n) {
+                    var t, i, r;
+                    console.log("download");
+                    for (i in p)
+                        if (n === p[i].name) {
+                            t = p[i].data;
+                            break
+                        }
+                    for (r in t) {
+                        var u = moment(t[r])
+                            , f = Math.ceil(u.diff(o.activeAdvisory.record.startTime, "ms") / (h * l * 1e3))
+                            , e = o.activeAdvisory.record.startTime.clone().add((f - 1) * h * l, "seconds")
+                            , s = o.activeAdvisory.record.startTime.clone().add(f * h * l, "seconds");
+                        ru(e, s, u)
+                    }
+                }
+                function ru(n, t, i) {
+                    e.getEcgData(o.activeAdvisory.record.deviceFastNumber, o.activeAdvisory.record.startTime, n, t).then(function (t) {
+                        var s = $.extend(!0, [], t.ecg), y = t.sampling, a = i.diff(n, "ms", !0) / c, v = i.diff(o.activeAdvisory.record.startTime, "ms", !0) / c, r = a - k + 1, u = a + tt, f, e = y * h * l;
+                        r >= 0 && u <= e ? (f = s.slice(r, u + 1),
+                            ti(o.activeAdvisory.record.startTime, v, f, o.type),
+                            document.getElementById("partEcgData").click(),
+                            $(".hw-overlay").fadeOut()) : (r < 0 && (r = 0),
+                                u >= e && (u = e - 1),
+                                f = s.slice(r, u),
+                                ti(o.activeAdvisory.record.startTime, v, f, "bad"),
+                                document.getElementById("partEcgData").click(),
+                                $(".hw-overlay").fadeOut())
+                    })
+                }
+                function ur(n, t, i) {
+                    for (var r = t.slice(0), u = 0; u < r.length; u++)
+                        r[u] = [Math.round(r[u] * 100) / 100];
+                    var e = r.join("\r\n")
+                        , s = new Blob([e])
+                        , f = document.getElementById("ecgData");
+                    f.href = URL.createObjectURL(s);
+                    f.download = n.clone().format("YYYYMMDDHHmmss") + "-P" + i + "-完整数据.txt";
+                    o.isResearcher && (o.ecgShow = !0)
+                }
+                function ti(n, t, i, r) {
+                    for (var u in i)
+                        i[u] = Math.round(i[u] * 100) / 100;
+                    var e = i.join("\r\n")
+                        , o = new Blob([e])
+                        , f = document.getElementById("partEcgData");
+                    f.href = URL.createObjectURL(o);
+                    f.download = n.clone().format("YYYY-MM-DD-HH-mm-ss") + "-" + t + "-" + r + ".txt"
+                }
+                function uu(n, t, i, r, u) {
+                    var f = undefined;
+                    for (f in i)
+                        i[f] = Math.round(i[f] * 100) / 100;
+                    var s = i.join("\r\n")
+                        , h = new Blob([s])
+                        , e = document.getElementById("partEcgData");
+                    e.href = URL.createObjectURL(h);
+                    e.download = n.clone().format("YYYY-MM-DD-HH-mm-ss") + "-" + t + "-" + u + "-0.txt";
+                    for (f in r)
+                        r[f] = Math.round(r[f] * 100) / 100;
+                    var c = r.join("\r\n")
+                        , l = new Blob([c])
+                        , o = document.getElementById("partEcgData1");
+                    o.href = URL.createObjectURL(l);
+                    o.download = n.clone().format("YYYY-MM-DD-HH-mm-ss") + "-" + t + "-" + u + "-1.txt"
+                }
+                function fr(n, t, i) {
+                    for (var u, f, e = [], r = 0; r < t.length; r++)
+                        t[r] = moment(t[r]),
+                            e[r] = [t[r].diff(n, "ms") / c];
+                    for (u = e.slice(0),
+                        f = 0; f < u.length; f++)
+                        u[f] = [u[f]];
+                    var h = u.join("\r\n")
+                        , l = new Blob([h])
+                        , s = document.getElementById("rPeakData");
+                    s.href = URL.createObjectURL(l);
+                    s.download = n.clone().format("YYYYMMDDHHmmss") + "-P" + i + "-R.txt";
+                    o.isResearcher && (o.rPeakShow = !0)
+                }
+                function fu() {
+                    var r, f, t;
+                    $.fakeLoaderShow({
+                        timeToHide: 1e4,
+                        targetClass: "fakeLoader",
+                        filterContentId: "splitter1",
+                        bgColor: "rgba(20, 20, 20, 0.1)",
+                        spinner: "spinner4"
+                    });
+                    o.activeAdvisory = angular.copy(n.paramObj.advisory);
+                    o.isResearcher = n.paramObj.map.get("isResearcher");
+                    o.timeParameter = n.paramObj.map.get("time");
+                    o.timeParameter === "undefined" || o.timeParameter === "" || o.timeParameter === undefined || (o.jumpToTimeFlag = !0);
+                    (o.isResearcher === "undefined" || o.isResearcher === "false" || o.isResearcher === "") && (o.isResearcher = !1);
+                    o.isResearcher === "true" && (o.isResearcher = !0);
+                    yt = ai / 60;
+                    o.deviceLeads = parseInt(o.activeAdvisory.record.device.leads);
+                    c = 1e3 / v;
+                    let i = [];
+                    for (o.deviceLeads === 3 && (o.deviceLeads3 = !0,
+                        l = 1,
+                        st = 3,
+                        o.btnBefore = "前20秒",
+                        o.btnAfter = "后20秒",
+                        o.pageTime = 20,
+                        i = Array.of(1, 2, 3)),
+                        o.deviceLeads === 1 && (o.deviceLeads3 = !1,
+                            i = Array.of(1, 2, 3, 4)),
+                        setTimeout(() => {
+                            i.forEach((n, t) => {
+                                let r = "chart" + (t + 1);
+                                var i = {
+                                    id: r,
+                                    chartStartTime: null,
+                                    chartEndTime: null,
+                                    chart: undefined,
+                                    data: []
+                                };
+                                y[r] = i;
+                                i.chart = bt(i)
+                            }
+                            )
+                        }
+                            , 20),
+                        o.activeAdvisory.record.startTime = moment(o.activeAdvisory.record.startTime),
+                        o.activeAdvisory.record.endTime = moment(o.activeAdvisory.record.endTime),
+                        r = [],
+                        f = (o.activeAdvisory.record.endTime.clone().milliseconds(0).seconds(0).minutes(0).hours(0).diff(o.activeAdvisory.record.startTime.clone().milliseconds(0).seconds(0).minutes(0).hours(0), "day") + 1) * 24 / lt,
+                        t = 0; t < f; t++)
+                        r.push({
+                            page: t + 1
+                        });
+                    su().then(function () {
+                        for (var t = [], i = Math.ceil(o.activeAdvisory.record.lengthInSeconds / (h * l)), n = 0; n < i; n++)
+                            t.push({
+                                page: n + 1
+                            });
+                        a = $("#pagerTable").jqGrid({
+                            data: t,
+                            datatype: "local",
+                            rowNum: 1,
+                            colModel: [{
+                                name: "page"
+                            }],
+                            styleUI: "Bootstrap",
+                            pager: "#chartPager",
+                            width: 400,
+                            loadComplete: function () {
+                                u(function () {
+                                    if (a) {
+                                        var n = a.getGridParam("page");
+                                        it = n;
+                                        sr();
+                                        o.timeParameter && o.jumpToTimeFlag ? (console.dir(o.timeParameter),
+                                            o.jumpToTimeFlag = !1,
+                                            er(o.timeParameter)) : ii(n)
+                                    }
+                                })
+                            }
+                        })
+                    }, function () { });
+                    eu();
+                    kt(1)
+                }
+                function eu() {
+                    return e.getHeartRateInfo(o.activeAdvisory.record.device.seqNumber, o.activeAdvisory.record.startTime).then(function (t) {
+                        t && (o.hsStats = t,
+                            console.dir(o.hsStats),
+                            n.hsStats = t)
+                    }, function (n) {
+                        return console.dir(n),
+                            r.reject(n)
+                    })
+                }
+                function ii(n) {
+                    var t, i, u, n;
+                    o.activeAdvisory && (t = o.activeAdvisory.record.startTime.clone().add((n - 1) * h * l, "seconds"),
+                        i = o.activeAdvisory.record.startTime.clone().add(n * h * l, "seconds"),
+                        i.isAfter(o.activeAdvisory.record.endTime) && (i = o.activeAdvisory.record.endTime),
+                        o.ecgTimeSectionText = " " + t.format("YYYY/MM/DD"),
+                        o.cursorTimeText = t.format("HH:mm:ss.SSS"),
+                        o.ecgPageDesc = " (" + l + " x " + h + "秒)",
+                        r.all([e.getRPeakData(o.activeAdvisory.record.device.seqNumber, o.activeAdvisory.record.startTime, t, i), e.getNoiseData(o.activeAdvisory.record.device.seqNumber, o.activeAdvisory.record.startTime, t, i), e.getEcgData(o.activeAdvisory.record.device.seqNumber, o.activeAdvisory.record.startTime, t, i), e.getSpecialEventResult(o.activeAdvisory.record.device.seqNumber, o.activeAdvisory.record.startTime, t, i), of()]).then(function (r) {
+                            var f, u;
+                            if ($.fakeLoaderHide(),
+                                r[2].error)
+                                swal({
+                                    type: "warning",
+                                    title: "提示",
+                                    text: r[2].error.message,
+                                    confirmButtonText: "确定"
+                                });
+                            else {
+                                s = r[0];
+                                li = r[1];
+                                rt = r[3].specialEvents;
+                                ut = r[4];
+                                console.log("sectionEvents", ut.length);
+                                let a = r[2].ecgData
+                                    , e = r[2].sampling;
+                                if (o.deviceLeads = r[2].leads,
+                                    v = e,
+                                    c = 1e3 / v,
+                                    o.deviceLeads === 3) {
+                                    o.btnBefore = "前20秒";
+                                    o.btnAfter = "后20秒";
+                                    o.deviceLeads3 = !0;
+                                    ht = $.extend(!0, [], a[0]);
+                                    for (let r = 0; r < 3; r++) {
+                                        let u = $.extend(!0, [], a[r]);
+                                        o.sliceName = Math.floor((n - 1) / yt) * v * ai * vt;
+                                        vi && (u = EcgBaselineFilter.Filtfilt(u));
+                                        ur(t, u, n);
+                                        let w = null
+                                            , b = null;
+                                        s[0] && (w = t.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"),
+                                            b = i.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"));
+                                        let d = bs.rangeValue(s, w, b);
+                                        fr(t, d, n);
+                                        for (let n in u)
+                                            u[n] = u[n] * 1e3;
+                                        let c = u;
+                                        while (c.length < h * e)
+                                            c.push(0);
+                                        let p = t.clone().add(0, "seconds")
+                                            , k = t.clone().add(h, "seconds");
+                                        for (let n = 0; n < c.length; n++)
+                                            c[n] = [p.clone().add(1e3 / v * n, "ms").toDate(), c[n]];
+                                        f = {
+                                            chartStartTime: p,
+                                            chartEndTime: k,
+                                            data: c
+                                        };
+                                        o.chartEcgDatas_Display[r] = f;
+                                        let l = "chart" + (r + 1);
+                                        y[l] = {
+                                            id: l,
+                                            chartStartTime: p,
+                                            chartEndTime: k,
+                                            chart: undefined,
+                                            data: c
+                                        };
+                                        y[l].chart = bt(y[l])
+                                    }
+                                }
+                                if (o.deviceLeads === 1) {
+                                    o.deviceLeads3 = !1;
+                                    ht = $.extend(!0, [], a[0]);
+                                    u = $.extend(!0, [], a[0]);
+                                    o.sliceName = Math.floor((n - 1) / yt) * v * ai * vt;
+                                    vi && (u = EcgBaselineFilter.Filtfilt(u));
+                                    ur(t, u, n);
+                                    let r = null
+                                        , f = null;
+                                    s[0] && (r = t.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"),
+                                        f = i.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"));
+                                    let c = bs.rangeValue(s, r, f);
+                                    fr(t, c, n);
+                                    for (let n in u)
+                                        u[n] = u[n] * 1e3;
+                                    for (let n = 0; n < l; n++) {
+                                        let i = u.slice(n * h * e, (n + 1) * h * e);
+                                        while (i.length < h * e)
+                                            i.push(0);
+                                        let f = t.clone().add(n * h, "seconds")
+                                            , o = t.clone().add((n + 1) * h, "seconds");
+                                        for (let n = 0; n < i.length; n++)
+                                            i[n] = [f.clone().add(1e3 / v * n, "ms").toDate(), i[n]];
+                                        let r = "chart" + (n + 1);
+                                        y[r] = {
+                                            id: r,
+                                            chartStartTime: f,
+                                            chartEndTime: o,
+                                            chart: undefined,
+                                            data: i
+                                        };
+                                        y[r].chart = bt(y[r])
+                                    }
+                                }
+                            }
+                        }, function (n) {
+                            $.fakeLoaderHide();
+                            console.dir(n)
+                        }),
+                        u = t.diff(at, "minute") / 60,
+                        n = Math.ceil(u / lt),
+                        hi = t.clone(),
+                        console.log([u, n, o.heartRateChartPageNum].join(",")),
+                        n != o.heartRateChartPageNum ? kt(n) : (o.plotTime == null && (o.plotTime = t.clone().milliseconds(0).seconds(0)),
+                            ct != null && (o.plotTime = t.clone().milliseconds(0).seconds(0),
+                                yi(ct, t))))
+                }
+                function bt(n, i) {
+                    var f = n.chart, r;
+                    return f ? (f.series[0].setData(i),
+                        n.chart) : (r = n.id,
+                            Highcharts.chart(r, {
+                                chart: {
+                                    height: ((b - w) / 500 + 3) / (h * 5 + 4) * 100 + "%",
+                                    zoomType: "x",
+                                    marginTop: 30,
+                                    animation: !1,
+                                    events: {
+                                        load: function () {
+                                            y[r].chart = this
+                                        },
+                                        render: function () {
+                                            var n = y[r], i, u, p, b, l, w, d, h, a, f, e;
+                                            if (n.chartStartTime) {
+                                                if (o.chartContent_alreadyShow || ui(),
+                                                    moment(o.chartContent_startTime).isBetween(n.chartStartTime, n.chartEndTime, null, "[]") && (o.chartContent_alreadyShow = !0,
+                                                        ri(r, o.chartContent_s)),
+                                                    o.isShowNormalBeat && pt && s) {
+                                                    i = n.chartStartTime.clone();
+                                                    u = n.chartEndTime.clone();
+                                                    s[0] && (i = n.chartStartTime.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"),
+                                                        u = n.chartEndTime.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"));
+                                                    p = bs.rangeValue(s, i, u);
+                                                    for (b in p)
+                                                        l = moment(p[b]),
+                                                            l.isBetween(n.chartStartTime, n.chartEndTime, null, "[]") && n.chart.xAxis[0].addPlotLine({
+                                                                value: l,
+                                                                color: tr,
+                                                                width: 1,
+                                                                id: "RPeakLine" + l.valueOf(),
+                                                                label: {
+                                                                    text: "N",
+                                                                    rotation: 0,
+                                                                    align: "center",
+                                                                    x: -2,
+                                                                    y: -5,
+                                                                    style: {
+                                                                        color: ir,
+                                                                        "font-weight": "bold"
+                                                                    }
+                                                                },
+                                                                zIndex: 20
+                                                            })
+                                                }
+                                                if (pt && li[0]) {
+                                                    i = n.chartStartTime.clone();
+                                                    u = n.chartEndTime.clone();
+                                                    s[0] && (i = n.chartStartTime.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"),
+                                                        u = n.chartEndTime.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"));
+                                                    w = bs.rangeValue(li, i, u);
+                                                    for (d in w)
+                                                        h = moment(w[d]),
+                                                            h.isBetween(n.chartStartTime, n.chartEndTime, null, "[]") && (n.chart.xAxis[0].removePlotLine("RPeakLine" + h.valueOf()),
+                                                                n.chart.xAxis[0].removePlotBand("LoadingBand"),
+                                                                n.chart.xAxis[0].addPlotLine({
+                                                                    value: h,
+                                                                    color: br,
+                                                                    width: 1,
+                                                                    id: "NoiseLine" + h.valueOf(),
+                                                                    label: {
+                                                                        text: "Z",
+                                                                        rotation: 0,
+                                                                        align: "center",
+                                                                        x: -2,
+                                                                        y: -5,
+                                                                        style: {
+                                                                            color: kr,
+                                                                            "font-weight": "bold"
+                                                                        }
+                                                                    },
+                                                                    zIndex: 20
+                                                                }))
+                                                }
+                                                if (pt && rt)
+                                                    for (a in rt) {
+                                                        var g = rt[a].data
+                                                            , nt = rt[a].name
+                                                            , v = rt[a].abbr
+                                                            , t = moment(g);
+                                                        if (t.isBetween(n.chartStartTime, n.chartEndTime, null, "[]")) {
+                                                            if (n.chart.xAxis[0].removePlotLine("RPeakLine" + t.valueOf()),
+                                                                n.chart.xAxis[0].removePlotLine("NoiseLine" + t.valueOf()),
+                                                                f = null,
+                                                                e = null,
+                                                                nt === ni)
+                                                                f = gt,
+                                                                    e = gt;
+                                                            else
+                                                                switch (v) {
+                                                                    case "fake":
+                                                                        f = "gray";
+                                                                        e = "gray";
+                                                                        break;
+                                                                    default:
+                                                                        f = pr;
+                                                                        e = wr
+                                                                }
+                                                            v.charCodeAt(0) >= 97 ? n.chart.xAxis[0].addPlotLine({
+                                                                value: t,
+                                                                color: f,
+                                                                width: 1,
+                                                                id: "SpecialEventLine" + t.valueOf(),
+                                                                label: {
+                                                                    text: v,
+                                                                    rotation: 0,
+                                                                    align: "center",
+                                                                    x: -2,
+                                                                    y: -20,
+                                                                    style: {
+                                                                        color: e,
+                                                                        fontWeight: "bold",
+                                                                        fontSize: "10px"
+                                                                    }
+                                                                },
+                                                                zIndex: 20
+                                                            }) : n.chart.xAxis[0].addPlotLine({
+                                                                value: t,
+                                                                color: f,
+                                                                width: 1,
+                                                                id: "SpecialEventLine" + t.valueOf(),
+                                                                label: {
+                                                                    text: v,
+                                                                    rotation: 0,
+                                                                    align: "center",
+                                                                    x: -2,
+                                                                    y: -5,
+                                                                    style: {
+                                                                        color: e,
+                                                                        fontWeight: "bold"
+                                                                    }
+                                                                },
+                                                                zIndex: 20
+                                                            })
+                                                        }
+                                                    }
+                                                if (pt && ut && ut.forEach(t => {
+                                                    let u = t.eventAbbr
+                                                        , o = t.eventName
+                                                        , h = u.length <= 3 ? "12px" : "10px"
+                                                        , i = null
+                                                        , r = null;
+                                                    o === ni ? (i = gt,
+                                                        r = gt) : (i = tr,
+                                                            r = ir);
+                                                    const f = t.events
+                                                        , e = [];
+                                                    for (let t = 0; t < f.length; t++) {
+                                                        let i = f[t]
+                                                            , r = moment(i.StartTime);
+                                                        if (!r.isAfter(n.chartEndTime)) {
+                                                            let u = moment(i.EndTime);
+                                                            u.isBefore(n.chartStartTime) || e.push([r, u])
+                                                        }
+                                                    }
+                                                    e.forEach(t => {
+                                                        var c, v, f;
+                                                        let e = t[0]
+                                                            , o = t[1]
+                                                            , l = e.clone().format("YYYY-MM-DDTHH:mm:ssZ")
+                                                            , a = o.clone().format("YYYY-MM-DDTHH:mm:ssZ");
+                                                        s[0] && (l = e.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"),
+                                                            a = o.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"));
+                                                        c = bs.rangeValue(s, l, a);
+                                                        for (v in c)
+                                                            f = moment(c[v]),
+                                                                f.isBetween(e, o, null, "[]") && (n.chart.xAxis[0].removePlotLine("RPeakLine" + f.valueOf()),
+                                                                    n.chart.xAxis[0].removePlotLine("NoiseLine" + f.valueOf()),
+                                                                    n.chart.xAxis[0].removePlotLine("SpecialEventLine" + f.valueOf()),
+                                                                    n.chart.xAxis[0].addPlotLine({
+                                                                        value: f,
+                                                                        color: i,
+                                                                        width: 1,
+                                                                        id: "SectionEventLine" + f.valueOf(),
+                                                                        label: {
+                                                                            text: u,
+                                                                            rotation: 0,
+                                                                            align: "center",
+                                                                            x: -2,
+                                                                            y: -5,
+                                                                            style: {
+                                                                                color: r,
+                                                                                "font-weight": "bold",
+                                                                                "font-size": h
+                                                                            }
+                                                                        },
+                                                                        zIndex: 20
+                                                                    }))
+                                                    }
+                                                    )
+                                                }
+                                                ),
+                                                    !(o.timeParameter === undefined || o.timeParameter === "")) {
+                                                    let i = new Date(o.timeParameter)
+                                                        , t = i.getTime() - k * c
+                                                        , r = t + (k + tt) * c
+                                                        , u = moment(t)
+                                                        , f = moment(r);
+                                                    n.chart.xAxis[0].addPlotBand({
+                                                        from: u,
+                                                        to: f,
+                                                        color: ki,
+                                                        id: "LoadingBand"
+                                                    })
+                                                }
+                                            }
+                                        },
+                                        selection: function (t) {
+                                            var i = y[n.id], s = parseInt(i.id.substring(5)), f, e;
+                                            if (t.preventDefault(),
+                                                o.activeAdvisory) {
+                                                let n = o.activeAdvisory.record.startTime
+                                                    , y = moment(t.xAxis[0].min)
+                                                    , p = moment(t.xAxis[0].max)
+                                                    , w = a.getGridParam("page");
+                                                for (let n = 0; n < st; n++) {
+                                                    let t = $("#chart" + (n + 1)).highcharts();
+                                                    t && (t.xAxis[0].removePlotBand("LoadingBand"),
+                                                        t.xAxis[0].removePlotBand("SelectedBand"),
+                                                        t.xAxis[0].removePlotBand("DblClickBand"),
+                                                        t.xAxis[0].removePlotBand("ClickBand"))
+                                                }
+                                                i.chart.xAxis[0].addPlotBand({
+                                                    from: y,
+                                                    to: p,
+                                                    color: ki,
+                                                    id: "SelectedBand"
+                                                });
+                                                ui();
+                                                f = (p.diff(n, "ms") / c).toFixed(0) - (y.diff(n, "ms") / c).toFixed(0);
+                                                e = p.diff(n, "ms") - y.diff(n, "ms");
+                                                let k = y.format("mm:ss.SSS")
+                                                    , d = p.format("mm:ss.SSS");
+                                                o.indexAndSecondsLength = "Len:" + f + "," + e + "ms";
+                                                o.showStartTime = k + "—" + d;
+                                                let b = y.diff(i.chartStartTime.clone(), "ms");
+                                                o.chartContent_startTime = y;
+                                                o.chartContent_s = b;
+                                                o.chartContent_chartId = r;
+                                                o.chartContent_operate = "selection";
+                                                o.chart_idx = s - 1;
+                                                let g = i.chartStartTime.clone();
+                                                o.offsetTime = y.diff(g, "seconds");
+                                                ri(r, b);
+                                                u(function () {
+                                                    let t = o.sliceName;
+                                                    o.selection.recordRange = (y.diff(n, "ms") / c).toFixed(0) + " - " + (p.diff(n, "ms") / c).toFixed(0);
+                                                    o.selection.sliceRange = (y.diff(n, "ms") / c - t / vt).toFixed(0) + " - " + (p.diff(n, "ms") / c - t / vt).toFixed(0);
+                                                    o.selection.pageRange = (y.diff(n, "ms") / c - t / vt - (w - 1) % yt * l * h * v).toFixed(0) + " - " + (p.diff(n, "ms") / c - t / vt - (w - 1) % yt * l * h * v).toFixed(0)
+                                                })
+                                            }
+                                        },
+                                        click: function (i) {
+                                            var u = y[n.id], pt, wt, rt, ut, d, ft, a, p, et, g, bt, nt, w;
+                                            i.preventDefault();
+                                            var gt = i.xAxis[0].value
+                                                , vt = moment(gt)
+                                                , it = parseInt(u.id.substring(5))
+                                                , ni = it - 1;
+                                            o.deviceLeads === 3 && (it = 1);
+                                            let f = u.chartStartTime.clone().add(-(it - 1) * h, "seconds")
+                                                , yt = f.clone().add(l * h, "seconds");
+                                            if (s) {
+                                                pt = u.chartStartTime.clone();
+                                                wt = u.chartEndTime.clone();
+                                                s[0] && (pt = u.chartStartTime.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"),
+                                                    wt = u.chartEndTime.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"));
+                                                var ti = f.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ")
+                                                    , ii = yt.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ")
+                                                    , b = bs.rangeValue(s, ti, ii)
+                                                    , e = [];
+                                                for (rt in b)
+                                                    ut = moment(b[rt]),
+                                                        ut.isBetween(f, yt, null, "[]") && (e[rt] = Math.abs(vt.diff(ut, "seconds", !0)));
+                                                d = e[0];
+                                                for (ft in e)
+                                                    d >= e[ft] && (d = e[ft]);
+                                                if (a = e.indexOf(d),
+                                                    a === 0) {
+                                                    swal({
+                                                        type: "warning",
+                                                        title: "提示",
+                                                        text: "无法选择此R峰",
+                                                        confirmButtonText: "确定"
+                                                    });
+                                                    return
+                                                }
+                                                p = moment(b[a]);
+                                                et = moment(b[a - 1]);
+                                                o.rPeakindex = p.diff(o.activeAdvisory.record.startTime, "ms", !0) / c;
+                                                o.preRPeakindex = et.diff(o.activeAdvisory.record.startTime, "ms", !0) / c;
+                                                g = moment(p.clone().add(-k * c, "ms").utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ss.SSSZ"));
+                                                bt = moment(p.clone().add(tt * c, "ms").utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ss.SSSZ"));
+                                                o.offsetTime = vt.diff(f, "seconds");
+                                                var kt = p.diff(f, "ms", !0) / c
+                                                    , ot = kt - k + 1
+                                                    , ct = kt + tt;
+                                                ot < 0 && (ot = 0);
+                                                ct > l * h * v && (ct = l * h * v - 1);
+                                                var dt = et.diff(f, "ms", !0) / c
+                                                    , lt = dt - k + 1
+                                                    , at = dt + tt;
+                                                for (lt < 0 && (lt = 0),
+                                                    at > l * h * v && (at = l * h * v - 1),
+                                                    o.partEcgValues = ht.slice(ot, ct + 1),
+                                                    o.prePartEcgValues = ht.slice(lt, at + 1),
+                                                    nt = 0; nt < st; nt++)
+                                                    w = $("#chart" + (nt + 1)).highcharts(),
+                                                        w && (w.xAxis[0].removePlotBand("LoadingBand"),
+                                                            w.xAxis[0].removePlotBand("SelectedBand"),
+                                                            w.xAxis[0].removePlotBand("DblClickBand"),
+                                                            w.xAxis[0].removePlotBand("ClickBand"));
+                                                u.chart.xAxis[0].addPlotBand({
+                                                    from: g,
+                                                    to: bt,
+                                                    color: "skyblue",
+                                                    id: "ClickBand"
+                                                });
+                                                o.dateTimes = [];
+                                                o.dateTimes.push(p);
+                                                ui();
+                                                let n = g.diff(u.chartStartTime.clone(), "ms");
+                                                o.chartContent_startTime = g;
+                                                o.chartContent_s = n;
+                                                o.chartContent_chartId = r;
+                                                o.chartContent_operate = "click";
+                                                ri(r, n);
+                                                t.$apply(function () {
+                                                    if (o.chart_idx = ni,
+                                                        a >= 2) {
+                                                        let n = moment(b[a - 2]);
+                                                        o.prepreRPeakindex = n.diff(o.activeAdvisory.record.startTime, "ms", !0) / c
+                                                    }
+                                                    o.rr = o.rPeakindex - o.preRPeakindex;
+                                                    let n = o.preRPeakindex - o.prepreRPeakindex;
+                                                    o.prepreRPeakindex > 0 && (o.ratio = (o.rr / n).toFixed(2));
+                                                    console.log("vm.chart_idx:" + o.chart_idx)
+                                                })
+                                            }
+                                        },
+                                        dblclick: function (t) {
+                                            var a = y[n.id], kt = t.xAxis[0].value, dt = moment(kt), gt = parseInt(r.substring(5)), b = a.chartStartTime.clone().add(-(gt - 1) * h, "seconds"), rt = b.clone().add(l * h, "seconds"), ut, ft, u, et, p, f, ct, nt, pt, w, wt, bt, it, e;
+                                            if (s) {
+                                                var lt = a.chartStartTime.clone()
+                                                    , at = a.chartEndTime.clone()
+                                                    , vt = ""
+                                                    , yt = "";
+                                                s[0] && (lt = a.chartStartTime.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"),
+                                                    at = a.chartEndTime.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"),
+                                                    vt = b.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"),
+                                                    yt = rt.clone().utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ssZ"));
+                                                var ni = bs.rangeValue(s, lt, at)
+                                                    , i = bs.rangeValue(s, vt, yt)
+                                                    , v = [];
+                                                for (ut in i)
+                                                    ft = moment(i[ut]),
+                                                        ft.isBetween(b, rt, null, "[]") && (v[ut] = Math.abs(dt.diff(ft, "seconds", !0)));
+                                                u = v[0];
+                                                for (et in v)
+                                                    Math.abs(u) >= Math.abs(v[et]) && (u = v[et]);
+                                                if (p = v.indexOf(u),
+                                                    f = i.indexOf(i[p]),
+                                                    f === 0 && u <= 0 || f < 2)
+                                                    return;
+                                                if (f === i.length - 1 && u >= 0)
+                                                    return;
+                                                var d = undefined
+                                                    , g = undefined
+                                                    , ot = undefined;
+                                                if (u < 0 && (d = moment(i[f - 1]),
+                                                    g = moment(i[f]),
+                                                    ot = moment(d.clone().add(-k * c, "ms").utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ss.SSSZ")),
+                                                    ct = moment(g.clone().add(tt * c, "ms").utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ss.SSSZ"))),
+                                                    u > 0 && (d = moment(i[f]),
+                                                        g = moment(i[f + 1]),
+                                                        ot = moment(d.clone().add(-k * c, "ms").utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ss.SSSZ")),
+                                                        ct = moment(g.clone().add(tt * c, "ms").utcOffset(s[0]).format("YYYY-MM-DDTHH:mm:ss.SSSZ"))),
+                                                    moment(ot) < b || moment(ct) > rt)
+                                                    return;
+                                                for (nt = moment(i[p]),
+                                                    pt = moment(i[p - 1]),
+                                                    o.rPeakindex = nt.diff(o.activeAdvisory.record.startTime, "ms", !0) / c,
+                                                    o.preRPeakindex = pt.diff(o.activeAdvisory.record.startTime, "ms", !0) / c,
+                                                    p >= 2 && (w = moment(i[p - 2]),
+                                                        o.prepreRPeakindex = w.diff(o.activeAdvisory.record.startTime, "ms", !0) / c),
+                                                    wt = ht.slice(o.preRPeakindex, o.rPeakindex + 1),
+                                                    bt = ht.slice(o.prepreRPeakindex, o.preRPeakindex + 1),
+                                                    uu(b, o.preRPeakindex, wt, bt, "R-REcg"),
+                                                    it = 0; it < st; it++)
+                                                    e = $("#chart" + (it + 1)).highcharts(),
+                                                        e && (e.xAxis[0].removePlotBand("LoadingBand"),
+                                                            e.xAxis[0].removePlotBand("SelectedBand"),
+                                                            e.xAxis[0].removePlotBand("DblClickBand"),
+                                                            e.xAxis[0].removePlotBand("ClickBand")),
+                                                        e.xAxis[0].addPlotBand({
+                                                            from: w,
+                                                            to: nt,
+                                                            color: "#E6E6FA",
+                                                            id: "DblClickBand"
+                                                        });
+                                                ui();
+                                                let t = w.diff(a.chartStartTime.clone(), "ms")
+                                                    , n = t + nt.diff(w, "ms") / 2;
+                                                o.chartContent_startTime = w;
+                                                o.chartContent_s = n;
+                                                o.chartContent_chartId = r;
+                                                o.chartContent_operate = "dbclick";
+                                                ri(r, n)
+                                            }
+                                        }
+                                    }
+                                },
+                                title: {
+                                    text: null
+                                },
+                                subtitle: {
+                                    text: null
+                                },
+                                credits: {
+                                    enabled: !1
+                                },
+                                exporting: {
+                                    enabled: !1
+                                },
+                                legend: {
+                                    enabled: !1
+                                },
+                                tooltip: {
+                                    enabled: !1
+                                },
+                                plotOptions: {
+                                    series: {
+                                        states: {
+                                            hover: {
+                                                enabled: !1
+                                            }
+                                        }
+                                    }
+                                },
+                                xAxis: {
+                                    type: "datetime",
+                                    tickInterval: v / 5,
+                                    gridLineWidth: .5,
+                                    gridLineColor: d,
+                                    minorGridLineWidth: .2,
+                                    minorGridLineColor: g,
+                                    minorTickInterval: 40,
+                                    tickLength: 0,
+                                    tickColor: d,
+                                    lineColor: g,
+                                    labels: {
+                                        enabled: !1
+                                    }
+                                },
+                                yAxis: {
+                                    min: w,
+                                    max: b,
+                                    tickInterval: 500,
+                                    gridLineWidth: .5,
+                                    gridLineColor: d,
+                                    minorGridLineWidth: .2,
+                                    minorGridLineColor: g,
+                                    minorTickInterval: 100,
+                                    tickLength: 0,
+                                    lineColor: g,
+                                    title: {
+                                        enabled: !1
+                                    },
+                                    labels: {
+                                        enabled: !0,
+                                        formatter: function () {
+                                            if (this.value / 1e3 % 1 == 0)
+                                                return this.value / 1e3 + "mV"
+                                        }
+                                    }
+                                },
+                                series: [{
+                                    type: "line",
+                                    color: "black",
+                                    animation: !1,
+                                    point: {
+                                        events: {
+                                            mouseOver: function () {
+                                                const n = moment(this.x).format("HH:mm:ss.SSS");
+                                                t.$applyAsync(() => {
+                                                    o.cursorTimeText = n
+                                                }
+                                                )
+                                            }
+                                        }
+                                    },
+                                    pointStart: 0,
+                                    lineWidth: 1,
+                                    data: n.data
+                                }]
+                            }))
+                }
+                function ou(n) {
+                    var u, f, t, i;
+                    if (console.dir(n),
+                        !bi)
+                        for (f = 0; f < st; f++)
+                            if (t = $("#chart" + (f + 1)).highcharts(),
+                                t) {
+                                for (i = 0; i < t.xAxis[0].plotLinesAndBands.length; i++)
+                                    if (t.xAxis[0].plotLinesAndBands[i].id === "ClickBand") {
+                                        u = t.xAxis[0].plotLinesAndBands[i];
+                                        break
+                                    }
+                                if (u)
+                                    break
+                            }
+                    (u || bi) && o.activeAdvisory && n && swal({
+                        title: "确认增加",
+                        text: "增加此处ECG的心律类型为【" + n + "】？",
+                        type: "warning",
+                        showCancelButton: !0,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "是的，确认!",
+                        cancelButtonText: "取消",
+                        closeOnConfirm: !1,
+                        closeOnCancel: !0,
+                        showLoaderOnConfirm: !0
+                    }, function (t) {
+                        if (t) {
+                            var i = [];
+                            i.push(n);
+                            e.modifySpecialEvents(o.activeAdvisory.record.device.seqNumber, o.activeAdvisory.record.startTime, o.dateTimes, i, n).then(function (t) {
+                                var i, r;
+                                $(".hw-overlay").fadeOut();
+                                t.data === "true" ? swal({
+                                    title: "增加成功!",
+                                    text: "已增加了时间[" + o.dateTimes[0].format("YYYY/MM/DD HH:mm") + "]的心律类型。",
+                                    type: "success",
+                                    timer: 1e3
+                                }) : swal.showInputError(decodeURIComponent(t.data.error.message));
+                                console.dir("showSpecialEventData增加成功！");
+                                for (i in p)
+                                    p[i].name === n && (p[i].count += 1,
+                                        r = {
+                                            abbr: p[i].abbr,
+                                            editable: p[i].editable,
+                                            isPoint: p[i].isPoint,
+                                            length: p[i].length,
+                                            name: p[i].name,
+                                            sort: p[i].sort,
+                                            data: o.dateTimes[0]
+                                        },
+                                        rt.push(r));
+                                ft && ft.clear().rows.add(p).draw();
+                                sr()
+                            }, function (n) {
+                                console.dir(n);
+                                r.reject(n)
+                            }).then(function () {
+                                console.dir("刷新ecg图！");
+                                let n = a.getGridParam("page");
+                                if (o.deviceLeads === 3)
+                                    for (let n = 1; n < 4; n++) {
+                                        let t = "chart" + n;
+                                        y[t] = {
+                                            id: t,
+                                            chartStartTime: y[t].chartStartTime,
+                                            chartEndTime: y[t].chartEndTime,
+                                            chart: undefined,
+                                            data: y[t].data
+                                        };
+                                        y[t].chart = bt(y[t])
+                                    }
+                                else {
+                                    let i = u.axis.chart
+                                        , t = $(i.container).parent().attr("id")
+                                        , e = i.series[0].options.data;
+                                    i.xAxis[0].removePlotBand("ClickBand");
+                                    let r = t.substring(5)
+                                        , f = o.activeAdvisory.record.startTime.clone().add((n - 1) * h * l, "seconds")
+                                        , s = f.clone().add((r - 1) * h, "seconds")
+                                        , c = f.clone().add(r * h, "seconds");
+                                    y[t] = {
+                                        id: t,
+                                        chartStartTime: s,
+                                        chartEndTime: c,
+                                        chart: undefined,
+                                        data: e
+                                    };
+                                    y[t].chart = bt(y[t])
+                                }
+                            }, function (n) {
+                                swal.showInputError(decodeURIComponent(n.statusText))
+                            })
+                        }
+                    })
+                }
+                function su() {
+                    if (o.activeAdvisory) {
+                        var n = 1;
+                        return n = a ? a.getGridParam("page") : 1,
+                            r.all([e.getAnalysisResult(o.activeAdvisory.record.device.seqNumber, o.activeAdvisory.record.startTime)]).then(function (n) {
+                                var t, s, u, i, r, f, e;
+                                if (console.dir(n),
+                                    n[0].error)
+                                    p = [{
+                                        name: "NO",
+                                        count: "无病症分析数据"
+                                    }],
+                                        o.noisePercentOfRecord = "/";
+                                else {
+                                    for (p = n[0].results,
+                                        console.dir(p),
+                                        o.noisePercentOfRecord = n[0].record.noisePercentOfRecord,
+                                        t = p.filter(n => n.isPoint === !0),
+                                        t = t.filter(n => n.name.indexOf("按键") < 0),
+                                        t = t.filter(n => n.name.indexOf("排除") < 0),
+                                        u = 0; u < t.length; u++)
+                                        for (i = 0; i < t.length - u - 1; i++)
+                                            t[i].name > t[i + 1].name && (s = t[i],
+                                                t[i] = t[i + 1],
+                                                t[i + 1] = s);
+                                    o.specialEventData_Add = [];
+                                    r = [];
+                                    for (f in t)
+                                        e = 1 + parseInt(f),
+                                            e % 4 > 0 ? r.push(t[f]) : e > 0 && (r.push(t[f]),
+                                                o.specialEventData_Add.push(r),
+                                                r = []);
+                                    r.length > 0 && o.specialEventData_Add.push(r)
+                                }
+                                ft && ft.clear().rows.add(p).draw()
+                            })
+                    }
+                }
+                function hu(n) {
+                    if (o.activeAdvisory) {
+                        var t = a.getGridParam("page")
+                            , i = o.activeAdvisory.record.startTime.clone().add(t * h * l, "seconds");
+                        r.all([e.getAnalysisDetailsOfSymptoms(o.activeAdvisory.record.device.seqNumber, o.activeAdvisory.record.startTime, n)]).then(function (t) {
+                            var r, u, f;
+                            if (et[n] = $.extend(!0, [], t[0].events),
+                                et[n]) {
+                                r = et[n];
+                                for (u in r)
+                                    if (f = moment(r[u]),
+                                        r[u].eventTime !== undefined && (f = moment(r[u].eventTime)),
+                                        f.isAfter(i)) {
+                                        let t = Math.ceil(f.diff(o.activeAdvisory.record.startTime, "ms") / (h * l * 1e3));
+                                        ni = n;
+                                        a.setGridParam({
+                                            page: t
+                                        }).trigger("reloadGrid");
+                                        break
+                                    }
+                            }
+                        })
+                    }
+                }
+                function cu(n) {
+                    if (o.activeAdvisory) {
+                        var t = a.getGridParam("page")
+                            , i = o.activeAdvisory.record.startTime.clone().add((t - 1) * h * l, "seconds");
+                        r.all([e.getAnalysisDetailsOfSymptoms(o.activeAdvisory.record.device.seqNumber, o.activeAdvisory.record.startTime, n)]).then(function (t) {
+                            var e, r, u, f;
+                            if (et[n] = $.extend(!0, [], t[0].events),
+                                console.dir(et[n]),
+                                et[n]) {
+                                e = et[n];
+                                r = $.extend(!0, [], e);
+                                r.reverse();
+                                for (u in r)
+                                    if (f = moment(r[u]),
+                                        r[u].eventTime !== undefined && (f = moment(r[u].eventTime)),
+                                        f.isBefore(i)) {
+                                        let t = Math.ceil(f.diff(o.activeAdvisory.record.startTime, "ms") / (h * l * 1e3));
+                                        ni = n;
+                                        a.setGridParam({
+                                            page: t
+                                        }).trigger("reloadGrid");
+                                        break
+                                    }
+                            }
+                        })
+                    }
+                }
+                function er(n) {
+                    if (console.dir(o.activeAdvisory),
+                        o.activeAdvisory) {
+                        let i = o.activeAdvisory.record.startTime.clone()
+                            , r = o.activeAdvisory.record.endTime.clone()
+                            , t = moment(n);
+                        if (t.isBetween(i, r, null, "[]")) {
+                            let n = Math.ceil(t.diff(o.activeAdvisory.record.startTime, "ms") / (h * l * 1e3));
+                            a.setGridParam({
+                                page: n
+                            }).trigger("reloadGrid")
+                        }
+                    }
+                }
+                function lu(t) {
+                    n.paramObj.map.set("name", t);
+                    EcgTools.gotoNewPage(f, "/EcgAnalysis/Illness", n.paramObj.map)
+                }
+                function au() {
+                    EcgTools.gotoNewPage(f, "/EcgAnalysis/AtrialFibrillation", n.paramObj.map)
+                }
+                function vu(n, t) {
+                    if (vi = t,
+                        a) {
+                        let n = a.getGridParam("page");
+                        ii(n)
+                    }
+                }
+                function yu(n, t) {
+                    if (console.log("rPeakSwitchChanged:" + t),
+                        console.dir(t),
+                        pt = t,
+                        a) {
+                        let n = a.getGridParam("page");
+                        ii(n)
+                    }
+                }
+                function pu(n, t) {
+                    switch (t) {
+                        case "0":
+                            w = -1e3;
+                            b = 2500;
+                            break;
+                        case "5":
+                            w = -2500;
+                            b = 2500;
+                            break;
+                        case "10":
+                            w = -5e3;
+                            b = 5e3;
+                            break;
+                        case "20":
+                            w = -1e4;
+                            b = 1e4
+                    }
+                    if (a) {
+                        let n = a.getGridParam("page");
+                        ii(n)
+                    }
+                }
+                function wu(n) {
+                    var t = o.dateTimes[0].clone().add(-10, "seconds")
+                        , i = o.dateTimes[0].clone().add(10, "seconds");
+                    let r = $("#modal-chart-zoomin-ecgview").width()
+                        , u = "-" + parseInt(r) / 3 + "px";
+                    $("#modal-chart-zoomin-ecgview").modal("show").css({
+                        "margin-left": u
+                    });
+                    e.getEcgData(o.activeAdvisory.record.device.seqNumber, o.activeAdvisory.record.startTime, t, i).then(function (t) {
+                        var i, e, u, r;
+                        let f = t.ecgData;
+                        o.deviceLeads === 1 && (i = $.extend(!0, [], f[0]));
+                        o.deviceLeads === 3 && (i = $.extend(!0, [], f[n]));
+                        e = t.sampling;
+                        v = e;
+                        c = 1e3 / v;
+                        for (u in i)
+                            i[u] = i[u] * 1e3;
+                        for (r = i; r.length < v * 10;)
+                            r.push(0);
+                        let s = {
+                            time: o.dateTimes[0],
+                            data: r
+                        };
+                        bu("container_zoomin", s)
+                    })
+                }
+                function bu(n, t) {
+                    o.zoominRuleChart = Highcharts.chart(n, {
+                        chart: {
+                            panning: !0,
+                            resetZoomButton: {
+                                theme: {
+                                    display: "none"
+                                }
+                            },
+                            marginTop: 50,
+                            events: {
+                                load: function () {
+                                    var n = this;
+                                    n.xAxis[0].addPlotLine({
+                                        value: v * 10,
+                                        color: "#AFEEEE",
+                                        width: 1,
+                                        id: "SpecialEventLine",
+                                        label: {
+                                            text: "",
+                                            rotation: 0,
+                                            align: "center",
+                                            x: -2,
+                                            y: -5,
+                                            style: {
+                                                color: "#fff",
+                                                fontWeight: "bold"
+                                            }
+                                        },
+                                        zIndex: 20
+                                    })
+                                },
+                                click: function () { }
+                            }
+                        },
+                        title: {
+                            text: null
+                        },
+                        subtitle: {
+                            text: null
+                        },
+                        credits: {
+                            enabled: !1
+                        },
+                        exporting: {
+                            enabled: !0,
+                            filename: "time" + rr(t.time),
+                            width: 1560
+                        },
+                        legend: {
+                            enabled: !1
+                        },
+                        tooltip: {
+                            enabled: !1
+                        },
+                        xAxis: {
+                            min: v * 6,
+                            max: v * 14,
+                            type: "datetime",
+                            tickInterval: v / 5,
+                            gridLineWidth: .5,
+                            gridLineColor: d,
+                            minorGridLineWidth: .2,
+                            minorGridLineColor: g,
+                            minorTickInterval: 10,
+                            lineColor: g,
+                            tickLength: 0,
+                            labels: {
+                                enabled: !0,
+                                step: 5,
+                                formatter: function () {
+                                    return this.value / v + "s"
+                                }
+                            }
+                        },
+                        yAxis: {
+                            min: w,
+                            max: b,
+                            tickInterval: 500,
+                            gridLineWidth: .5,
+                            gridLineColor: d,
+                            minorGridLineWidth: .2,
+                            minorGridLineColor: g,
+                            minorTickInterval: 200,
+                            lineColor: g,
+                            tickLength: 0,
+                            title: {
+                                enabled: !1
+                            },
+                            labels: {
+                                enabled: !0,
+                                formatter: function () {
+                                    if (this.value / 1e3 % 1 == 0)
+                                        return this.value / 1e3 + "mV"
+                                }
+                            }
+                        },
+                        series: [{
+                            animation: !1,
+                            type: "line",
+                            color: "black",
+                            enableMouseTracking: !1,
+                            pointStart: 0,
+                            lineWidth: 1,
+                            data: t.data
+                        }]
+                    });
+                    localforage.getItem(dt, function (n, t) {
+                        t != null ? (console.log("localforage:get " + dt),
+                            wi(t)) : (wi(1),
+                                console.log(n))
+                    })
+                }
+                function ku() {
+                    var r, u;
+                    let t = o.offsetTime;
+                    console.dir(document.cookie);
+                    console.log("offsetTime:" + t);
+                    $("#modal-chart-ruler").modal();
+                    $("[name='rule-switch']").bootstrapSwitch("state", !0);
+                    var f = o.chartEcgDatas_Display[o.chart_idx]
+                        , n = 0
+                        , i = 4;
+                    t >= 14 ? (n = 11,
+                        i = 15) : t <= 2 ? (n = 0,
+                            i = 4) : (n = t - 2,
+                                i = n + 4);
+                    r = f.data.slice(n * 250, i * 250);
+                    u = {
+                        data: r
+                    };
+                    du("container_ruler", u);
+                    o.heightFix !== 0 && or()
+                }
+                function du(n, t) {
+                    console.dir(t);
+                    o.chartZoom = Highcharts.chart(n, {
+                        chart: {
+                            panning: !0,
+                            resetZoomButton: {
+                                theme: {
+                                    display: "none"
+                                }
+                            },
+                            marginTop: 10,
+                            events: {
+                                load: function () {
+                                    var n = this
+                                },
+                                click: function () { }
+                            }
+                        },
+                        title: {
+                            text: null
+                        },
+                        subtitle: {
+                            text: null
+                        },
+                        credits: {
+                            enabled: !1
+                        },
+                        exporting: {
+                            enabled: !1
+                        },
+                        legend: {
+                            enabled: !1
+                        },
+                        tooltip: {
+                            enabled: !1
+                        },
+                        xAxis: {
+                            min: 0,
+                            max: 1e3,
+                            tickInterval: 50,
+                            gridLineWidth: .5,
+                            gridLineColor: d,
+                            minorGridLineWidth: .2,
+                            tickLength: 0,
+                            minorGridLineColor: ei,
+                            minorTickInterval: 10,
+                            labels: {
+                                enabled: !1
+                            }
+                        },
+                        yAxis: {
+                            min: w,
+                            max: b,
+                            tickInterval: 500,
+                            gridLineWidth: .5,
+                            gridLineColor: d,
+                            minorGridLineWidth: .2,
+                            minorGridLineColor: ei,
+                            minorTickInterval: 100,
+                            tickLength: 0,
+                            title: {
+                                enabled: !1
+                            },
+                            labels: {
+                                enabled: !0,
+                                formatter: function () {
+                                    if (this.value / 1e3 % 1 == 0)
+                                        return this.value / 1e3 + "mV"
+                                }
+                            }
+                        },
+                        series: [{
+                            animation: !1,
+                            type: "line",
+                            color: "black",
+                            enableMouseTracking: !1,
+                            pointStart: 0,
+                            lineWidth: 1,
+                            data: t.data
+                        }]
+                    })
+                }
+                function or() {
+                    var t = document.getElementById("container_ruler"), i, n, u;
+                    document.cookie = "container_heightFix=" + o.heightFix;
+                    i = o.originHeight;
+                    n = i + Number(o.heightFix);
+                    console.dir("target1.style.height : " + t.style.height);
+                    t.style.height = n + "px";
+                    var f = n / i
+                        , e = o.originWidth
+                        , r = e * f;
+                    t.style.width = r + "px";
+                    u = gu(n, r);
+                    o.chartZoom.update(u)
+                }
+                function gu(n, t) {
+                    return {
+                        chart: {
+                            height: n,
+                            width: t
+                        }
+                    }
+                }
+                function nf(t, i) {
+                    console.dir(i);
+                    n.$broadcast("RuleSwitchChanged", i)
+                }
+                function tf(n, t) {
+                    console.dir(t);
+                    var i;
+                    t ? (i = {
+                        yAxis: {
+                            min: w,
+                            max: b,
+                            tickInterval: 500,
+                            gridLineWidth: .5,
+                            gridLineColor: d,
+                            minorGridLineWidth: .2,
+                            minorGridLineColor: ei,
+                            minorTickInterval: 100,
+                            tickLength: 0,
+                            title: {
+                                enabled: !1
+                            },
+                            labels: {
+                                enabled: !0,
+                                formatter: function () {
+                                    if (this.value / 1e3 % 1 == 0)
+                                        return this.value / 1e3 + "mV"
+                                }
+                            }
+                        }
+                    },
+                        o.chartZoom.update(i)) : (i = {
+                            yAxis: {
+                                title: {
+                                    text: null
+                                },
+                                max: null,
+                                min: null,
+                                tickInterval: null,
+                                minorTickInterval: null,
+                                gridLineColor: null,
+                                gridLineWidth: null,
+                                minorGridLineColor: null,
+                                minorGridLineWidth: null,
+                                tickLength: null,
+                                minorTickLength: null,
+                                labels: {
+                                    formatter: function () {
+                                        return this.value
+                                    },
+                                    enabled: !1
+                                }
+                            }
+                        },
+                            o.chartZoom.update(i))
+                }
+                function ri(n, t) {
+                    if (n === o.chartContent_chartId) {
+                        let s = document.getElementById(n)
+                            , f = s.getBoundingClientRect()
+                            , h = $("#chartTop").height()
+                            , i = f.top - h - 32;
+                        i = i + $("#sp2").scrollTop();
+                        let u = $("#" + n).find(".highcharts-plot-border")
+                            , e = u[0].width.animVal.value
+                            , c = f.width
+                            , l = c - e
+                            , r = l + e / 15e3 * t;
+                        if (o.chartContent_operate === "click")
+                            $(".chartContentdiv").css("left", r),
+                                $(".chartContentdiv").css("top", i),
+                                $(".chartContentdiv").show();
+                        else if (o.chartContent_operate === "dbclick")
+                            r = r - 30,
+                                $(".downloadRREcgdiv").css("left", r),
+                                $(".downloadRREcgdiv").css("top", i),
+                                $(".downloadRREcgdiv").show();
+                        else if (o.chartContent_operate === "selection") {
+                            u = $("#" + n).find(".highcharts-plot-background");
+                            let t = u[0].attributes.height.value;
+                            $(".chartContentbutton3leadsdiv").css("left", r);
+                            $(".chartContentbutton3leadsdiv").css("top", i);
+                            $(".chartContentbutton3leadsdiv").show();
+                            let f = i + 30;
+                            $(".indexAndSecondsLengthdiv").css("left", r);
+                            $(".indexAndSecondsLengthdiv").css("top", f);
+                            $(".indexAndSecondsLengthdiv").show();
+                            let e = parseFloat(i) + parseFloat(t);
+                            $(".showStartTimediv").css("left", r);
+                            $(".showStartTimediv").css("top", e);
+                            $(".showStartTimediv").show()
+                        }
+                    }
+                }
+                function rf() {
+                    document.getElementById("partEcgData").click();
+                    document.getElementById("partEcgData1").click()
+                }
+                function sr() {
+                    o.chartContent_chartId = "";
+                    o.chartContent_s = 0;
+                    o.chartContent_startTime = "";
+                    o.chartContent_operate = "";
+                    o.chartContent_alreadyShow = !1;
+                    o.indexAndSecondsLength = "";
+                    o.showStartTime = "";
+                    $(".downloadRREcgdiv").hide();
+                    $(".chartContentdiv").hide();
+                    $(".chartContentbutton3leadsdiv").hide();
+                    $(".indexAndSecondsLengthdiv").hide();
+                    $(".showStartTimediv").hide()
+                }
+                function ui() {
+                    $(".downloadRREcgdiv").hide();
+                    $(".chartContentdiv").hide();
+                    $(".chartContentbutton3leadsdiv").hide();
+                    $(".indexAndSecondsLengthdiv").hide();
+                    $(".showStartTimediv").hide()
+                }
+                function uf() {
+                    o.heartRateChartPageNum = o.heartRateChartPageNum - 1;
+                    o.heartRateChartPageNum > 0 && o.heartRateChartPageNum <= o.heartRatePageCountArray.length && kt(o.heartRateChartPageNum)
+                }
+                function ff() {
+                    o.heartRateChartPageNum = o.heartRateChartPageNum + 1;
+                    o.heartRateChartPageNum > 0 && o.heartRateChartPageNum <= o.heartRatePageCountArray.length && kt(o.heartRateChartPageNum)
+                }
+                function kt(n) {
+                    if (o.heartRateChartPageNum = n,
+                        o.activeAdvisory) {
+                        at = o.activeAdvisory.record.startTime.clone().startOf("day");
+                        o.activeAdvisory.record.startTime.hours() >= 12 && at.add(12, "hour");
+                        si = o.activeAdvisory.record.endTime.clone().endOf("day");
+                        o.activeAdvisory.record.endTime.hours() < 12 && si.subtract(12, "hour");
+                        let r = Math.ceil(si.diff(at, "hours") / lt);
+                        console.log("heartRatePageCount:" + r);
+                        for (let n = 0; n < r; n++)
+                            o.heartRatePageCountArray[n] = n + 1;
+                        let t = at.clone().add((n - 1) * lt, "hours")
+                            , i = at.clone().add(n * lt, "hours");
+                        o.heartRatePageText = " " + t.format("YYYY/MM/DD HH:mm") + " - " + i.format("HH:mm");
+                        nr = t;
+                        o.requestStartTime = t.isBefore(o.activeAdvisory.record.startTime) ? o.activeAdvisory.record.startTime : t;
+                        o.requestEndTime = i.isAfter(o.activeAdvisory.record.endTime) ? o.activeAdvisory.record.endTime : i;
+                        e.getHeartRateData(o.activeAdvisory.record.device.seqNumber, o.activeAdvisory.record.startTime, o.requestStartTime, o.requestEndTime).then(function (n) {
+                            var f, u;
+                            let r = [];
+                            if (n.length > 0) {
+                                let e = n.slice(0);
+                                f = o.requestStartTime.clone();
+                                let s = t.clone();
+                                for (let n = 0; n < i.diff(t, "minutes"); n++)
+                                    r.push({
+                                        x: s.toDate(),
+                                        y: null
+                                    }),
+                                        s.add(1, "minute");
+                                u = f.milliseconds(0).seconds(0).diff(t, "minutes");
+                                for (let n = 0; n < e.length; n++) {
+                                    if (u + n >= r.length)
+                                        break;
+                                    r[u + n].y = parseInt(e[n])
+                                }
+                            } else {
+                                let n = t.clone();
+                                for (let u = 0; u < i.diff(t, "minutes"); u++)
+                                    r.push({
+                                        x: n.toDate(),
+                                        y: null
+                                    }),
+                                        n.add(1, "minute")
+                            }
+                            ci = r;
+                            let e = ef("chartHeartRate", r, o.activeAdvisory.record.startTime, o.activeAdvisory.record.endTime);
+                            o.init_page && (o.init_page = !1)
+                        }, function (n) {
+                            console.dir(n)
+                        })
+                    }
+                }
+                function ef(n, t, i, r) {
+                    return ct = Highcharts.chart(n, {
+                        chart: {
+                            backgroundColor: vr,
+                            height: (gi - di + 46) / 25 / (lt * 6 + 84 / 25) * 100 + "%",
+                            zoomType: "x",
+                            events: {
+                                load: function () {
+                                    let n = this;
+                                    n.xAxis[0].addPlotLine({
+                                        id: "recordStartTime",
+                                        value: i,
+                                        color: lr,
+                                        dashStyle: "DashDot",
+                                        width: 2
+                                    });
+                                    n.xAxis[0].addPlotLine({
+                                        id: "recordEndTime",
+                                        value: r,
+                                        color: ar,
+                                        dashStyle: "DashDot",
+                                        width: 2
+                                    });
+                                    hi && (o.plotTime = hi.clone().milliseconds(0).seconds(0),
+                                        yi(n, o.plotTime))
+                                },
+                                selection: function (n) {
+                                    n.preventDefault()
+                                },
+                                dblclick: function (n) {
+                                    console.dir(n);
+                                    let i = this
+                                        , r = n.xAxis[0].value
+                                        , t = moment(r);
+                                    if (o.activeAdvisory) {
+                                        o.plotTime = t.clone().milliseconds(0).seconds(0);
+                                        console.dir(o.plotTime);
+                                        yi(i, t);
+                                        let n = o.activeAdvisory.record.startTime
+                                            , r = o.activeAdvisory.record.endTime;
+                                        t.isBetween(n, r, null, "[]") && (console.dir("showAllEcgCharts:" + o.plotTime),
+                                            pi(o.plotTime))
+                                    }
+                                }
+                            }
+                        },
+                        title: {
+                            text: null
+                        },
+                        subtitle: {
+                            text: null
+                        },
+                        credits: {
+                            enabled: !1
+                        },
+                        exporting: {
+                            enabled: !1
+                        },
+                        legend: {
+                            enabled: !1
+                        },
+                        tooltip: {
+                            enabled: !1
+                        },
+                        xAxis: {
+                            type: "datetime",
+                            tickInterval: 36e5,
+                            gridLineWidth: .2,
+                            gridLineColor: "gray",
+                            labels: {
+                                enabled: !0
+                            }
+                        },
+                        yAxis: {
+                            min: di,
+                            max: gi,
+                            tickInterval: 50,
+                            gridLineWidth: 0,
+                            minorGridLineWidth: .2,
+                            minorGridLineColor: "gray",
+                            minorTickInterval: 25,
+                            title: {
+                                enabled: !0,
+                                text: "心率 (bpm)"
+                            },
+                            labels: {
+                                enabled: !0,
+                                formatter: function () {
+                                    return this.value
+                                }
+                            }
+                        },
+                        series: [{
+                            animation: !1,
+                            type: "line",
+                            enableMouseTracking: !1,
+                            lineWidth: 1,
+                            data: t
+                        }]
+                    }),
+                        t === undefined && (ct.credits || ct.addCredits({
+                            enabled: !0,
+                            text: "NO HeartRate Data",
+                            href: "#",
+                            position: {
+                                x: -500,
+                                y: -60
+                            },
+                            style: {
+                                "z-index": "999",
+                                "font-size": "24px"
+                            }
+                        })),
+                        ct
+                }
+                function ot(n, t, i, r) {
+                    t.StartTime = moment(t.StartTime);
+                    t.EndTime = moment(t.EndTime);
+                    t.StartTime.isAfter(o.requestStartTime) && o.requestEndTime.isAfter(t.EndTime) && n.xAxis[0].addPlotBand({
+                        from: t.StartTime,
+                        to: t.EndTime,
+                        color: i,
+                        id: r
+                    })
+                }
+                function of() {
+                    return ut ? r.resolve(ut) : e.getSectionEventData(o.activeAdvisory.record.device.seqNumber, o.activeAdvisory.record.startTime)
+                }
+                function yi(n, t) {
+                    if (console.dir("plotMinuteLine"),
+                        console.dir(t.format()),
+                        o.activeAdvisory) {
+                        let i = o.activeAdvisory.record.startTime.clone().seconds(0).milliseconds(0)
+                            , r = o.activeAdvisory.record.endTime.clone().seconds(0).milliseconds(0);
+                        if (n.xAxis[0].removePlotLine("EcgMinute"),
+                            t.isBetween(i, r, null, "[]")) {
+                            let t = o.plotTime.diff(nr, "m")
+                                , i = t < ci.length ? ci[t].y : "";
+                            n.xAxis[0].addPlotLine({
+                                value: o.plotTime,
+                                color: cr,
+                                width: 1,
+                                id: "EcgMinute",
+                                label: {
+                                    text: i,
+                                    rotation: 0
+                                },
+                                zIndex: 30
+                            })
+                        }
+                    }
+                }
+                function pi(n) {
+                    if (o.display_startTime = n,
+                        oi = n,
+                        o.activeAdvisory) {
+                        o.showMinuteBtn || t.$apply(function () {
+                            o.showMinuteBtn = !0
+                        });
+                        let i = n.clone()
+                            , r = Math.floor(i.diff(o.activeAdvisory.record.startTime.clone(), "seconds") / h / l) + 1;
+                        a.setGridParam({
+                            page: r
+                        }).trigger("reloadGrid")
+                    }
+                    console.log("vm.showMinuteBtn:" + o.showMinuteBtn)
+                }
+                function sf(n) {
+                    var r, i, u, s, h, t, f, e;
+                    if (console.dir(n),
+                        console.dir(oi),
+                        r = $("#chartHeartRate").highcharts(),
+                        r) {
+                        for (u = 0; u < r.xAxis[0].plotLinesAndBands.length; u++)
+                            if (r.xAxis[0].plotLinesAndBands[u].id === "EcgMinute") {
+                                i = r.xAxis[0].plotLinesAndBands[u];
+                                break
+                            }
+                        s = o.activeAdvisory.record.startTime;
+                        h = o.activeAdvisory.record.endTime;
+                        i ? (t = moment(i.options.value).add(n, "seconds"),
+                            f = moment(s).seconds(0),
+                            e = moment(h).seconds(0),
+                            t.isBetween(f, e, null, "[]") && (i.options.value = t,
+                                i.options.label.text = t.format("HH:mm:ss"),
+                                i.axis.update(),
+                                o.plotTime = t.clone(),
+                                pi(t))) : (t = oi.add(n, "seconds"),
+                                    f = moment(s).seconds(0),
+                                    e = moment(h).seconds(0),
+                                    t.isBetween(f, e, null, "[]") && (o.plotTime = t.clone(),
+                                        pi(t)))
+                    }
+                }
+                function wi(n) {
+                    localforage.setItem(dt, n).then(function () {
+                        console.log("localforage:set " + dt)
+                    }).catch(function (n) {
+                        console.log(n)
+                    });
+                    let t = o.zoominRuleHeight * n;
+                    $("#modal_content").css("height", t);
+                    $("#btnRule1").removeClass("btn-selected");
+                    $("#btnRule2").removeClass("btn-selected");
+                    $("#btnRule" + n).addClass("btn-selected");
+                    $("#container_zoomin").css("height", t);
+                    let i = {
+                        chart: {
+                            height: t
+                        }
+                    };
+                    o.zoominRuleChart.update(i)
+                }
+                var o = this
+                    , bi = !1;
+                o.type;
+                o.rPeakindex = undefined;
+                o.preRPeakindex = undefined;
+                o.prepreRPeakindex = 0;
+                o.partEcgValues = undefined;
+                o.prePartEcgValues = undefined;
+                o.timeParameter = undefined;
+                o.ecgShow = !1;
+                o.rPeakShow = !1;
+                o.init = fu;
+                o.activeAdvisory = undefined;
+                o.ecgTimeSectionText = undefined;
+                o.ecgPageDesc = null;
+                o.cursorTimeText = null;
+                o.specialEventData_Add = [];
+                o.gotoNextEventPage = hu;
+                o.gotoPrevEventPage = cu;
+                o.jumpToTime = er;
+                o.jumpToTimeFlag = !1;
+                o.onbutton = tu;
+                o.showPromt = gr;
+                o.showNewIllNessPromt = nu;
+                o.gotoIllnessPage = lu;
+                o.gotoArtialFibrillationPage = au;
+                o.showZoomIllNessPromt = wu;
+                o.showZoomRulerPromt = ku;
+                o.toLocalTimeStringAll = rr;
+                o.isShowNormalBeat = !0;
+                o.sliceName;
+                o.dateTimes = [];
+                o.chartEcgDatas_Display = [];
+                o.noisePercentOfEffective;
+                o.noisePercentOfRecord;
+                o.addSpecialEvents = ou;
+                o.heightFix = 0;
+                o.fixHeight = or;
+                o.originHeight = 280;
+                o.originWidth = 800;
+                o.chartZoom = null;
+                o.hsStats;
+                o.isResearcher = !1;
+                o.selection = {
+                    recordRange: null,
+                    sliceRange: null,
+                    pageRange: null
+                };
+                o.zoominRuleChart;
+                o.zoominRuleHeight = 260;
+                o.zoominRule = wi;
+                var dt = "CHART_RATIO_ECGVIEWER", fi, hr, y = {}, h = 15, l = 4, st = 4, v = 250, w = -1500, b = 1500, d = "#febabc", ei = "#ff0000", g = "#fed3d3", ki = "#FFD54F", ht, a, it;
+                o.init_page = !0;
+                var oi, ct, lt = 12, di = 0, gi = 150, at, si, cr = "blue", lr = "#F7DC6F", ar = "#F8C471", vr = "#f8f8f8";
+                o.heartRatePageText;
+                o.showMinuteBtn = !1;
+                o.btnBefore = "前一分钟";
+                o.btnAfter = "后一分钟";
+                o.pageTime = 60;
+                o.heartRatePageCount = 0;
+                o.heartRatePageCountArray = [];
+                o.goNextMinute = sf;
+                o.showHeartRate = kt;
+                o.showHeartRatePrePage = uf;
+                o.showHeartRateNextPage = ff;
+                var hi = null
+                    , ci = []
+                    , nr = null
+                    , yr = "#AED6F1"
+                    , nt = new Map;
+                nt.set("房颤/房扑", "#fedcbd");
+                nt.set("窦性心律不齐", "#fcf16e");
+                nt.set("室性心动过速", "#FADBD8");
+                nt.set("室上性心动过速", "#EBDEF0");
+                nt.set("ST段抬高", "#FFBBFF");
+                nt.set("ST段压低", "#B4EEB4");
+                var s, tr = "#AFEEEE", ir = "darkblue", p, rt, ut, ft, pr = "#AFEEEE", wr = "darkblue", gt = "red", ni = null, et = {}, li, br = "#7FB3D5", kr = "#F1948A", k = 100, tt = 100, ai = 300, yt, vt = 2, vi = !1, pt = !0, wt = "", c;
+                o.sectionData;
+                o.queryType = "";
+                o.recordStartTime = "";
+                o.record_keyword = "";
+                o.pageIndex = 1;
+                o.isResearcher;
+                o.deviceLeads = 0;
+                o.deviceLeads3 = !1;
+                o.ratio = "";
+                o.rr = "";
+                o.chart_idx;
+                o.offsetTime;
+                o.chartContent_startTime;
+                o.chartContent_s = 0;
+                o.chartContent_chartId = "";
+                o.chartContent_operate = "";
+                o.downloadRREcg = rf;
+                o.indexAndSecondsLength = "";
+                o.showStartTime = "";
+                o.chartContent_alreadyShow = !1;
+                dr()
+            }
+            // angular.module("app.EcgAnalysis").controller("EcgViewerController", n);
+            n.$inject = ["$rootScope", "$scope", "$compile", "$q", "$timeout", "$window", "EcgDataService"]
+        }
+        )()
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        
+(function(){
+	var BASE64_MAPPING = [
+		'A','B','C','D','E','F','G','H',
+		'I','J','K','L','M','N','O','P',
+		'Q','R','S','T','U','V','W','X',
+		'Y','Z','a','b','c','d','e','f',
+		'g','h','i','j','k','l','m','n',
+		'o','p','q','r','s','t','u','v',
+		'w','x','y','z','0','1','2','3',
+		'4','5','6','7','8','9','+','/'
+	];
+ 
+	/**
+	 *ascii convert to binary
+	 */
+	var _toBinary = function(ascii){
+		var binary = new Array();
+		while(ascii > 0){
+			var b = ascii%2;
+			ascii = Math.floor(ascii/2);
+			binary.push(b);
+		}
+		/*
+		var len = binary.length;
+		if(6-len > 0){
+			for(var i = 6-len ; i > 0 ; --i){
+				binary.push(0);
+			}
+		}*/
+		binary.reverse();
+		return binary;
+	};
+ 
+	/**
+	 *binary convert to decimal
+	 */
+	var _toDecimal  = function(binary){
+		var dec = 0;
+		var p = 0;
+		for(var i = binary.length-1 ; i >= 0 ; --i){
+			var b = binary[i];
+			if(b == 1){
+				dec += Math.pow(2 , p);
+			}
+			++p;
+		}
+		return dec;
+	};
+ 
+	/**
+	 *unicode convert to utf-8
+	 */
+	var _toUTF8Binary = function(c , binaryArray){
+		var mustLen = (8-(c+1)) + ((c-1)*6);
+		var fatLen = binaryArray.length;
+		var diff = mustLen - fatLen;
+		while(--diff >= 0){
+			binaryArray.unshift(0);
+		}
+		var binary = [];
+		var _c = c;
+		while(--_c >= 0){
+			binary.push(1);
+		}
+		binary.push(0);
+		var i = 0 , len = 8 - (c+1);
+		for(; i < len ; ++i){
+			binary.push(binaryArray[i]);
+		}
+ 
+		for(var j = 0 ; j < c-1 ; ++j){
+			binary.push(1);
+			binary.push(0);
+			var sum = 6;
+			while(--sum >= 0){
+				binary.push(binaryArray[i++]);
+			}
+		}
+		return binary;
+	};
+ 
+	var __BASE64 = {
+			/**
+			 *BASE64 Encode
+			 */
+			encoder:function(str){
+				var base64_Index = [];
+				var binaryArray = [];
+				for(var i = 0 , len = str.length ; i < len ; ++i){
+					var unicode = str.charCodeAt(i);
+					var _tmpBinary = _toBinary(unicode);
+					if(unicode < 0x80){
+						var _tmpdiff = 8 - _tmpBinary.length;
+						while(--_tmpdiff >= 0){
+							_tmpBinary.unshift(0);
+						}
+						binaryArray = binaryArray.concat(_tmpBinary);
+					}else if(unicode >= 0x80 && unicode <= 0x7FF){
+						binaryArray = binaryArray.concat(_toUTF8Binary(2 , _tmpBinary));
+					}else if(unicode >= 0x800 && unicode <= 0xFFFF){//UTF-8 3byte
+						binaryArray = binaryArray.concat(_toUTF8Binary(3 , _tmpBinary));
+					}else if(unicode >= 0x10000 && unicode <= 0x1FFFFF){//UTF-8 4byte
+						binaryArray = binaryArray.concat(_toUTF8Binary(4 , _tmpBinary));	
+					}else if(unicode >= 0x200000 && unicode <= 0x3FFFFFF){//UTF-8 5byte
+						binaryArray = binaryArray.concat(_toUTF8Binary(5 , _tmpBinary));
+					}else if(unicode >= 4000000 && unicode <= 0x7FFFFFFF){//UTF-8 6byte
+						binaryArray = binaryArray.concat(_toUTF8Binary(6 , _tmpBinary));
+					}
+				}
+ 
+				var extra_Zero_Count = 0;
+				for(var i = 0 , len = binaryArray.length ; i < len ; i+=6){
+					var diff = (i+6)-len;
+					if(diff == 2){
+						extra_Zero_Count = 2;
+					}else if(diff == 4){
+						extra_Zero_Count = 4;
+					}
+					//if(extra_Zero_Count > 0){
+					//	len += extra_Zero_Count+1;
+					//}
+					var _tmpExtra_Zero_Count = extra_Zero_Count;
+					while(--_tmpExtra_Zero_Count >= 0){
+						binaryArray.push(0);
+					}
+					base64_Index.push(_toDecimal(binaryArray.slice(i , i+6)));
+				}
+ 
+				var base64 = '';
+				for(var i = 0 , len = base64_Index.length ; i < len ; ++i){
+					base64 += BASE64_MAPPING[base64_Index[i]];
+				}
+ 
+				for(var i = 0 , len = extra_Zero_Count/2 ; i < len ; ++i){
+					base64 += '=';
+				}
+				return base64;
+			},
+			/**
+			 *BASE64  Decode for UTF-8 
+			 */
+			decoder : function(_base64Str){
+				var _len = _base64Str.length;
+				var extra_Zero_Count = 0;
+				/**
+				 *计算在进行BASE64编码的时候，补了几个0
+				 */
+				if(_base64Str.charAt(_len-1) == '='){
+					//alert(_base64Str.charAt(_len-1));
+					//alert(_base64Str.charAt(_len-2));
+					if(_base64Str.charAt(_len-2) == '='){//两个等号说明补了4个0
+						extra_Zero_Count = 4;
+						_base64Str = _base64Str.substring(0 , _len-2);
+					}else{//一个等号说明补了2个0
+						extra_Zero_Count = 2;
+						_base64Str = _base64Str.substring(0 , _len - 1);
+					}
+				}
+ 
+				var binaryArray = [];
+				for(var i = 0 , len = _base64Str.length; i < len ; ++i){
+					var c = _base64Str.charAt(i);
+					for(var j = 0 , size = BASE64_MAPPING.length ; j < size ; ++j){
+						if(c == BASE64_MAPPING[j]){
+							var _tmp = _toBinary(j);
+							/*不足6位的补0*/
+							var _tmpLen = _tmp.length;
+							if(6-_tmpLen > 0){
+								for(var k = 6-_tmpLen ; k > 0 ; --k){
+									_tmp.unshift(0);
+								}
+							}
+							binaryArray = binaryArray.concat(_tmp);
+							break;
+						}
+					}
+				}
+ 
+				if(extra_Zero_Count > 0){
+					binaryArray = binaryArray.slice(0 , binaryArray.length - extra_Zero_Count);
+				}
+ 
+				var unicode = [];
+				var unicodeBinary = [];
+				for(var i = 0 , len = binaryArray.length ; i < len ; ){
+					if(binaryArray[i] == 0){
+						unicode=unicode.concat(_toDecimal(binaryArray.slice(i,i+8)));
+						i += 8;
+					}else{
+						var sum = 0;
+						while(i < len){
+							if(binaryArray[i] == 1){
+								++sum;
+							}else{
+								break;
+							}
+							++i;
+						}
+						unicodeBinary = unicodeBinary.concat(binaryArray.slice(i+1 , i+8-sum));
+						i += 8 - sum;
+						while(sum > 1){
+							unicodeBinary = unicodeBinary.concat(binaryArray.slice(i+2 , i+8));
+							i += 8;
+							--sum;
+						}
+						unicode = unicode.concat(_toDecimal(unicodeBinary));
+						unicodeBinary = [];
+					}
+				}
+				return unicode;
+			}
+	};
+ 
+  window.BASE64 = __BASE64;
+})();
+    </script>
+    <script>
+        var data ="AcKBPMKAAwAAAAAAAAAAAAAAAAAAAcKBAAAAAMKAw7/Dv8O0w79/wprDv3/ClsO/w7/CjMO/f8Kgw7/Dvz8AAAAAAAAAAAAAAAF/AAAAAAAAAAAAAAAAAAAAAAF/AAAAAAAAAAAAAAAAAAAAAAF/AAAAAAAAAAAAAAAAAAAAAAF/AMO/w792f8O/w7vDvcO/wqPDvcO/b8O9w5/Cv3/Dv8O/TsO/w79Fw7/Dt8O/w57Dv8O/w47Dv8O/w4vDt8K/w5/Dv8K/w4jDv3/DhsO/w73Du3/Dv8O/DcO/wr/Dr8O/w73DvsO/w7PDv8O/w6HDv8Ovw7fCv8O/f8Oyw79/w67Dv8K/w7/Dt8K/w7/Dt8O/wq/DvMOfw77DvcO/A8O/w7/Do8O+f8K/w7/DvcOvw7/Dt8O9w7vDvcO/w77DvzHDv8K/w5/Dv8O7f8O/w7vCv8O/w73Du8O3awAAAAAAAAABwoEAAAAAAAAAAAAAAAAAAAAAAcKBAAAAAAAAAAAAAAAAAAA0w7rCv8O/wrfDv8Ouwr/Dv8OfDwLCjMKNwpHCjMKKwpHClMKYwpDCjsKZwpzCn8KWwpLCmcKcwqLCnMKZwqHCocKmwqDCnMKkwqbCqcKjwqPCqcKpwrDCqcKlwq7CrsKywq3CqsKywrPCtsKvwq3Ct8K4wrvCtcKzwrvCu8K/wrrCuMOAw4DDhcOAwr3DhcODw4nDgsK/w4nDicONw4jDhcONw4zDkcOLw4fDksORw5TDkMOMw5TDlMOZw5TDj8OXw5bDm8OXw5PDm8Obw5/Dm8OXw6DDn8Ojw57Dm8Okw6LDpcOiw57DpsOmw6rDpMOgw6vDqsOsw6jDpsOvw67DtMOsw6bDscOyw7XDr8Oqw7TDtMO1AsOsw6fDs8Oww7LDr8Oqw7TDs8O2w7HDrcO3w7bDu8O1w7DDvgAAw7vDtsO+w74Bw7zDtwAAA8O/w7gBAQMAw7wCAgYAw7wIBQcFAAkICgUACgkMBwEMCwwIBA4MDwsFDxATDwoTEhQPChQTEw4KFBQVEAkTExQPDRgUFRIMFxYVEA8ZFRUTDxkXFxMOGhkZFhEbGxoXEx0aGhcQGwIZFxcTGxscGBQeHBwaGSEdGxUQHR4dFhAdHxwXERseHhkTHR8dGRcgHRwbFh8gHhkVICIhHBchIB0aFR4gHRkXHx4cGhUeIR0XFR8eGxkWHx8cGBYgIBwZFyAgHRoWHyEcGRcfIB0aGCAgGxgXISEcGBcfHhoaFx8fGhgWHSAbFwEWw79/w7fCv8Kfw79vw7/Du8O9w77Cv8Ovf8K/w7fDv8O1wq/DvsObw7/Dr8Otw7/Dun9vw79/w73Cv8OnP8O/w7bDvsOvw7t/w5vDn8O9e8O7w6/Du8O3b8O/w6fDv8O3w7rDr8O+w7fDq8O/w7rDv2fDuMO5w65/P8O/w5/Dv8K9w7fDvsO7w6/Dn8O/w7bDv8Odw7/Cv8KDwrvDr8O/w73DvMO9w7fCv8Kfw6/Du8O3w5t/w7/Dt8O/w7t3w7/DvcO9w79+w7fDncO/XsOfw5/Dv8Ovw7fDt3cCDgsLDxUOCgwQFAwJDBEVDAgLEBMKBwwPEgwLEA8RCwUJDxMJBQkLDwgECAsPBwMHCg4HBAcIDwgCBgsOBQMJChAKBAcMEgkECw0QCgUJDA8HBQsLDwcFCQkOCAQKDBAJBg0OEQsHDA4TCwYPERUQDRESFw8JEBARCgUMDxYMBQkCBwkBw78FBQkCw78HCQ4HAAgJCwIACQcMBgEICg0IBQwKDAYEDAkMBgEIBwoDw78FBQbDv8O7AwIDw73DugLDvwDDu8O2w73DvQDDt8Oyw7vDu8O9w7XDsMO5w7rDvcO1w7DDusO7w73DtcOyw77DvMO8w7XDscO7w7nDucOyw67DucO1w7HDq8Orw7TDsMOyw6vDqsO2w7HDr8Oqw6nDssOtw6zDqcOnw67DqcOpw6DDnsOzw7XDsMOmw5/Do8Ocw5zDksOHw4rDgsK9wrQCwq7DgMOYw7XDt8O2CxQZFA4XFxwaFSEoLCIWHB4kHRMcGBMBw63DsMO0ABAlMh0Lw7fDp8Ouw6/DssOow53DqcOtw7LDp8Ocw6rDrsOuw6jDo8Oqw6rDrMOkw5vDp8Orw6zDosOcw6bDpsOlw5zDlcOew57Dn8OYw5DDmsOew53Dk8OOw5rDmMOcw5rDlMOfw6HDoMOaw5fDosOhw6DDm8OYw6LDo8Olw6LDncOnw6fDpcOjw6LDrsOww7HDrMOow7PDssOzw7PDrsO1w7XDtsOzw63DssOxw7bDtsOyw7nDuALDtcOzw7PDvMO4w7fDt8O1w77Du8O5w7rDuwUDAMO9w7nDvsO7AAIACQoJBQILBwYGBA4KBAELBgEAw74Dw7/DusO4w7gGBcO9w7rDuQDDv8O9w7zDugDDv8O9w77DvADDvMO7w7rDuADDvsO7w7vDugHDv8O5w7fDtMO4w7LDqMOnw74lJgjDqcObw63DtMO1AQYGAgURFhsUExscHxkRExQZGRUTCwYAw7zDvMO8AADDvwIBBgYDBQQCCAkJCwcLDgsLDA8KCQUICgoIBg0PCwoIDhIQDgoPFBEPDRIVEg8OFBkUEQ8SFRIPDBATEA4NEBMODAsPFA8KCg8TEA0LEBUPDQ0RFhIODhUYEQ8NEhcOCgsPEgoGBg0SCAQFChAIAgQKEAoDAgkQCQAACA8Gw78ACA8Ew77DvwMJAALDucO4w7wHBMO8w78EBMO8w7fDucO/AsO8w7sABgsBw70EDBEIAwcMEQgFCQkOBgIICg0FAwYGCQIAAgQIAMO9AQMIAMO8AAEEw77DvAADBcO+w74DBAgAw70CAgXDv8O7AAADw7rDt8O8w7wAw7rDtsO8w7zDvsO4w7jDvsO9w7/DucO4w77DvMO/w7jDtsO8w70Aw7jDtcO7w7sAw7vDuMO/w74Dw73DugAABMO/w7wAAATDv8O7AMO/AgPDvsO6w7/DvQDDvMO5AMO/w7/DuMO5AMO6w77DvMO4w73DvADDu8O8BMO+AMO6w7XDvcO6w77DucO2w77DvADDvMO3w77DvgPDvcO4AAAEw73DtsO/w78Dw73DuQDDvgLDvMO4AMO8AMO8w7fDvsO8AMO7w7XDvcO/AsO7w7bDvsO8AMO7w7PDu8O9AsO7w7XDvwAGw7/DuQICBgDDugEABcO+w7cAw78Bw73Dt8O/w74Cw73DtsO/w77Dv8O6w7XDvsO9AMO5w7YAw70Aw7vDtMO+w7wAw7rDswLDvcO+AsO+w7bDvwIKAsO6BAMEw77DuQQBAcO8w7gCw7/Dv8O5w7YAw74Aw7vDtQDDvwDDvMO2AMO+AMO5w7MAw77DvsO6w7TDvsO+AMO7w7cAw78BAMO6AgMGAMO7BgQFAMO7BAMDw77DugMAAMO8w7cBw7/Dv8O5w7UAw78Aw73DuAMCAMO8w7kBw7/Dv8O6w7YCAQDDvsO7BgUGAsO9CAkHAMO7BQUDw77DuwUCAsO/w7oEAcO/w73DuAIAw70Cw7rDtQECw77DvMO9BgDDvMO7w7kDAAEAw7wFAwICAAoGBQUACAUDAgAGAwDDv8O9BQMBw77DuAAAAADDugIDAcO/w7sEBADDvcO3AADDv8O+w7gAAwIAw7wEBQQBw7wDBAMCw74FBgIAw70EBAHDv8O7AwLDvMO8w7wCAMO9w7zDuMO/AcO+w7nDssOyw6zDpcOow6/DusO7w7vDusO5BQsJBgIMDwgDAQsKAgDDvwUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgcAw77DuwIDw73DusO6AALDusO2w7bDvwDDvMO6w7oCBcO+w7rDuAAFAMO8w70HCwYCAAsPBgMDCQoEAgEHCAEAAAICw77DvsO9AAHDvcO+w78BAcO8w7zDvMO/AcO9w7zDu8O/AcO8w7rDucO/BQLDv8O/BgwGBAMICwMBAgQFw7/DvsO/AQPDvcO7w7wAAcO6w7jDuwACw7vDucO8AALDu8O5w7rDvADDuMO1w7fDuwDDvsO9w78ECgQCAgULDwfDu8Ofw6QIAgAnNA3DtgAAAATDvMO8w7/DvMO/w7vDvMO/w74Aw7rDucO9w73Dv8O4w7jDu8O7AMO6w7rDvwAFAgIFBw4HAgYICwMAAgIFAAADAALDvcO8AMO/A8O8w7nDvsO/AMO7w7rDvsO9AMO6w7bDusO6w7/DucO3w70ABwHDvgMHDgUACAoOBQAEBAgAw70EAQLDvMO7AcO/AMO5w7fDvcO9AcO5w7XDvcO/AsO6w7bDvcO9AALDt8O1w78BBwDDvwgKEAkJFBARCgQKCQsDAQgDBsO/w7sAAATDvMO5AMO+AsO8w7gAw78Cw7rDtcO9w70Bw7jDs8O8w70Ew7/DuQQGCQIACwsQBwAJCAkAw7sCAATDv8O6AsO/AcO7w7gCAMO/w7vDugLDvwDDusO5A8O/AMO8w7kAw7wAw7jDscO5w7fDusO3w7oHCA8Iw70CAggAw7oBAwcAw7sEAQUAw7oBAAUAw7kBAgADw77DugMCBgLDvwQBBMO/w7gBAAPDvsO4AgABw7rDtAAABMO/w7oFBAXDvsO3AwQIA8O7BAUIw7/DugYEBQDDugMDBgDDuwUCBQDDugUCAcO9w7oEAQHDv8O7BAEBw77DuwUAAgDDuwYCAsO/w7sFAwHDv8O9BAACAcO8BQEAw77DvAQBAcO+w7oEAMO/w7/DvAUCAMO/w7sDAQIAw7wGAgEAw7wHBgQBAsO/CwsLCQQPCwQAw74HAMO+w7/DvATDv8O7w7rDugMAw7zDuMO2AMO8w7rDucO3w7/DucO2w7bDtMO+w73DuMOzw7HDvMO8w7vDucO6CQ0MBgAGBgYAw7kCBQcDw7wCAgUCw7wDAwLDvsO5AQICAMO6AgIAw7/DuAAEAcO+w7sDAgHDvsO4AQIAw7/DuwICw7/DvcO5AQIAw77DuQECAMO9w7kBAsO/w77DuwIEAMO+w74FBQDDv8O8AgMCAMO+w7oEBcO+w73DvQMEAMO9w7wEBAAAw70EBgEAw74EBADDvsO8BAXDvsO8w70GBsO/w77DvAIFAMO9w7wCAwDDv8O/AwLDv8O+w7sBAsO9w7vDugACw77Du8O7AgUAw7/DvQMFAMO+w78EBMO/w77DvQIFw7/DvcO+AgTDv8O9w7wCBgDDvcO9AgUAw73DvQEFAMO8w7wDBcO+w7zDvQEDw77DvMO+AgTDvcO8w74BA8O+w73DvgIGAMO9w7wCAATDvsO+w78CBwDDvsO+AQYAw77DvQIIAcO+w70BB8O/w7wABAgAw7zDvAAGw77Du8O+AwfDvsO6w74BBcO/w7zDvQEHw77DuMO+AgXDvsO7w70BB8O+w7rDvgAGw77DucO/AgTDvcO7w77DvwTDvsO8AAMGw77DvAADB8O/w70BBAfDvsO8AAEFw77DvAECBMO9w7wBAgTDvcO8AAEGw7/DvAAAA8O+w70BAALDvMO8AgACw73DvAEAA8O9AsO7AAAEw7zDuQABA8O+w74CAwjDv8O7AgEDw73DvQMDBMO+w70DAQTDvcO8AQADw73DuwQBAsO9w70BAAXDvsO7AgADw73DuwHDvwLDvsO7AMO/BMO9w7kBAATDvsO5AQABw7zDuQICBMO/w7oCAgPDu8O5AgADw73DuwMBBMO/w7sEAgTDv8O8AgADw7/DugABBgDDugAABcO+w7gDAgTDvsO6AgAEw77DugQDBQDDvAMCAgfDv8O6AwADAMO+BgIEw77DuQIBBADDvAMABcO/w7kAAALDvsO6AAAFw7/DugLDvwTDv8O4AMO/AcO8w7gBAAPDvcO3AAAEw73DuAEABMO/w7gBAALDvcO5AQAGAMO6BAECw7/DuwQAAsO/w7sFAAIAw7sDAQPDvsO4AQAEw7/DuQMAAcO+w7oCAALDu8O1AQEBw7vDtgIBAsO8w7cCAgHDvcO6AwACw77DuQUEA8O/w7sCAsO+AwHDugUHBwDDvAYFBcO/w70LBgPDv8O5AwICw77DuQQCAsO/w7oDAgUAw7gCAwPDvsO4AwEBw73DtwIBAcO+w7gBAQLDv8O5AgECw77DtwIDAsO+w7kEAQDDv8O7BAIAw77DuwQBAcO/w7wGAgDDv8O8BQEAw77DugQCAMO+w7wFAgDDvcO6AgEAw73DugQBAMO+w7kEBAEAw7wEBAMAw7oDBAHDv8O7BQQCAsO/w7oEBQLDv8O8BAIBBAAEAwDDvsO8BQPDv8O9w7sEAgDDvsO7AgIAw77DugMDAMO9w7sCAcO/w73DuwICw7/DvcO6AQHDv8O7w7gBAMO9w7vDuAECw73Du8O6AQIAw7/DugIGAcO/w7wDBADDvsO9BAYAw77DvgUEAMO+w7wFBwLDvsO7AwTDv8O9w78HBwMAw74FBgIBw74FBwDDv8O+BAYBw7/DvgUEw7/Dv8O9AwPDvsO+w70BAgLDv8O+w74DAwAAw74CBAAAw74CAwABw78CBMO+w7vDvQECw7zDusO8AQDDu8O7w7sAAMO7w7rDugADw7zDu8O/BAUAAAAGBgDDv8O/BAcAw77DvgIGAMO9w74DBsO/w73DvwEEw7/DvcO/AwcAw77DvgMHw7/DvcO9AATDvsO9w74AA8O9w7vDvwMGAMO/AAQHAMO+AAQHAMO+w70ABQDDvMO9AQTDvcO7w78ABcO/w7vDvQAEw73DvALDvsO/BMO+w7rDvgIHw7/DvgABCAPDvsO+AATDvsO9w78BBcO+w7rDvwIEw7zDuwAAA8O8w7kAAwTDvMO7AAEEw77DuwABBMO8w7wBAQPDvcO7AAAFw77DugACBcO9w7rDvwAEw7zDucO/AATDvcO8AAAGw77DuwECBcO+w7sAAATDvMO5AAAGw77DugAAA8O8w7nDvwAEw73DugEABMO+w7oBAALDvMO7AAADw7zDuQDDvgPDvsO5AAEFAsO/w7wBAAPDvMO6AgMJAMO6AAAEAMO8AgIGw73DuQDDvwPDvcO6AcO/AsO+w7sBw74Cw73Dt8O/w78Dw7zDuwQCBgDDvAQDBgDDuwMDBcO9w7wEAQXDv8O6AgIFw77DuwIABcO/w7oEAgTDv8O9BQEEAMO7AwEEAMO9AwMGw7/DuwQCBcO/w7sEAQPDvsO7BAEDw7/DvAQCBMO+w70GAgTDv8O8BAACw77DuwUBAsO9w7wFAgAEw7/DuwQAA8O/w7oDAAPDvcO4BAUGw7/DugIABADDuQEABsO/w7gCAAPDvsO4AgEDw77DuQIABcO+w7gDAQPDvsO4AwMEw7zDtgMBAgDDugIBBcO/w7gCAgTDvcO4AwIEw7/DuQMAAsO/w7oDAQPDvsO4AwMEw7/DvAUCBMO/w7kFAwQAw7kBAQLDvcO4BQICAMO7BAEDAMO6BQQDw7/DuwQCBMO+w7kGAwDDvgACDA8IAwELCgIAw78FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALDuwQAAQDDuwYFAgDDvwkEAgDDuwQBAgDDugQDAwDDugMDAsO8w7kFAwHDvsO6AwIAw73DugMBAcO/w7gDBAHDvsO6BAIAw77DvQgFAsO/w7sEAgIAw7sFBALDv8O6BAQDw77DuQUEAMO+w70FAwEAw7sEBQLDv8O9BwMAAMO9BAMBw7/DvQQCAsO/w7oEBADDvsO7BAIBAMO7BAQAw7/DuwMEAMO9w7wGAwIAw7/DvQXDu8Ocw5rDuQQFJi4Dw78JAcO9AAsHAADDvgMDAMO/w70GBADDv8O9BQYAw7/DvwYGAQDDvAMFw7/DvcO7AwQAw77DvAMEAMO9w7oBA8O/w77DuwECw77DvcO6AAPDv8O6w7kCAsO9w7rDuQECw73DvMO6AALDvsO7w7oBAsO+w7zDugACw73DusO7AgLDvcO8w7sABMO9w7rDvQQGAgDDvwYHAwHDvwQIAMO/AAUFAMO/w78CAwTDvcO9w78CBMO+w7zDvQEFAAAAAgTDvcO9w74BBADDvcO8AgXDv8O9w70CBsO/w7vDvgQGw73DvcO+AQXDvcO7w74AA8O+w7zDvQAEw73Du8O/AgTDvsO9w74AAMO6w7zDvwAEw7/DvMO9AATDvcO7w70ABMO+w7zDvgAEw7zDvAAABMO/w7zDvwADw77Du8O+AAXDvsO7w78DBcO9w7wAAgXDvsO7w78CB8O/w7vDvwAFw7/DvMO/AgfDv8O8AAIGw74Cw7sAAQTDv8O9AAAHAcO9AQMEw7zDvQEABcO+w7sBAgTDvcO6AAEEw73DuwAABMO+w7oAAQXDvsO7AQEEw77DugAABcO+w7kAAQPDvcO7AAAFw73DuQABBcO+w7oAAQXDvcO6AQAEw73DugIAA8O9w7oAAAPDvMO6AgEEw77DugACBcO9w7oCAQXDvsO6AQIGw7/DuwAABMO+w7oCAQTDvsO7AgEEw7/DvAEABcO+w7kBw78CAMO6w7oDAAPDv8O8BQIDw77DvQQBBgLDvgQCBMO9w7sEAALDvsO+BgIEw77DugQDB8O+w7kDAgXDvMO3BAYIw7/DuAIDCMO+w7QBBgrDv8O0AAMIw7/DtMO/BQzDvsOtw7kGEADDr8O7BhAAw6/DuwcOw73DrwAJC8O9w7IACAzDvsO0AQUHw73DtQIHCcO+w7YBBAXDvcO3AwMDw77DuwQCAsO9w7sFAAHDvcO7BQEAw77DvQIHAQDDvsO+BwIAw7zDuwUAw77DvcO8BQAAw77DvQUBAwDDvwbDv8O+w77DvwgAAAABCgDDvMO9AAgAw7/DvwAJAMO9w78BCQDDvsO/AAgAw7/Dv8O/BgAAw7/DvgUAAMO/w7wGAsO/w7zDuwTDv8O9w7zDugDDvcO+w7zDuAMDAsO+w7sGBAIAw70DAgPDv8O8BAMCw7/DvAMBAsO+w7oEAQDDv8O8BQQDw7/DvAUDAsO/w7oDBAQCAMO7AwMDAMO8AgECw7/DugMCAcO9w7gBAQHDvsO4AgQAw7zDugIBAMO+w7gBAgDDvMO5AAICAMO9AwMAw7vDuQEBAMO8w7cBAsO+w7rDuQIBw73DusO5AwUAw73DvQcHAsO/w74GBQEAw74FBAHDv8O9BgYBw77DvQYEAMO9w7wEA8O/w7zDuQACAMO9w70EBMO/w73DvQQEAMO+w7wCA8O/w7zDuwECw7/Du8O7BAYAw73DvQMCAsO+w7vDuwIBw73Du8O6AQHDvcO8w7wCBADDvMO7AwUCAMO8AwcBw77DvAMFAMO+w7sABADDvsO8AAQAw73DugAFAMO8w70DBcO/w7zDvQEEAMO8w70DBADDvcO8AALDvsO7w7oAAwDDu8O7AgYAw7vDugEIAMO8w70CBQDDvwADBgDDvwAEBwHDvcO+BQgAw70AAwXDv8O8w74BBgDDvcO/BQcAw7wABAXDv8O+AAIFAMO9AsO+AgbDv8O8AAQFAAAAAATDvsO6w78BBADDvMO+AQTDvsO7w74CCADDuwAEBcO+w70AAgUAw7zDvgEHAMO7AAMEw77DvMO/AAUAw7zDvwEEw73DuwABBcO+w7zDvwAFw77DuwABBMO+w7rDvgAFw73DucO+AAXDv8O7AAIEw73DugABBMO/w7rDvgAGw7/DugEDBMO+w7kAAgTDvsO7w78ABsO+w7jDvwIGw73DugICBMO+w7oAAgUCw7/DvAICBgDDugADB8O/w7kAAQYBAAQCBMO+w7oAAQXDv8O7AQEFw77DugEABQDDuQACBMO+w7oAAgbDvcO6AgADw7/DugECBMO9w7kBAgPDvsO8AgEFAMO7AQEEw77DugMBA8O+w7oAAAbDvsO4AQAEAMO7AQEEw7/DugECBcO+w7oDAQPDvcO4AwMEw7/DvAMBAsO+w7oCAQTDv8O7BAEDw77DuQIBA8O+w7kCAgEDw73DuQIAA8O/w7kBAAYDw7oAAgTDvcO5BAIEAMO5AAMGw77DuQMCA8O+w7sCAQTDv8O5AwIEw7/DugIEBcO+w7kDAwXDv8O4AgIDw7/DuAACBcO/w7oEAgLDvcO5AwEDw7/DugEBA8O9w7kEAwLDvsO5AwMDAMO6BAQEw7/DugMDAsO+w7sGAwLDv8O6AgMDw77DuQMCAsO+w7oFAwHDvcO5BAMAw7zDuwQAAMO+AsO5AwMAw7zDugUHBcO+w7oFAwDDvcO7AwICAMO6AgMCw77DuQQDAcO+w7kCAgLDvsO5AwIAw77DugQFAsO8w7cCAsO/w7zDugQDAMO9w7oEAwDDvsO7AwMBw73DugMDAcO/w7sCAgEAw70EAwHDv8O8AwQCw7/DvAUEAcO+w7sEAwDDvsO7AgIAAMO+AgEAw7/DvQQEAQDDvAEDAMO9w7wEBAHDvsO8AwMAw77DvQYFAsO/w73DvAQEw7/DvcO+AwLDv8O9w74ICQHDvsO+BATDv8O+w74CAsO/w77DvQICw7/DvcO+AwPDv8O9w7wCBADDvcO9AQPDv8O8w70DA8O/w7/DvQIFAMO+w7wCBgDDvcO/BAUAw77DvgIGAMO9w70CBgDDvcO+AQQBw7/DvQEFAMO8w7wBBADDvMO9AwYBw73DvAIFw7/DvcO9AQUAw7zDvgIFAMO9w78DBsO/w74AAQQAw73DvQEGw7/DusO9AgIEw73Du8O/AQTDv8O+AQUGAMO9w7wABgDDvMO8AAcAw7vDvQAFw7/DusO8AAXDv8O7w78BAsO+w7vDvQAFw77DusO/AQXDvsO7w78CBcO/w7wAAgYAw7sABAbDv8O9AAEFw7/DvQABBcO/w70AAQXDv8O8w78CCMO/w7oAAgbDv8O6AAMFw77DuwABBsO+w7sAAAPDvsO7AQADw7/DuwACBcO+w7oBAQPDvsO7AAADw77DuwAAA8O+AsO5w70ABMO8w7oBAgYAw7wCAQUAw70GBwXDvcO7AQADw7zDuQAABMO+w7kAAAUAw7sAAAYAw7sBAQXDvsO4AAEDw77DuwEABAHDusO+AAbDv8O4AAAGw7/DuAAABMO/w7sBAQXDv8O5AQIGAMO5AgIDw7/DuwEABADDugICA8O+w7sCAQTDvsO5AQEDw77DuQMCA8O+w7wEAQTDv8O6AQAEw7/DugQBAcO9w7sEAgACDA8IAwELCgIAw78FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIDw77DugQCAsO9w7oEAgQAw78FAAPDv8O5AwMDw77DuwQDBMO/w7oDAgPDv8O5AgMEw7/DugUFBMO9w7oFBATDv8O6BAMDw7/DuQICA8O9w7kDAgPDvsO6BAIAw77DuwQCAcO9w7sDAADDvcO8BgIAw77DvQUCAMO+w74GAADDvsO7AwEDw7/DuQMCAMO9w7sCAQLDvcO4AgEBw77DuQIEA8O+w7oDAwLDv8O6AwQDw77DuQIBAgLDvsOtw5rDnwHDv8O6JzEHw7fDvQEAAgHDvwQCAsO/w7kAAgLDv8O6AgMBw7/DugECAcO/w7oCAQDDvsO7AgEBw7/DugMDAMO9w7sCAcO+w73DvQUDw7/DvcO9BQHDvgAABALDv8O/w74EA8O+w74ABQHDv8O/w70BAgDDvsO+BAMAw73DugEEAcO9w7wDBADDv8O7AQYDw77DuwMFAMO8w7sCA8O/w73DuwIFAMO9w7wBBAACw73DugAEAMO9w7sDBcO/w7zDvAEFBADDuwACw7/DvMO6AAUAw7vDugAEw7/DvMO8AAUBw77DvAAFAMO8w7sBBgDDvMO8AQYAw7zDvQMGw77DusO9AgXDvsO7w74DBsO/w7zDvgIEw7/DvQADA8O+w74AAwYAw73DvwIEAMO/AAIEAAABBAfDvwAEBAQAAAMEBQAAAQMGAMO/AQIFw7/DvAIFBMO9w70BAQQAw7zDvwECBQDDvgAABMO/w7wAAggAw7rDvMO+AcO9w74AAALDvsO8w7/DvgTDv8O7w78ABMO+w7sAAQbDvsO5AAACw7/DvAAABMO+w7oAAgbDv8O7AAAEw77DuAAAA8O/w7sAAAXDv8O6AAEDw73DuwAAA8O/w7sAAAXDvsO5AAEGw7/DuMO/AQXDv8O5AAEFw73DugIABMO/w7kAAAPDvMO5AAEFw77DuMO/AAPDu8O3AQEDw7zDt8O/AAUAw7wCAwMIAcO9BAMHAMO6AwMGAMO6AwUJAcO7AgEFAMO6AQAGAMO6AgMEw77DugMCAwDDvAIAAsO+w7sCAAIAw7wCAAPDvcO6BAECw77DugIAAsO+w7sDAALDv8O7AgABw77DuwQAAcO/w7sBAAQAw7oCAAMAw7sBw78Cw7/DuwQAAgDDugIAAADDvQLDvwEAw7sCw78AAMO9BMO9w74AAATDu8O6w77DvwTDvsO/AgABCcO/w78DAgXDvgABAAoDAADDvgTDvgACAAPDvgAAw74Ew77DvwDDvgPDvwACAAXDvwABw70Dw7/DvwEAA8O9AAMABMO+w78DAAHDusO+AwEDw7wABQABw74AAcO7AQICw77DtwAAAgHDugECAgDDuQACAgDDugECAADDvAICAgHDugIDAQDDuwEBAwPDvAIDAwLDuwADAgDDuwEDAgDDugICBAEAw7sBBwLDvcO4AgYBw73DuAEFAsO+w7gFCwHDusO1AQgAw7rDtgEKBMO7w7QACgbDvcO2AQkDw7zDtQAIAsO9w7kBBwDDvcO8BQfDvsO8w7wFCAHDvcO6BAoBw7zDuQIIAcO9w7sDB8O/w7vDuwIHAMO6w7gABADDvMO3w78HAMO4w7TDvQbDv8O4w7gCDAXDv8O7Aw0Dw7zDvAQLAcO7w7sBCgPDvMO5AgsBw7zDvAMKAcO8AsO6AAcAw73DvQAIAsO+w7wACAIDBgIDw77DvsO/w70Aw7zDvwLDvwDDvgACw78Aw7wAAsO/AMO9AQXDvsO8w7oEB8O8w7rDuwcLw7zDuMO6CAzDvMO3w7kGC8O8w7vDvQYJw7zDvcO+BQjDvMO9w7sBBcO8w73DusO/BcO/AMO9AAPDvgLDu8O9BgACw7zDvALDvwPDvsO8AMO/A8O7w7sCAATDvcO6AAAGw77DuQDDvgPDvcO5w77DvgcAw7jDvgAJAgDDtsO+AAfDv8O3w73DvwkCw7rDv8O/CMO+w7XDvwAIw7/DtwACC8O/w63DuQwaAMOpw7gKFwDDqMO4DhvDvsOiw7UPG8O9w6LDtA0aw77DpMO2DBbDvMOnw7kKEcO6w6rDuwYMw7vDrsO9BQvDu8OwAAcJw7vDswEGB8O9w7gFAwLDu8O6CAQBw73DvgcAAMO+w78Jw7/DvsO+AQsAw77DvwELAMO9w78DC8O/w7zDvwQLw77DvMO/AwvDvcO6w78DCQLDusO2w7wCCMO8w7jDvQMLw77DvAADCcO9w78EBQjDvsO+w73DvwoBw77DvgAJw7/DvMO+w78Hw7/Dv8O/AAjDv8O/AQAHAAAAAAcAw74AAAYAAQHDvwcAw7/Dv8O/BwDDv8O9w74FAADDv8O9BwIAw7/DvAUAw7/DvsO8BgHDv8O+w7wCw77Dv8O+w7oDAMO+w77DvgTDvsO9w73DvAUAw73DvwAGAMO/AMO9BAHDvsO9w70Dw7/DvwDDvgUBAAACw70EAQDDv8O9BAEAAMO7AwYFAMO8AwIAAMO8AwUEAcO7AgUDw7/DuwIEAsO/w7sEBQHDvsO6AQUCw77DugEDAsO+w7kBBQLDvsO7AQQCAMO7AQIBAMO8AgPDv8O/w78FA8O/w77DvAIBw77Dv8O/AwEAAMO+AgQAw77DvQMEAADDvwYGAMO/AAUFAMO/w78EBcO/w7/DvgADAMO/w7wCBwDDvsO9AQQAw7/DuwAFAsO/w73DuwAEAcO/w70ECgHDvcO9AAQAw7/DvgEEAMO+w74ABADDv8O/AQTDv8O9w70BBgDDvcO+AQUAw73DvwIEw7zDuwABAsO7w7wAAgPDvcO9AAEDw77DvsO/AAUAw73DvgAEw77DvgAABADDvsO/AQXDv8O9AAIGAMO+AAAEw7/DvwEBBsO/w7wAAgTDvsO+AgECw7vDuwAABMO9w7oBAwTDvMO7AAEFw7/DvAACBMO9w7wBAgEEw7vDugMCBMO9w7sAAATDvsO8AwIEw7/DvQMCBsO+w7wBAAkEw70BAgXDv8O9AgEEw7/DvQICBsO/w7sCAQUAw7wCAAPDv8O7AQEFw77DugIBA8O+w7oAw78Cw77DvAQCBQDDuwAABsO/w7oAw74DAcO8w7/DvgQAw7oAw74DAMO7AMO9BADDugDDvQMAw7oAw78Dw7/DuQDDvwQAw7kCAQPDvcO6AgAFw7/DuAIBA8O+AsO7BAEEAMO8BgMEAMO/CgICw77DuQQCAsO9w7kCAAHDvMO3AQABw7zDuAMAAcO9w7cAw78Cw77DuQIAAcO+w7kAAALDvcO4AsO/AMO+w7kCAAHDvsO7BAEBw77DuQQCBAHDvAYFBQDDvAQCA8O/w7oDw7/Dv8O9w7oGAgDDv8O9BQEBAMO8BAEDw7/DuwYEAwDDvgYCAwDDugIAAMO+w7kCAMO9w7nDuALDvsO8w7nDtQDDvgLDv8O8w7bDv8O+AMO9w7bDv8O+w7zDusO4AcO/AADDvggICAYDDAoIBQAMDAYAw74EAMO/w7zDuQHDv8O7w7vDucO/w73Du8O7w7gAw7/DvMO5w7gAw77DvcO8w7kAAQMBw70FBQMDw78GBwUDw70DBADDvsO7AQEAAMO9AADDv8O+w7oAAMO9w7zDugAAw7/DvcO6AQLDvsO7w7fDvwHDvsO7w7gAAgEBAAYIBQQBBwcCAsO/AwUAw77DvQACDA8IAwELCgIAw78FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAMO8w7vDu8O/w7/DvMO8w70AAMO8w7vDuwABw73DvMO7AALDvMO8w74EBMO9w7zDvAIJBQQECg4HAwQJCAEAAAIFw77DvMO9AALDvcO7w7rDvADDvcO6w7wAAsO8w7vDvQABw77DvMO5w7wAw7nDtsO5w7wAw73DvMO+BQ0FAwUJDggFBwkLAwAAAAPDvsO6w7rDvgHDu8O5w7rDvQLDu8O5w74AA8O9w7vDvMO9AsO7w7bDtsO3w77DuMO1w7oABgECAAUKEsO6w5vDrg0PDy4tBQQFw77Dv8O/BADDvsO+w7wBw7vDuMO8w74Bw7vDt8O7w7wDw73DuMO7w7zDv8O1w7PDt8O3AMO9w7sABQ8KBg4QFQ4HDAwNAcO+BAIFw7vDtwDDvsO/w7nDuMO+w7zDv8O3w7XDv8O9w7/DuMO2w73DvMO+w7XDscO2w7HDtcOww63DuMO+CQcECw4XEg4XFRcNBAkFBMO+w7wAw7wAw7rDt8O/w7zDvsO3w7XDv8O8w7/DusO2w77DvALDv8O5w7bDvcO5w7rDssOrw7HDrcO2w7sADQwRDAQLDBENDR0fHhAFCAIEw77DugTDv8O8w7bDtcO/w7jDt8Ozw7UBw7vDuMO0w7QAw7rDuMOyw67Dt8Oxw67DqMOkw7MADgoGEg0NBgAJBQUCAAcBBAHDvAUDBMO+w7sFAAIAw7sFAwPDvsO7BAADAMO5AgMFAMO7BAEEAcO7AwIBw7zDtgEDBgHDugEBBQDDuQIBAwDDuwICAQQBw7sDAwQAw7kFBwUAw7wDAAMBw7sCAQIAw70FAcO/w73DuwQBAMO/w7wGAgAAw70EAQAAw74HAgDDvsO7BAIBAMO9BAEAw7/DuwUEAcO/w7sDAwHDvsO8BgIAw7/DvAQCAMO/w7sDAQAAw70DAwHDv8O8BQMAw7/DvQQDAcO/w7sEAwDDv8O8AwMAw7/DvgMCAcO/w7sDA8O/w77DvAMEAcO+w7kCBAACw73DtwIGAQDDvwgHAQDDvQAAAMO/w7sCAsO+w77DvgECAADDvAACAADDvQEEw7/DvMO8AgQBAMO8AQPDv8O9w70DA8O/w78ABALDvgDDvwIFAMO+w70CAcO9w73DvgIDw77DvMO+AwLDvMO9w78BAsO9w73DvwMEw7/DvsO+AQTDvsO9AAIEAMO+w7wBBQDDvcO8AAUAw73DvQEEw77DvsO/AAQAw7/DvgAGAMO+w74BBgDDvcO+AAIEw7/DvcO+AQUAw73DvgIGAMO+AwcHw7/DvgABBMO/w74AAQYAw74AAATDvsO+AQEEw7/DvMO/AQTDvsO9AAAFw77DuwABBcO+w7wAw78Cw77DvMO/AAPDvcO7AAACw77DvMO/AATDvcO8AgEEw73DugAABMO9w7sBAQTDvsO8AQEDw77DvQEABcO+w7sBAATDv8O8AQEEw77DvAIABMO+w7wDAQTDvsO8AgADw73DugEAA8O+w7wCAQADw73DuQAABMO/w78FAQTDvsO7AQAEAMO7AAAGw7/DuwEABMO+w7oBAATDvsO6AgAEw73DuQEABcO/w7oBAAXDv8O5AgAEw7/DugMAA8O/w7oDAAPDvsO7BAECw77DuwMABADDvAIABQDDuwQABMO/w7oDAAMAw70EAATDv8O6AwEDAMO7BAEDAMO7BAIEw7/DugMAAsO/w7kDAALDv8O5AgEDAMO9BgECAsO/w7sEAAIAw7oDAQQAw7sEAQHDv8O/CAACw7/DugMAAcO+w7kEAAEAw7oBAgPDvsO5AQABw73DuQMBAcO/w7gBAQHDvsO7AwAAw77DuQQCAMO+w7kCAQLDv8O6AwAAw7/DuwIBAcO9w7oEAQHDvsO5BAMAw7/DvAMAAMO/w7sCAQEAw7sDAwHDvsO7BAEAw7/DuwMBAQDDvAQDAgDDvAUEAADDugEBAMO/w7oCAgMAw77DuwEAAADDuwIEAwPDvgMCAMO+w7wDAcO/w73DugIEAcO8w7kDAwDDv8O8AwIAw7/DuwICw7/DvsO9AwMAw73DugIDw7/DvcO7AgTDv8O9w70DA8O+w73DvQQDw7/Dv8O+AgQAw7/DvwQEAMO/w74CBADDvsO8AgQAw7/DvAIFAMO+w74DBMO/w77DvgMEw7/Dv8O/AgUAw77DvQIFAMO+w70CBQDDvcO+AgQAw7/DvwECw77DvwLDvwIEAMO/w74BBwTDv8O9AgXDvsO9w78DBcO+w74AAgLDvMO8w74AA8O/w73DvwEDw77DvwAABMO/w73DvwEEw77DvMO/AgTDvsO8w78BA8O8w7zDvwEFw7zDugAAA8O9w7wAAAPDvsO8w78ABMO+w7vDvwADw7/DvMO+AAbDv8O8AAAFw7/DvQEBBADDvgABBcO+w7sAAQXDv8O8AAEDw77DvAAABQDDvAAABcO/w70BAQYAw7zDvwAGAsO/w7jDvQAGw7/DusO+AAXDvsO6AAMKAMO4w78ABQDDuwABB8O+w7oBAAXDvsO5AQEFw73DuwIABMO9w7sDAQTDv8O9BAIEw7zDuwQAAsO+w7sDAQTDv8O8AwACw7/DvQQBBADDvQMAAsO9w7sGAgHDu8O8BAAAw77DvgUAAsO+w7wEAAHDvMO7BgAAw77DvQQAAcO+w7sFAADDvsO8BAADw77DuwMAAsO/w7oBAAPDv8O6AwIABADDugEBBwDDuwYGBwHDuwEABADDuwMBBQDDvAQCBgHDvAYDBADDuwMBAcO/w7oBw78Cw77DuAMAAMO8w7sDAAHDvcO6BQEAw7zDuQQAAcO/w7sFAADDv8O7BAAAw7/DuwIAAsO9w7kEAADDvsO6AwEBw77DuAIBA8O/w7gBAAEAw7oBAwPDvsO6AwACAMO4AQICw77DugMAAQDDvAIAAwDDuQMDAgACw7oBAwTDv8O9BgMEAsO8AgIEAMO8BwYBw7/DuwIBAcO/w7kBAQEAw7sBAgHDvsO7BAEAw77DuwMAAADDuwMDAMO/w7wDAcO/AMO+AwEAw7/DvAUCw7/Dv8O+BAHDv8O/w7sCAwDDvMO5AQIAw77DvgQBw78Aw70BAgAAw70DBQHDv8O9BQQAw7/DvAIDAMO/w70FBgDDv8O+BQXDv8O/w78DBAEAw70BA8O/w73DuwADAsO/w73DuwADAMO/w70DBAAAAAUFw77DvcO9AQQAw77DvQEDw7/DvsO9AQUAw73DvQMHAMO9w7wCBcO+w7zDvQEFw7/DvcO9AALDvsO8w7wBBsO+w7vDuwAFw7/DvMO8AAPDvcO5w7sABADDvgADBcO/w70ABAbDvsO8AAECw73DvMO+AATDvcO7w78BA8O8w70BAgTDv8O/AAAGAMO+AAEGAMO/AgEEAMO9w74ABMO+w7wAAATDv8O7w74Cw74Cw7/DvQADBsO/w78BAQbDvsO7AAADw73DvAEBBcO/w70BAQbDv8O6AAIFw77DuwAABMO+w7oBAwTDvMO8AgEFw77DvgQBBgDDvQEBBsO/w7wCAQXDvsO8AwAEw7/DvAEABMO9w7oDAQPDvMO5AAEFw73DugMBAsO/w74BAAXDv8O9BAAEAMO8AgAEw7/DvAIABMO/w7sDAAPDvsO5AQADw77DuwEABMO+w7oDAAHDvQACDA8IAwELCgIAw78FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALDugLDvwLDvsO7AQAFAMO6AQAEw77DugMABADDvAMAA8O+w7kBw78Dw7/DugQCAsO+w7oEAQPDv8O7AQAGAMO6AwADw7/DuwQAAsO/w7sEAALDv8O7BAEDw7/DugQCA8O+w7oEAQQAw7wFAQHDvsO6AwABw77DuwQBAsO+w7oCw78BAMO7AsO/AMO+w7oCAAIAw7gCAgPDvcO3AgEBw77DugMAAsO/w7kCAAIAw7oEAwIEAMO9BsO5w5zDmcO5BwInLwHDvAcGw7/DugYHBADDvAcIBgDDvQoJBwHDvQoKCAHDugYHA8O8w7cDBAHDvsO4AgUDw7vDswAGBsO9w7LDvwUGw73DscO/CAbDu8OyAAkGw7vDsgAHBcO7w7QCBwPDu8O3BQcCw77DuQMIA8O7w7kICwPDvsO7AwLDvsO5w7cCAcO9w7nDtwAAw7vDusO6AwDDusO6w7wCAMO6w7rDvQMBw73DusO8AgQBw7rDusO9BAHDu8O8w74EAcO8w74ABAHDvcO/AAMAw7vDvcO/AcO/w7zDvMO+AsO+w7nDvAACw77DvQAAAwDDvQAAAgHDvgACBQLDvgACAcO/w74BAAAAw70AAAAAw77DvwACAgABAAIDw78AAQMDw78AAAQEw78AAQIDAQEAAgTDv8O+AAEDw7/DvgACBgDDvwACBADDvwEDBQDDvgADBQAAAAIFAALDvgABBQDDvQADBsO/w7wAAwcAw7zDvwEFw7/DuwAEBcO+w70AAQTDv8O7w70ABADDvMO+AAPDv8O8w78AA8O9w7wBAQLDvcO8w78ABMO+w7oAAQPDvcO9AQIDw77DvQAABMO/w70BAQXDv8O9AQEGAMO7AQMGw7/DvAEBBgDDu8O/AQkCw7wAAAYAw7sAAQcAw7nDvgAGAMO5w78CCADDuwEDBwDDvAEABwDDuwACAgfDv8O6AAAHAcO8AQEDw73DuwEBBsO/w7oAAAXDv8O5AgIEw7/DugAABcO+w7kCAgTDvsO6AQEEw7/DvAIABADDvAIBA8O+w7wDAAPDvsO6AwEEw7/DugMBBcO/w7kDAQPDv8O8AwIFw77DugQCA8O+w7kDAALDv8O9BAEFAMO9CAMDAMO9BQIEAMO8BgUEAMO9BQQGAMO+CAQFAcO8BAMDw7/DvAQAAcO9w7gCBAEAw77DvQgDAMO/w74Ew7zDvcO9w7wEw77Dv8O/AAgAw77DvsO6AgIBw7/DvgUAAcO/w70HAwDDv8O+BgIFAcO6AQACAcO7AAEEw7/DuAIBAsO/w7gCAQHDv8O5AAECw73DuQICAsO9w7gCAgDDvMO4AAACAMO5AQECw77DuAEBAgDDuQIDAw8dGQIAw7rDrsO7AgPDusOww70EAsO6w7LDvwUEw7zDtMO/AwLDvMO0w74EAgLDvMO2AAQAw7nDtgECAMO8w7gAAgDDu8O3AAMAw73DugEBw77Du8O4AAHDvsO8w7oBAwDDvcO7AgQBAMO+BQUAw7/DvgMFAsO/w70EA8O+w77DvwQDAADDvgQFAMO/w74CAcO+w73DvAECw73DvMO+AgMAw77DvQEBw77DvsO+AQPDv8O8w74DAsO8w73DvwIBw77DvcO9AQMAw77DvgIDw77DvcO/AQLDv8O9w78CA8O+w78AAwUBAAEEAgLDvMO+w78AAgDDvcO8AATDv8O8w70AAsO+w7zDvQADw7/DvcO/AQPDvsO9w78CBcO/w7vDvwECw73DusO9AALDu8O7w74AAsO8w7rDvcO/AsO8w7rDvQAFw7/DvMO/AwXDvcO8AAIGAcO+w78ABcO/w70CAgYAw7wAAwYBw78BBAgAw70BAQTDvsO9AQIFw7/DvAAABcO/w70BAATDv8O6w78CBcO+w7wBAAPDv8O8AAADw7/DvgMBA8O/w74CAgAEAcO/AwEFAMO9BAEEAMO+AgADw77DvgUBAsO8w70EAAPDvcO7BAACAMO+BAIDw77DvQIABMO/w7wDAAMAw70DAgTDvsO6AgEFw77DuwMAAwDDvAMABMO+w7gAAQTDvcO3AAADw7/DuAAAAsO9w7kAw78DAMO6AAAEw7zDtwIAAsO+w7sCAAUAw7gAAAYAw7gBAgbDv8O5AgADAMO6AQAEw7/DuAAAAgLDucOxw7/DvwDDv8O8AgAEAMO5AgIEw7/DugMBAsO/w7oDAgQAw7wDAQQAw7oBAAPDv8O8AwADAMO7BAQEw7/DvAQBAwDDuwQBAsO/w7kBAQLDv8O7AwICw7/DugMCAwDDuwIBAcO9w7kCAQIAw7kBAgQAw7sCAQLDvcO4AwEBw77DugMAAADDuwMCAcO/w7sEAwMAw70DAMO/w73DuwMBAQDDvAUFAcO+w7sFAgMBAMO8BAQBw7/DvAUEAgLDvwQCAQDDvQQDAQDDvQQEAwHDvQMDAwDDvAMDAMO+w7wDAwHDv8O9BQMAw7/DuwIDAMO9w7wDAcO+w73DuwIEAMO8w7kAAcO/w73DvAMCw77DvcO7AwTDv8O8w7sDA8O/AMO8AQUAw7vDuwIBw73DvMO5w78Aw7zDucO5AgYAw74ABQTDvsO8w70BAsO/w7vDugACAMO/w7sAAsO/w73DvQIFAQICAAQGAcO/w78DBMO/w78ABAUBAMO/AgYAw70ABQYAw78AAgUBw78AAwUAw77DvgMGw7/DvMO/AQLDvsO/AAEEw7/DvMO/AgPDvcO8AAIFw7/DvMO/AgXDv8O+AAAEAMO9w74CB8O/w7zDvwADw73Du8O+AATDv8O8w78ABMO+w7sAAgLDvcO8w73DvgPDvMO5w74BBsO/w7wAAgUAw74AAgcAw74BAQUAw78BAggAw7wAAwcCAMO9AwMFAAACAAUAw7wAAQXDv8O7AAEEw77DvAECBMO+w7wBAQTDvsO8AMO/A8O/w7sAAAPDvcO7AQEEw77DvAIABADDvQEBBMO9w7sDAgXDvsO8AwADw7/DvQIAA8O+w7oBAQTDvsO8AwADw77DuwIABcO/w7oCAQTDv8O5AAADw77DuwEAA8O+w7gAAATDvsO6AwEEAMO8AwAEAMO6AQACw73DuQIAAsO8w7kCAgABw73DugMAA8O+w7cBAQHDvMO5AMO/AcO+w7oCAAHDvsO7AsO/AMO+w7oEAQLDvsO6AgMFw77DugQCBMO/w7sEAQPDv8O7BAABw7/DugMCBQHDvgUDBADDuwQCAsO/w7sDAQLDv8O6AwEBw73DuQEAAsO/w7oDAQHDvsO5AQEBw7/DvQUBAgDDuwMAAMO/w7sEAQAAw7sCAQLDv8O7AwECAMO6AgIDAMO7AwQDAALDvAUCAADDvwQCAwHDvQQDAsO+w7sGBADDv8O+BgQBAMO9BAEAw73DugMDAcO+w7sDAQAAw7sAAQHDvsO4AQMAw7zDuQEBAMO/w7oBAwDDvMO5AQMBw73DugIDAcO+w7oDAwDDv8O9BAIAw7/DvQMEAsO/w70EBAEAw74DAwAAw74DAwDDvsO9BAIAw7/DvAIDAMO9w7wCAsO+w7zDuwECw7/DvsO8AQQAw77DvAECAAIMDwgDAQsKAgDDvwUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAsO+w73DvQIDAMO9w7oAA8O/w73DvAADAMO9w70CBMO/w7vDvAMFw77DvcO+AgTDv8O9w70BA8O+w73DvAEEw77DvMO9AQHDvMO9w78AAwDDv8O/AwbDv8O+AAECAADDvgEGAMO8w78CBADDvsO/AgXDv8O9w74BBcO/w70AAgTDvsO7w78BAcO9w74AAQPDvcO+AgEDw77DvQAAA8O9w7wAAQPDvsO8w78AA8O9w7wAAgXDv8O7w74CBsO8w7kAAgEEw7/DvMOww5fDqADDvQcuMMO/w7YGAwLDvsO+AQAEAMO9AAAGAMO8AAEEAMO+AAAFAMO9AAADw77DvAEBBQDDvgEBBgDDvQEBBQDDvQDDvwMAw7wAAQXDv8O7AAAEw7/DvgMABMO/w7sBAQTDvsO8AgADw73DugIAA8O9w7oBAAPDvsO6AAACw7zDuAEAAsO8w7oCAAUAw7kAAAUAw7sBAATDv8O8BAIFw78Cw7sDAQLDvcO7AwEDw7/DvAIAA8O+w7oDAAHDvcO5AgEEw77DuQIBA8O+w7sCAALDvcO6BAABw73DuwPDvwHDv8O7AwAEw7/DuQECBcO/w7oDAAPDv8O7BQADAMO8BAAEAMO6AwIDAMO7AgACAMO6AwMEw7/DugUCAcO/w7wDAALDv8O5AQIFAMO6AwIEAMO6AgIEAMO7BAIEAcO9BQMDAMO8BAMEAMO7BQMCAgDDvQUBAcO/w7wFAQHDv8O6AwIAw73DugQAw7/DvsO6AwIAw77DvQcEAcO/w7wFAwQAw7wGAgDDv8O8BAICAMO7BAMBAMO8BAIAw7/DvQUCAMO/w7sDAgHDv8O6AwMAw77DvAICAQDDugECAcO/w7wEBAHDvsO7BAQAw77DvQQDAQDDvQMEAcO/w7wEBQDDv8O8AgIAw7/DvQMEAMO/w70EA8O/w77DuwIFAMO8w7wCAcO+w7zDvcO7AgQAw77DvAEEAMO9w7wEA8O9w77DvgMDw77DvsO9AQPDv8O8w7wBAwDDv8O8AQYBw73DuwABw77DvMO8AQQAw73DvAEEw77DvQADA8O9w7zDvwICw77DvsO+AQUAw73DvQECw77DvcO+AwbDv8O/AAEDAMO+w70CBcO+w70AAwPDvMO9AAICw7/DvsO+AQTDvcO+AAAEAMO8w74BBMO/w77DvQAEw77DvcO/AAPDv8O+AAIEw74Cw7zDvgAFAMO9AAEEw7/DvQADBcO/w70AAQTDv8O9AAEEw7/DvQAABMO9w7vDvwAFw7/DuwADBsO/w74Aw78Ew7/DvAADBcO+w70BAAUAw7sBAgbDv8O9AgAEw7/DvAECBcO/w7sAAAPDv8O8AQIHw7/DvAIABADDuwACBcO+w7wCAATDv8O6AAADw7/DvQEABcO/w7sCAQPDvcO5AAAEw7/DuwEAA8O9w7kAAQPDvcO7AwACAsO+w7sCAAQAw7sCAAPDvsO5AAADw77DuQAAAsO+w7wBAAbDv8O3AAABw73DuwIAAwDDuwMBAwDDvQIAA8O+w7oEAADDvcO7AwABw7/DvQQAA8O/w7oCAgUAw7sEAgXDv8O5AwIEw7/DugQCBMO/w7kBAAPDv8O4AQEDw77DuAICA8O/w7kCAQPDv8O5AgIDw7zDtwMDBADDuQIBAwDDuwMBAwDDvAMBAsO/w7oCAwABw77DuQMBAcO+w7kDAgIAw7wDAgPDvsO5AwECAMO6BAUDw7/DvQYCAgDDvAUDAcO+w7sEAgLDv8O6BAIAw77DuwUDAMO+w7wCAADDvcO6BQMBAMO9AwABAMO8BAIAAMO/BQIAw7/DvAQBw7/DvsO8AwIAw73DugECAMO9w7wDAMO+w77DvQMBAADDvQIABxQbJR0Kw7rDssO7AMO+w7jDscO9AMO9w7fDssO+AQACw7rDs8O8AQDDvcO3w78Bw7/DvcO6AAIAw77DuwIDAMO9w7sCA8O/w7vDugIDw77DvMO9AQEAAMO8AAHDv8O/w74CA8O/w77DvQIEAMO+w7wAAwDDv8O9AQPDv8O+w7wABADDvMO9BQYAw77DvwQFw7/DvcO/BATDv8O9w70CBMO+w73DvwIFAMO+w70BBcO/w74AAgTDvsO+AAEEw73DuwADBMO9w74AAwPDvsO9w78AA8O/w70AAgTDv8O+AAECAsO9w74AAQQAw78AAwTDvMO9AQICw7vDvQICA8O9w74CAwTDvsO+AQECw7zDuwABAcO9w78CAQLDvsO+AQEDw77DvQICA8O9w70AAAUAw7vDvwEHAMO9AAIHAMO6AAIHAcO9AAAHAMO8AAEGw7/DuwDDvwUAw7zDvwAGAcO8w78ABQDDu8O+w74EAMO8AQADAMO9AMO/BADDuwDDvwQAw74Bw78EAMO9AcO+AgDDvAIAw74Aw77DvwPDvQHDv8O+A8O8w78ABgjDscOyAA4Nw7XDtsO/BgnDucO8AQIFw7wAAMO/BMO/AwLDvwPDvQMAw7sCAAQBw7sCAQXDvsO2w78FDcO/w6/DvgkQw7zDq8O+Cw3Du8Otw78LDcO6w6zDvwsOw7vDrgAJDMO7w64ACgrDu8OwAAgKw7vDsQEHCMO8w7MBBgbDvMO0AAQHw77DtAAFBsO9w7YCAwTDvMO2AwIDw77DuQMCAwLDv8O5BAIAw73DuwQAAgDDugEAAsO/w7sDAAAAw70FAAIAw74FAAAAw78FAAADAAXDvsO+AAEHw73DvQMEBsO7w7wFBAXDu8O7AgQGw7rDvAUEBMO6w70DAgTDu8O6AQACw73DvgEABQAAAcO/BQEAAQAFAAABAAYEAwIABgQBAgAHBQEAw78FAMO+AMO/AwDDvsO/w7wCAcO+w73DvAIBAMO+w7sCAgEAw7/DuwIDAMO/w7oDBQDDvMO5AAMAw73DuAEDAMO+w7kCBwLDvcO5AgYAw7zDuAEFAMO7w7YABQDDusO2AAcAw7rDuAIFw7/DvMO4w74DAMO8w7oBBADDvcO6AgcBw7/DuwAEAMO+w7wCBADDvsO7AAYBw77DuwEGAMO8w7oACAHDvMO7AAYBw7zDugIJAcO7w7sDBwDDvsO9AQcAw73DuwEIAMO5w7cBDQPDtsO2AgwBw7gCw7kDCwLDucO5BAwAw7jDvAQKAMO6w7wCCQDDvMO8AgkAw7rDvwMGw77Du8O+AgfDv8O8AAMEw73DuwAEBcO8w70BAwXDvsO9AgIEw73DvAIDA8O9w70CAgPDvcO9AwIDw73DvQMCAcO8w74CAADDu8O+BAAAw7vDvQMBAcO9w74DAADDvcO/AwACw7/DvgQBAMO7w78FAQLDvcO+BAABw73DvAIBAsO9w70Dw78Aw77DvgLDvgACw7rDtwICAsO/w78FAQHDvMO8AcO9AMO+w7wBw78Bw77DvgMAAsO+w70EAAPDv8O9BAECAMO/AwEGAMO9BAEFAMO8BAIDw7/DvgTDvwEAw70DAALDvsO8AgADAMO7AQABw77DuwIAA8O+w7kDAgLDvcO6AgAEw7/DugQBA8O/w7wEAAIAw7sBAATDv8O6AwEEw7/DuwMBBMO/w7oDAQTDv8O6BQMCw77DuwQBAsO/w7sEAAIMDwgDAQsKAgDDvwUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgECAMO7AgIFAMO7BQICw7/DugIBBADDugQCAsO+w7oDAQIAw7wDAAPDv8O5AwICAMO8BAIDAMO6AQABw77DuQIBAsO/w7sEAQDDvsO8BAICAMO5AgMCw77DugMBAQDDvgMAAMO+w7oEAgHDvsO7AwEAw7/DuwIBAcO+w7sEAwPDv8O7BQMBAMO8AgEBw7/DugMCAMO+w7oCAcO/w7zDuwMAw7/DvcO6AgEAw74Cw7oBAgDDrcOPw6UAw70CJSsCw7sCw7sAAQEAw7sBAgIAw7wBAgHDv8O7AwQAw73DuwICAMO/w7wDBAEAw7sAAgDDvsO7AAIAw77DvAEDAcO9w7sCAsO/w77DuwACAMO+w7sBA8O/w73DvQMEAMO+w70DBAAAw74CA8O/w7/DvwMHAcO/w78DBQDDvcO+AwQAw77DvgEEAMO+w7wBBQDDvcO9AgYAw73DvAIEw7/DvgABAgLDvsO8w74CA8O+w73DvgAEAMO9w78AAsO/w73DvgADw7/DvcO/AgTDvsO7w74CBADDvsO/AQUAw7zDvgEFAMO9AAIDw7/Dv8O/AAUAw74AAQXDv8O7AAMGw7/DvAADBcO/w73DvwADw73DvAAABQDDvMO+AQXDvcO6w74ABQDDvAABBgDDvMO/AATDvsO6w78ABMO+w7sBAgTDvsO7AAEEw77DvAIBBQLDvwECBgDDvAAABMO+w7sBAgEDw77DvQMCBMO+w7oAAQTDvsO8AgADw7/DvAEAA8O+w7sBAgXDvsO8AgADw7/DvAEABsO/w7oBAALDvcO7AwEEw77DugMECQDDtcO7AAfDv8O1w70DCcO/w7cAAggAw7gAAggAw7kBAgcAw7sCAwYAw7wEAQUAw7oCAgXDv8O6AgABAMO9AsO/AsO9w7kCAAPDvsO6AwABw7/DvAYBAsO+w7oDAQQAw7wGAQEAAsO8BQMDw7/DvQYCAcO/w7wDAALDv8O8BAADAMO8BQACw7/DuwMAAcO+w7sEAQHDvsO7BAEBw73DuwUBAgDDuwMCAgDDuwQBAsO/w7oDAwLDvcO6BQMBw7/DvQQAAQDDvwbDv8O9w77DvgYAw73DvMO/CMO/w70AAATDvgAAw70FAgAAw7wEAgDDv8O+AwEBw7/DuwMBAMO+w7sCAQHDvsO6AwAAw73DuQIBAMO/w7kAAQIAw7zDuQIBAMO9w7kCAwDDvsO5AgQCw7/DuwIDAcO9w7kABALDv8O8AgMCw7/DugEDAcO+w7oCAwHDv8O7AgMAw77DuwECAcO/w7oCBQDDvsO8AwQCAMO8AgQCAMO8AgUDAMO7AwYBAMO+AwYBw77DvQMFAcO/w7wDBADDvsO8AQQBw77DvQICw77DvcO9AgPDv8O+w74DBgDDvcO8AwbDv8O9w78CBADDv8O/AgMAAMO+AgIFAMO9w7wBBADDvcO8AgXDv8O8w74BAwDDvsO9AAMAw73DvgIEAMO/w70BBcO/w7zDvgIFw7/DvQAEBcO/w77DvwEEAMO+w78BBADDvcO+AQQAw78AAAXDv8O8AAEDw73DvQAABMO/w7wAAgXDvsO8AAIGw7/DuwADBcO/w70AAgbDv8O9AQIFAMO+AAADw73DuwABBcO+w70BAQPDvsO9AQEDw77DvQAABcO/w7wAAAYAAsO8AAIFw7/DvgEABMO+w70CAATDv8O8AQEDw7/DvADDvwPDvcO6AAAEw77DuMO/AQPDvMO6AAADw77DugECBcO/w7sAAAbDv8O5AAEGAMO8AQAHCQsNBQjDv8O1w7zDvwTDu8Ozw7zDvwTDvcO1w73DvwTDvcO2w74ABMO9w7XDvwEFw73DtwABBMO+w7gBAQTDv8O4AAIGw7/DugIABMO/w7kAAQXDvsO6AwEEAMO8AgAEw77DuQMAAgHDv8O6AAADw77DugMAAMO7w7kCAALDvcO6BAABw7/DuwUCAgDDvAMAAcO+w7wEAgLDvsO6AwIEw77DuQMAAQDDvQQAAsO/w7wEAQHDvsO6BAECAMO7AwEDAMO5AgEBAMO8BAABw77DuwTDvwDDv8O7AwAAw77DvAUAAADDvQMAAMO9w7sDAAHDvsO6AwIBw73DuQIAAMO+w7sDAgLDv8O8BQICAMO8BAIBw7/DvQIEw7/Dv8O/w7sFBAMAw7sDAQHDv8O7AwQCw7/DvggFBQLDvwgGAgDDvwUAw77DvsO9BAEAAQAGBADDvsO9BQEAw7/DvAIAw7/DvsO7AwLDvsO9w70CAMO/w77DvAICAMO+w7sCAsO/w73DuwAAw7/DvMO5AAIAw77DuwIFAcO+w7wEBQDDvcO8AQEAw7/DvAIDw7/DvcO7AgQAw77DvAAEAMO9w7wCAwDDv8O+AgQBw73DugEEAAIAw70ABADDvcO7AQQAw77DvAEFAMO+w7wABAHDv8O8AATDv8O1w6nDrsO7w7zDvMO+BAYAAAAFCAAAAQUGAAEDBALDvgADBgTDvsO/AgUEw73DvwEEBcO/w74AAgXDvsO8w74ABcO/w7vDvQIHAMO7w70DBwDDvMO7AAkBw7vDvgIHAsO8w7wCCADDvcO+AQYAw73DvwMIw77DuMO8AATDv8O6w7wABsO/w7rDvgADw7/DvAAAAgPDvsO8AAEEw77DvgEAAsO9w7wBAALDvcO9AgECw7zDuwABBMO9w7wCAQMAw74AAAYAw7wAAQcAw7wAAAYAw7rDvgAGw7/DugABBsO/w7oAAQUAw74BAAUAw7rDvwAHAcO7AAIHAMO6AAAHAMO5AAEGAMO7AAEGw7/DuwEABQDDuwIABADDuwAABMO/w7sEAwTDvsO7AwEFAMO8BAIDw77DvAQDBMO/w7wCBAACw7/DvAMABMO/w7sEAALDvcO6BAMDw73DuQMBAsO9w7oEAwPDvcO7BgICw7/DvQUCA8O+w7sEAQMAw70GAwTDv8O9BgIDw7/DuwYDAsO+w7wGAQAAAAgCAcO/w78IAQDDv8O+BQICAMO+BcO+w77DvMO8BMO/w7/DvsO9BgAAw7/DvQQAAcO/w7oDAADDvcO6AwECw73DtwEBAsO+w7gBAgTDv8O4AgMEw7/DuAECBAIAw7gBBATDv8O5AQADCRIaCwTDvcOyw7sAAsO7w7HDvAADw7/DtsO/AQQAw7kAAADDvcO6AgEAw7zDtgIDAsO+w7cAAwPDvMO4BAQDAMO5AQQFAMO6BAYGAcO7AQMEw77DuAMEAMO+w7kAAQDDu8O2AALDv8O6w7gAAADDusO2AAIAw7zDtwACAMO9w7gAAQDDvcO5AQIAw73DugHDv8O8w73DvAAAw77DvcO6AADDv8O+w7oBAgPDv8O8w7sBA8O/w7rDuQABw73DvMO8AwPDv8O8w7oAAwQCw78DBADDv8O+AgQAw78ABAQBw7/DvQIFAcO+w70DBQDDv8O+AwMAw77DvQIFAMO8w70CBMO/w7zDvwQFAMO+w78EBgDDvMO9AwYAw7zDvwUFAMO+w78DBgDDvcO+AgUAw73DvgEEw7/DvcO/AgTDv8O9w78CA8O+w74AAwUAw7/DvwEEAMO+w74CB8O/w7zDvwIGAMO9AAIMDwgDAQsKAgDDvwUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAsO/AQPDvcO7AAEDw73DvAAAAsO9w7sAAALDvsO9AAIFAMO9AAEGw7/DvAACBMO+w7wAAgXDvcO8AQIEw77DvQABBMO/w70AAgTDvsO8AAIFw73DugECA8O8w7oAAATDvsO7AAAEw7/DvAEBBMO+w7oAAQTDvsO8AQEFw7/DuwABA8O+w70CAAQAw7wBAgfDvsO5AgIDw73DuwEAA8O/w7sAAAYBw7wBAQTDvcO7AgEEAsO/w7wBAMO6w5fDlgEDBSMoCMO8CgDDuQECBsO/w7oBAgfDv8O5AgIEw73DuAABBMO+w7oDAgXDv8O6AgEFAMO6AQEGAMO5AgICw73DuwIABADDuQAABADDvAIABgDDugMBBgLDvAIBBgLDvAQFCQLDvgcHBwDDvQUEBgHDuwMDBgDDuQQDBMO/w7sEAwbDv8O6AwMFw7/DuQIAAcO/w7oCAMO+w7zDuwICw77DvsO6w7sFw7/Dv8O+w7sEAADDvMO7BgEAw73DuwIAAsO/w7oEAgLDvcO5AwEBw77DugUCAMO+w7sCAAAAw7wBAALDvsO5AgAAw77DugMCAMO+w7wEAQHDv8O7AgIDw7/DugQCAQDDvAIBAwDDugECAcO+w7oEAgLDv8O6AgMCw73DuAEBAMO+w7oAAQLDv8O5AgIAw77DvAIBAMO/w7oBAQIAw7sDAQDDvsO8BAUBw74Cw7wDAwEAw70EBQLDv8O7BAUBw7/DvQQDAgDDuwMDAADDvQMDAMO+w70FA8O/w7/DvgIAw73DvMO8AwLDvsO9w7wDAcO8w7zDvQMBAMO+w7sBAcO9w7vDugADAMO9w7sBAsO/w73DuwEDw7/DvcO6AQQAw77DvQQGAMO+w70DBQDDvsO9BAUAAMO+AQQBw7/DvAIFAMO8w7sBAwDDvsO7AQQAw77DvQIGAMO9w74CBQHDvsO+AgUCw77DucO+BQYBw7/DvQIGAMO/AAIDAMO/w70ABgDDvcO+AgUAw73DvgIFAMO+w70ABgDDvcO+AQUAw7/DvgAFAMO9w74CBsO+w7wAAQUAw73DvwAEAMO9AAEEAMO9AAMGAQECBQjDvsO6w74AAcO6w7nDvMO9AMO7w7rDvgACw7rDugABA8O9w7sAAAPDv8O9AAIGw7/DvAAABMO+w7zDvwAEw77DusO/AATDvsO5w78BBcO9w7jDvQLDvwPDvsO4w70BBsO+w7rDvwAGw7/DuwAABQDDuwEBBcO/w7sAAATDv8O7AAIGw7/DvAMCBQDDvAECBcO/w70CAQbDvsO6AAAEAMO8AQEEw73DuQACBMO9w7sCAAPDvsO8AgIGw7/DvAUCBADDvAIBBMO+w7sDAQPDvsO8AgAEw77DuQAAAwDDuwAABcO+w7kBAATDvsO3AAADw73DuQAABMO/w7gAAgYAw7oDAwbDvwLDuQICBwDDugMDBMO/w7oDAgTDvsO6AgABw73DuAABBcO/w7sEAwTDvcO5BAIDw7/DvAUCAwDDvAQDBQDDvAQCBgDDuwQBAwDDugMCBMO/w7sFAwPDvsO5AwIDAMO8BQECw7/DugMBAsO9w7oFAAAAw74FAgLDvsO9BwEBw7/DvAYCAcO+w7sFAgHDv8O8BAEBw73DugIAAMO9w7kDAADDvcO4AgEAw7zDuwYCAgLDv8O6AwMDw7/DuwQDAcO9w7sFAwIAw7sDAgMAw7sCAQDDv8O7BAIAw77DuwMBAcO/w7kDAwHDvcO5AgIBw7/DugIDAcO+w7oCAgDDvcO7AwAAw77DuAECAMO8w7oBAgHDvsO8BAMBAMO8AgMCw7/DuAIEAMO+w7sCBAHDv8O6AQIAw77DvQYFAMO/w70EAwHDvsO7AQEAw7zDuQMEAMO/w74EBQLDvsO6AgQAw73DugIAAsO/w7zDuwICw7/Du8O7AwMAw77DvAEDAcO/w7sCBADDv8O8AgQBAMO+AwTDv8O9w7wCBQDDvsO8AQQAw73DvQMEAMO/w74DBQAAAAUHAgEBBQcCw7/DvwUGw7/DvcO9AQLDvMO6w70CAsO8w7rDuwECw73DvcO/BgoDAAAFCgUDAwcJBAAAAwPDvcO9w74BAsO8w7vDvQAAw7rDuMO7AADDusO8w73DvwDDvMO7w7wAAsO9AsO7w7wABMO8w7oAAQQAw70ABQgBAAMGCQLDvwIFBwDDvcO+AQPDvcO7w74ABMO+w7rDvQAEw77DusO9AAPDvcO7w74AA8O9w7nDucO7AcO+w7oABAgBw78CBgoCAAQECAHDvgACBgDDvAADBsO9w7nDvcO+A8O+w7jDvAADw7zDt8O9AATDu8O1w7rDvQLDvcO4w70BCALDvwMGCwQABgcLA8O/AwUIAMO8AQEEw73DuwDDvgIBw73DucO/AALDvMO5AQABw7zDucO/w74Aw7jDtMO9w73Dv8O7w7oBAQkEAAcJDQQABgQHAMO8AgACw73DugIBAcO6w7gBw77DvsO6w7kAw74Aw7zDuMO/w78Bw7rDtcO9w7vDvsO5w7TDvsO/BADDvQYHDAcCCQkMBAAHBQTDv8O9AwAEw77DuQLDvwDDvMO4AMO/AMO7w7gAw78Aw7rDtcO/w73Dv8O5w7YAAQYBw74ICAwGAAoKDAUAAgcEBgDDuwMCAsO7w7cAw78Aw7zDuQHDvgDDvMO3AAAAw7rDtwIAAMO5w7XDvsO8w77DtcOsw7bDt8O/w7zDuAYKDwkCDhMZEQkSCgPDvQYDA8O9w7cCAMO9w7nDuADDu8O+w7rDtMO/w7/Dv8O6w7YAw77Dv8O6w7TDvsO7w7rDs8Ouw7nDusO+w73DuwgLDw0LFhMTDgkQCQXDv8O6AwDDv8O8w7kBAMO8w7jDtcO9w7vDusO3w7YAw7zDu8O4w7TDvsO9w70Cw7fDr8O3w7bDtcOxw7DDvQACAwIPEhUTDhcTDwkCCQUAw73DuwQAw73Du8O7BADDu8O5w7gBAMO9w7nDuQLDv8O7w7fDtsO+w7vDtsOww6nDr8Oxw70FBRASCwDDuAQNDALDuwYODQYACAwIAMO5BAgEw73DuAMGAsO9w7YABQPDu8O2AAEAw7vDuAECw77Du8O4AQPDv8O8w7sCAwDDvsO6AgTDv8O8w7sCAwDDvsO9AgMAw77DvAQCBADDv8O7AQQAw77DvwMBw77DvMO8AwLDvMO6w7oAAMO5w7bDuMO+w7vDt8O5w70IDQsLCRASDxASGBMIBgcLBsO/w78AAwDDucO7w7wAw7/DuMO4w70BAMO5w7fDuMO9w73DtsOzw7PDuMO5w7PDr8Ovw7TDtcOww7HDuggTEAoGCg0HAgAECAQBAAUKA8O+w74EBwHDvwEICgLDv8O9AQYAw7vDvQIEw73DvMO+AQTDvsO7w74BBMO/w70Cw7rDvQTDv8O6w74CBMO+w7rDvQECw77Du8O8AQbDvsO7w78CBcO/w70AAgYAw70AAgYAw74ABAjDv8O8AAIEw7/DvQEEBsO9w7rDvwIFw77DvAACBgDDvQADBsO+w7sAAgXDv8O8w78AA8O+w7wAAwXDvsO7AAACw7zDucO/AAPDvMO5w73DvwPDu8O4w74AAMO7w7nDvMO9A8O+w7vDv8O/AsO7w7jDvwACw7zDucO/AAQAw78EBgkDAAYJDAACDA8IAwELCgIAw78FAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBw70IDhAHAwkLEAkGCgcLBQAJDA0EAAcLDwgCA8O+w7vDssOvw7jDu8O+w7TDscO7w7nDusO2w7XDvcO9AMO6w7gAAADDt8O0w7rDusO9w7XDs8O8w7jDusO1w7PDvMO7w77DtsOxw7rDusO9w7fDs8O7w74Bw7jDs8O8w73Dv8O4w7TDvMO6w7/Dt8Ozw73DvADDu8O1w73DvwTDv8O8BwgNCAUPEBUQCxMVGhINFxUWDwkRDQ4HAAYEBwDDvAUCBAQAw77DvMOcw6MBAAotOAnDuQoKBAELBwkEw70EAwTDv8O7BAIDw73DugMAAMO8w7oCAADDusO3AQAAw7rDtgDDvgDDucO2AQAAw7rDtMO/w73DvMO3w7LDu8O5w7rDs8Otw7TDscOzw6vDocOkw53DocO2EBwQDMO9w63DuMO9AcO3w67DusO9AMO6w7PDvgABw7rDtAAAAsO9w7cCAgPDv8O3AAIFw77DtwIDBMO/w7kEBggAw7wGBAYBAsO7BAUEAMO8BQQEAMO9BwYGAcO9BwYFAMO8BgYFAMO9CAYDAMO8BQUEAMO8BgYDw7/DvQcFA8O/w7sFAgHDvsO7BAICAMO9CAYCAMO7AwMBw7/DvAYFAcO7w7cAw77DvMO5w7cCAMO+w7vDuQHDv8O9w7rDtQAAw7zDtsOzw7/DvsO6w7fDs8O9w77Du8O3w7XDv8O/w73DucO2AADDvcO6w7cAAMO/w7zDugEBAMO8w7oDAwDDvsO7AgICAMO8w7kCAMO7w7bDscO1w7DDsMO/ChEKAsO/w7wDBwXDv8O7BQcFAcO9BAkGAMO8BQkEAMO+BQgEAMO/BwkEw7/DvQUHA8O/w7kBBQDDvMO7AgQCw7/DuwEEAcO+w7oCBgLDvcO7BAcBw73DvQQEAMO9w7wDBgDDvMO7AgQAw77DvgMDAMO9w70EBMO/w73DvAIEAMO9w70DBgDDvMO9AgQAw73DvAQFw7/DvMO+AwTDv8O8w70CAwUAAAAICgQAAAkLBAQGDBAKBgUJCADDvcO/AwXDvsO6w7wCBcO+w7nDuwIFw7/DvcO/AgUBw78AAgTDvsO8w78BA8O+w7vDvQACw73DucO7AgbDvcO5w74CBMO9w7rDvQIEw7zDu8O/AgXDv8O9AAIEw7/DvAAFCADDvQAEBgDDvQADBgDDvMO+AgbDv8O6w74BBcO+w7rDvQAFw7/DusO+AQTDv8O8w78CBcO9w7nDvQEFw70Cw7nDvgAEw73DusO+AAUAw7wAAwXDv8O+AQMHAMO+AgUJAMO8AgUHAMO9AQEGAMO8AAEGw7/DugADBsO/w7oAAQTDvsO9AQEFw73DugABBMO9w7kAAwTDvMO7AQMGw77DuQABA8O9w70CAALDvsO7w78ABcO+w7oCAgTDv8O8AQAFAMO7AMO/AcO9w7sAw74Cw73DugMDAsO7w7oAAQbDvcO3AAIFw77DuQAABMO+w7jDvwACBMO/w7sAAQXDvsO6AgEFw7/DugEDBcO9w7kBAQXDvsO5w7/DvwPDvMO4AwMEw73DuQICA8O8w7oAAAXDvsO5AwYJAMO8BgkOBgAJDA0Dw70EBQsEw74FBAcBAAYBAsO/w7wDAALDu8O3AQEDw7/DvQQDBwDDvQMAAsO6w7UAw77DvMO2w7YAw78Aw7nDtgAAA8O7w7YCAQPDv8O7AgIEw77DuwMBA8O/w7oDAgPDu8O4AgUDA8O+w7oBAAPDvsO3AAECw7vDtgEDBMO8w7cBAQTDvsO3AAABw7vDtcO/w73DvsO4w6/DtsO4AsO/w7oGBQPDusO2BAQCw7vDuAMBAsO8w7gDAgUBw7sAw74CAQAHAgLDvwAPDAcAw7wKDQsAw7kFCAsCw7oCAAIAw7sBAADDusOzw7zDvQHDvcO2AQMDw7rDtAEEA8O7w7QABQTDusO0AAICw7zDtwAAAcO9w7kDAQACw77DuAEDBQDDugIBAcO9w7kBAAHDv8O5AgDDvsO9w7sCw73Du8O9w74Ew7nDtsO8AQfDu8O5AQULAcO+AAIKAwIDAgsEAAEACgYFBQEGAgICAAUDAgDDvQMAw78Cw78DAADDv8O7AgIBAMO7AwMBw7/DuwMCAcO/w7oBAQDDv8O8BAUBw7zDuQQEAMO/w7oDBwLDvMO5BAYCw73DuAEGBMO+w7kCAwDDvsO6AQICw77Du8O6AwUDw7/DuQIGAMO7w7kDBQDDvcO5AgYBw73DuQIGA8O/w7sFCALDv8O8AgUDw77DugUHAMO/w70DBQDDvsO+BgYAw77DugMGAMO8w70FBgDDvMO6BAcAw73DuwQIAsO8w7oDBwHDvsO8BAcAw73DvAMHAMO9w7oBBgHDvcO8BAgAw7zDvAMHAsO9w7wFBwDDvsO8AwkBw73DvAQIAQAABAYBAMO+BAcAw74Cw74ECQHDvsO+BAfDvsO7w74EBsO/w73DvQEFw7/Du8O7w78Cw73DusO8AwXDvMO6w7sABMO+w7vDvQADw7vDuMO7AAPDvMO5w7rDvQHDvMO4w7oAA8O9w7zDvwIFAMO+w78ABgDDvsO/BAjDv8O9AAIGw7/DvMO/AQYAw74AAgYAw73DvwMHw7/DvMO/AQYAw70AAQPDvsO9AAIFw77DvQIBA8O/w74AAAPDvcO9AAADw73DuwABBMO+w7vDvwEFAsO+w7zDvwAEw7/DvAAAAsO+w74AAALDvcO8AQIDw7vDugABBMO+w7sAAgXDvMO8AAAFw77DuwACBMO8w7wDBAXDvMO8AwMGw7/DvQECBcO9w7wBAQTDvMO7AAAGw73DuQIDBMO8w7sCAQXDvsO5AQIFw73DuMO+AAcAw7sAAATDv8O8AAAGAMO6AAEGw77DugACBsO+w7sBAgbDvsO5AAEHAMO6AAAHw7/DuQAABcO/w7sAAgAFw77DuQEBBMO9w7kBAAUAw7sBAAbDv8O6AMO/BQDDugAABMO+w7sCAAXDv8O6AQEHAcO/BAIIAMO7BAIDw7vDuQMCBMO7w7UCAgTDvcO4AAAGAMO4AAADw73DugMAA8O+w7oDAAPDv8O7AwABw77DvAMABMO+w7oCw78Cw77DugLDvgHDvcO4AQABw73DugMCBMO8w7cCAQPDvsO5AQAEAMO8BAADAMO8BwIBw7wCw7oFAgLDvcO6BAIEw77DuQMBBMO/w7oEAAQBw7sDAQTDv8O5AwADAMO5AgEEw77DuAIBBMO+w7cCAgQAw7oCAAXDv8O5BAEDw77DuAMCBcO+w7cDAgUAw7gDAgUAw7gDAwTDv8O8BgMHAsO9BwMEAMO9CAUEAAAMBQIAw74JBAHDvsO6BQAAw77DvAcCAQDDvgcBAMO+w7sFAMO/w77DugQAw7/DvcO5BAECAMO6w7cFAwLDvsO4AwAAw73DtwIAAMO+w7YBAgHDvMO1AQIAw7vDtgAAAMO7w7UBw7/DvsO8w7bDv8O+w7/DvMO3AwMCw7/DugQDAsO/w7kCAwPDv8O3AQQDw77DuQQEAwDDugUFAwHDvAMDBAHDuwMCAwHDuwQEAgDDuwIAAMO/w7sDAADDvsO6BQUCAMO8BQMBAMO8BAIAAMO7BAQBw7/DuwQFAsO+w7kEBADDvcO5AAIMDwgDAQsKAgDDvwUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        
+        // var result=BASE64.encoder(data);
+        var result = BASE64.encoder(data)
+        console.log(result)
+    </script>
+</body>
+</html>

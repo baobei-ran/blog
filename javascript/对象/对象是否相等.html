@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>js比较两个json对象(或数组)是否相等的方法</title>
+</head>
+
+<body>
+
+    <script>
+        /**
+         *  参考链接： https://www.jianshu.com/p/0a153466be07
+         * 
+         *  @param { Object } origin 
+         * @param { Object } target 
+        */
+        function compare(origin, target) {
+            if (typeof target !== "object") {
+                //target不是对象/数组
+                return origin === target; //直接返回全等的比较结果
+            }
+
+            if (typeof origin !== "object") {
+                //origin不是对象/数组
+                return false; //直接返回false
+            }
+            for (let key of Object.keys(target)) {
+                //遍历target的所有自身属性的key
+                if (!compare(origin[key], target[key])) {
+                    //递归比较key对应的value，
+                    //value不等，则两对象不等，结束循环，退出函数，返回false
+                    return false;
+                }
+            }
+            //遍历结束，所有value都深度比较相等，则两对象相等
+            return true;
+        }
+
+
+
+        const obj1 = [{
+            id: 1,
+            name: '张三',
+            age: 18
+        }, {
+            id: 2,
+            name: '李四',
+            age: 16
+        }];
+        const obj2 = [{
+            id: 1,
+            name: '张三',
+            age: 18
+        }, {
+            id: 2,
+            name: '李四',
+            age: 16
+        }];
+        const obj3 = [{
+            id: 1,
+            name: '张三',
+            age: 18
+        }, {
+            id: 2,
+            name: '李四',
+            age: 16
+        }]
+        const obj4 = [{
+            id: 1,
+            name: '张三',
+            age: 18
+        }, {
+            id: 2,
+            name: '李四',
+            age: 18 //
+        }]
+        console.log(compare(obj1, obj2))  //true
+        console.log(compare(obj3, obj4))  //false
+
+        // C:\Users\Administrator\Desktop\测试test\yyj-project\cloudsmed_hos_web\node_modules\_normalize-wheel@1.0.1@normalize-wheel\src\isEventSupported.js
+    </script>
+</body>
+
+</html>

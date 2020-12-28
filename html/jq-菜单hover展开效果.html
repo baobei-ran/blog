@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .test {
+            width: 100px;
+            height: 100vh;
+            background: #243067;
+        }
+
+        .Pd-T5 {
+            padding-top: 5px;
+        }
+
+        .Pd-T10 {
+            padding-top: 10px;
+        }
+
+        .Pd-T20 {
+            padding-top: 20px;
+        }
+
+        .Pd-T30 {
+            padding-top: 30px;
+        }
+
+        .Pd-T40 {
+            padding-top: 40px;
+        }
+
+        .Pd-T50 {
+            padding-top: 50px;
+        }
+
+        .Pd-T60 {
+            padding-top: 60px;
+        }
+
+        .Pd-T70 {
+            padding-top: 70px;
+        }
+
+        .Pd-T80 {
+            padding-top: 80px;
+        }
+
+        .Pd-L5 {
+            padding-left: 5px;
+        }
+
+        .Pd-L10 {
+            padding-left: 10px;
+        }
+
+        .Pd-L20 {
+            padding-left: 20px;
+        }
+
+        .Pd-L30 {
+            padding-left: 30px;
+        }
+
+        .Pd-L40 {
+            padding-left: 40px;
+        }
+
+        .Pd-L50 {
+            padding-left: 50px;
+        }
+
+        .Pd-L60 {
+            padding-left: 60px;
+        }
+
+        .Pd-L70 {
+            padding-left: 70px;
+        }
+
+        .Pd-L80 {
+            padding-left: 80px;
+        }
+
+        .Pd-R5 {
+            padding-right: 5px;
+        }
+
+        .Pd-R10 {
+            padding-right: 10px;
+        }
+
+        .Pd-R20 {
+            padding-right: 20px;
+        }
+
+        .Pd-R30 {
+            padding-right: 30px;
+        }
+
+        .Pd-R40 {
+            padding-right: 40px;
+        }
+
+        .Pd-R50 {
+            padding-right: 50px;
+        }
+
+        .Pd-R60 {
+            padding-right: 60px;
+        }
+
+        .Pd-R70 {
+            padding-right: 70px;
+        }
+
+        .Pd-R80 {
+            padding-right: 80px;
+        }
+
+        .Pd-B5 {
+            padding-bottom: 5px;
+        }
+
+        .Pd-B10 {
+            padding-bottom: 10px;
+        }
+
+        .Pd-B20 {
+            padding-bottom: 20px;
+        }
+
+        .Pd-B30 {
+            padding-bottom: 30px;
+        }
+
+        .Pd-B40 {
+            padding-bottom: 40px;
+        }
+
+        .Pd-B50 {
+            padding-bottom: 50px;
+        }
+
+        .Pd-B60 {
+            padding-bottom: 60px;
+        }
+
+        .Pd-B70 {
+            padding-bottom: 70px;
+        }
+
+        .Pd-B80 {
+            padding-bottom: 80px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test">
+
+    </div>
+    <script>
+        $(".test").hover(function () {
+            var thisw = $(this).width();
+            var thish = $(this).height();
+            $(this).stop().animate({ width: thisw + 100 });
+        }, function () {
+            var thisw = $(this).width();
+            var thish = $(this).height();
+            $(this).stop().animate({ width: thisw - 100 });
+        });
+    </script>
+</body>
+
+</html>

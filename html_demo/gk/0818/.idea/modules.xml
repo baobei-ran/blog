@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../app/.idea/0818.iml" filepath="$PROJECT_DIR$/../app/.idea/0818.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../前端/jqueryDatePlugin-master/.idea/jqueryDatePlugin-master.iml" filepath="$PROJECT_DIR$/../前端/jqueryDatePlugin-master/.idea/jqueryDatePlugin-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../导航/.idea/导航.iml" filepath="$PROJECT_DIR$/../导航/.idea/导航.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../前端/自适应/.idea/自适应.iml" filepath="$PROJECT_DIR$/../前端/自适应/.idea/自适应.iml" />
+    </modules>
+  </component>
+</project>

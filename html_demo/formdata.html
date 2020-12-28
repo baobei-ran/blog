@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+</head>
+<body>
+    
+    <script>
+        // key =>  value
+
+        var formdata = new FormData();                  // 构造实例化
+
+        formdata.append("sign", "713FC5995B02DA74998FCE511C78768C");        // 添加数据   append('第一个值为key值', '第二个为需要的参数，属于 value 值')
+        formdata.append("timestamp", "1605094095");
+        formdata.append("hosNumber", "H124512");
+
+        // 如果后台需要 key 对应的 value 值为 数组或者对象，就把数组（对象）用字符串包裹起来，然后传给后台
+        formdata.append("data", '[{"patType":"1","patName":"信本刚","patSex":"M","patAge":"48","patBirth":"1972-03-28 00:00:00","patAddress":"黑龙江省宁安市宁安镇六委8组","patMobile":"13845325858","patIdType":"1","patIdNum":"231084197203280317","patCardType":"1","patCardNum":"231084197203280317","guardName":"","guardIdType":"","guardIdNum":""}]');
+
+
+        $.ajax({                        // js 使用 ajax 进行发送请求数据
+            url: '后台提供的接口路径',
+            method: "POST",             // 请求方式     （get， post, ）    
+            data: formdata,             // 传入参数给后台
+            headers: { "Content-Type": "multipart/form-data" },         // 告诉发送请求头，使用 form-data 方式进行传参给后台
+            success: function (result) {
+                // 得到响应数据
+                console.log('返回的数据', res);             // 打印到控制台
+            },
+            error: function (error) {
+                // 响应出错处理
+            }
+        })
+        
+    </script>
+</body>
+</html>

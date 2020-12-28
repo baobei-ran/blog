@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+
+        function objToArr(obj) {
+            var arr = []
+            for (let i in obj) {
+                let o = {};
+                o['id'] = Number(i)
+                o['name'] = obj[i];
+                arr.push(o)
+            }
+            return arr;
+        }
+        let obj = {  5:'未完成',  8:'已完成',  4:'待确认',  6:'已取消' };
+
+        console.log(objToArr(obj));  // [{id:5,name: '未完成'}, ...]
+
+
+
+        
+        // 把对象转换成数组对象, 参数对象， 返回值数组对象
+        function objToArr2 (obj) {
+            var arr = []
+            for (let i in obj) {
+                let o = {};
+                o[i] = obj[i];
+                arr.push(o)
+        
+            }
+            return arr;
+        }
+        let obj2 = { '未完成': 5, '已完成': 8, '待确认': 4, '已取消': 6 };
+        
+        console.log(objToArr2(obj2));   // [{ '未完成': 5 }, ...]   得到的格式
+ 
+        let obj3 = {
+            one : 1,
+            two : 2,
+            three: function () {
+                console.log('test three')
+            }
+        }
+        function objArr (obj) {
+            let arr = [];
+            for(let [k , v] of Object.entries(obj)) {
+                obj = {}
+                obj[k] = v
+                arr.push(obj)
+            }
+            return arr
+        }
+        let newArr = objArr(obj3)
+        newArr[2].three()
+        console.log(newArr)
+
+    </script>
+</body>
+</html>

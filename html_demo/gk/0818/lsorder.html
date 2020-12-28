@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="user-scalable=no,width=device-width,initial-scale=1,maximum-scale=1">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no"name="format-detection"  />
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <link href="css/sweetalert.css" rel="stylesheet">
+    <link href="css/application.css" rel="stylesheet">
+    <title>订单</title>
+</head>
+<body style="background-color: #fff;">
+<header>
+    <div class="headerbar">
+        <h1>订单</h1>
+        <a class="navbar-toggle" href="mine.html">
+            <span class="icon-m_goback"></span>
+        </a>
+    </div>
+</header>
+
+<section>
+    <div class="time" id="date-group1-1">2020.08</div>
+    <div class="shouxq">
+        <div class="text-center line">
+            <a class="pull-left btn1">tzd00630</a>
+            廖<span style="padding-left: 1rem;">15852369856</span>
+        </div>
+        <ul>
+            <li><label>下单时间: </label>2020-04-06 09:05:01</li>
+            <li>
+                <label>总数: </label>1.00
+                <label class="postcode">可取:</label>1
+            </li>
+            <li>
+                <label>金额: </label>9.90
+                <label class="postcode">优惠券: </label>0
+            </li>
+            <li>
+                <label>地址：</label>临沂市兰陵县金海湾7号楼三单元三室301
+            </li>
+            <li>
+                <label>备注: </label>下午一两点在家
+            </li>
+            <li>
+                <label>门店备注: </label>下午一点在家
+            </li>
+            <li>
+                <label>录衣门店: </label>汤庄店
+            </li>
+        </ul>
+    </div>
+    <div class="shouxq">
+        <div class="text-center line">
+            <a class="pull-left btn1">tzd00630</a>
+            廖 <span style="padding-left: 1rem;"> 15852369856 </span>
+        </div>
+        <ul>
+            <li><label>下单时间: </label>2020-04-06 09:05:01</li>
+            <li>
+                <label>总数: </label>1.00
+                <label class="postcode">可取:</label>1
+            </li>
+            <li>
+                <label>金额: </label>9.90
+                <label class="postcode">优惠券: </label>0
+            </li>
+            <li>
+                <label>地址：</label>临沂市兰陵县金海湾7号楼三单元三室301
+            </li>
+            <li>
+                <label>备注: </label>下午一两点在家
+            </li>
+            <li>
+                <label>门店备注: </label>下午一点在家
+            </li>
+            <li>
+                <label>录衣门店: </label>汤庄店
+            </li>
+        </ul>
+    </div>
+</section>
+<footer>
+    <div class="row footbar">
+        <a class="col-4 text-center" href="index.html" ><span class="icon-home"></span>首页</a>
+        <a class="col-4 text-center" href="shopping.html" ><span class="icon-cart2"></span>商城</a>
+        <a class="col-4 text-center" href="dingdan.html" ><span class="icon-order2"></span>订单</a>
+        <a class="col-4 text-center" href="mine.html" ><span class="icon-user2"></span>我的</a>
+    </div>
+</footer>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript" src="js/jdate.min.js"></script></body>
+<script>
+    window.onload = function() {
+
+        // 格式
+        new Jdate({
+            el: '#date-group1-1',
+            format: 'YYYY-MM',
+            beginYear: 2000,
+            endYear: 2100
+        })
+    }
+</script>
+</html>

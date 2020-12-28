@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>   
+    <meta charset="UTF-8">    <title>Echarts实现心电图效果</title>   
+    <script src="https://cdn.bootcss.com/echarts/3.7.1/echarts.js"></script>
+</head>
+
+<body>
+    <div id="totalFlowRate" style="height:300px;"></div>
+</body>
+
+
+<script type="text/javascript">
+    var totalFlowRate = echarts.init(document.getElementById('totalFlowRate'));
+var xAxisData = [];
+var yAxisData = [];
+for (var i = 500; i > 0; i--) {
+    xAxisData.push(i + "秒前");
+}
+for (i = 1; i < 501; i++) {
+    yAxisData.push(null);
+}
+var totalFlowRateOption = {
+    animation: false,
+    title: {
+        text: '总流量（kbps）'/*,      
+        left:"110px"*/ },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'cross' }
+    },
+    grid: {
+        left: 50/*"50px"*/,
+        right: 15/*"15px"*/
+    },
+    legend: {
+        data: ['当前流量']
+    },
+    xAxis: {
+        boundaryGap: false,
+        data: xAxisData
+    },
+    yAxis: { boundaryGap: false },
+    series: {
+        symbol: "none",/*去掉小圆点*/
+        name: '当前流量',
+        type: 'line',
+        data: yAxisData/*,             smooth:true//显示为平滑的曲线*/
+    }
+};
+
+totalFlowRate.setOption(totalFlowRateOption);
+
+setInterval(function () { 
+    yAxisData.push(Math.round(Math.random() * 1000)); 
+    if(yAxisData.length>500) {
+        yAxisData.shift(); 
+    }
+    totalFlowRate.setOption(totalFlowRateOption); 
+}, 100);
+
+
+</script>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+    <!-- 引入JQuery文件（学习心电图的同学会用到，单纯学习网格不需要引入JQ文件） -->
+    
+    <!-- 引入样式文件 -->
+    <title>心电图</title>
+    <style>
+        * {
+  padding: 0;
+  margin: 0;
+}
+
+.heartBeat {
+  width: 750px;
+  height: 200px;
+  background: #FFF9F9;
+}
+    </style>
+  </head>
+  <body>
+    <div class="heartBeat">
+      <canvas id="heartBeat" width="750px" height="750px"></canvas>
+    </div>
+    <script>
+        var hb;//heartBeat简写，方便之后操作
+var beatArray= [
+  [0, -10],
+  [50, 30],
+  [70, -50],
+  [90, 50],
+  [110, -15],
+  [130, 25],
+  [150, -60],
+  [170, 15],
+  [190, -30],
+  [210, 32],
+  [230, -2],
+  [250, 25],
+  [270, -45],
+  [290, 32],
+  [310, -54],
+  [330, 25],
+  [350, -16],
+  [370, 30],
+  [390, -50],
+  [410, 50],
+  [430, -15],
+  [450, 25],
+  [470, -60],
+  [490, 15],
+  [510, -30],
+  [530, 32],
+  [550, -2],
+  [570, 25],
+  [590, -45],
+  [610, 32],
+  [630, -54],
+  [650, 25],
+  [670, -16],
+  [696, 30],
+  [710, -50],
+  [730, 50],
+  [750, -15],
+  [770, 25],
+  [790, -60],
+  [810, 15],
+  [830, -30],
+  [850, 32],
+  [870, -2],
+  [890, 25],
+  [910, -45],
+  [930, 32],
+  [950, -54],
+  [970, 25],
+  [990, -16],
+  [1010, 30],
+  [1030, -50],
+  [1050, 50],
+  [1070, -15],
+  [1090, 25],
+  [1110, -60],
+  [1130, 15],
+  [1150, -30],
+  [1170, 32],
+  [1190, -2],
+  [1210, 25],
+  [1230, -45],
+  [1250, 32],
+  [1270, -54],
+  [1290, 25],
+  [1310, -16]
+];
+    </script>
+    <script>
+        var ctx;
+
+/**绘制中型网格
+ * 第一个for语句循环出纵向中方格中线条，间距为X轴方向15像素，小网格的5倍
+ * 第二个for语句循环出横向中方格中线条，间距为Y轴方向15像素，小网格的5倍
+ */
+function drawGrid(c_canvas) {
+  var c_canvas = document.getElementById("heartBeat");
+  ctx = c_canvas.getContext("2d");
+  ctx.strokeStyle = "#FEC6C8";
+  ctx.strokeWidth = 2;
+  //宽度是小网格的2倍
+  ctx.beginPath();
+  for (var x = 0.5; x < 750; x += 15) {
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, 750);
+    ctx.stroke();
+  }
+  for (var y = 0.5; y < 750; y += 30) {
+    ctx.moveTo(0, y);
+    ctx.lineTo(750, y);
+    ctx.stroke();
+  }
+  ctx.closePath();
+  return;
+}
+
+drawGrid();
+
+function draw() {
+   var c_canvas = document.getElementById("heartBeat");
+   drawGrid(c_canvas);
+   drawLine(c_canvas);
+   return;
+}
+/**绘制心电图 */
+function drawLine(c_canvas) {
+  hb = c_canvas.getContext("2d");
+  hb.strokeStyle = "#8C8888";
+  //线条颜色为绿色
+  hb.strokeWidth = 2;
+  //线条粗细为2
+  hb.beginPath();
+  beatArray.forEach(a => {
+    hb.lineTo(a[0], a[1] + 80);
+  });
+  /**for循环 */
+  hb.stroke();
+  hb.closePath();
+}
+draw(); //调用绘制网格
+    </script>
+    <!-- 引入自己新建JS文件,为了完全保证程序正常运行，该段引入放在canvas后 -->
+  </body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <title>心电图</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+     <style>
+         html,body{
+             width: 100%;
+             height: 100%;
+             margin: 0;
+         }
+         #can {
+             background: #000;
+             width: 100%;
+            height: 100%;
+         }
+     </style>
+ </head>
+ <body>
+ <div id="canvas">
+     <canvas id="can"></canvas>
+ </div>
+ <script>
+     var can = document.getElementById('can'),
+         pan,
+         index = 0,
+         flag = true,
+         wid = document.body.clientWidth,
+         hei = document.body.clientHeight,
+         x = 0,
+         y = hei/2,
+         drawX = 0, 
+         drawY = hei/2,
+         drawXY = [],
+         cDrawX = 0,
+         i = 0,
+         reX = 0,
+         reY = 0;
+     start();
+     function start(){
+         can.height = hei;
+         can.width  = wid;
+         pan = can.getContext("2d");
+         pan.strokeStyle = "white";
+         pan.lineJoin = "round";
+         pan.lineWidth = 6;
+         pan.shadowColor = "#228DFF";
+         pan.shadowOffsetX = 0;
+         pan.shadowOffsetY = 0;
+         pan.shadowBlur = 20;
+         pan.beginPath();
+         pan.moveTo(x,y);
+         drawXYS();
+         index = setInterval(move,1);
+     };
+
+     function drawXYS(){
+         if(drawX > wid){
+         }else{
+             if(drawY == hei/2){
+                 if(flag){
+                     flag = false;
+                 }else{
+                     var _y = Math.ceil(Math.random()*10);
+                     _y = _y/2;
+                     if(Number.isInteger(_y)){
+                         drawY += Math.random()*180+30;
+                     }else{
+                         drawY -= Math.random()*180+30;
+                     }
+                     flag = true;
+                 }
+                 cDrawX = Math.random()*40+15;
+             }else{
+                 drawY = hei/2;
+             }
+             drawX += cDrawX;
+             drawXY.push({
+                 x : drawX,
+                 y : drawY
+             });
+             drawXYS();
+         }
+     }
+
+     function move(){
+         var x = drawXY[i].x,
+             y = drawXY[i].y;
+         if(reX >= x - 1){
+             reX = x;
+             reY = y;
+             i++;
+             cc();
+             return;
+         }
+         if(y > hei/2){
+             if(reY >= y){
+                 reX = x;
+                 reY = y;
+                 i++;
+                 cc();
+                 return;
+             }
+         }else if(y < hei/2){
+             if(reY <= y){
+                 reX = x;
+                 reY = y;
+                 i++;
+                 cc();
+                 return;
+             }
+         }else{
+             reX = x;
+             reY = y;
+             i++;
+             cc();
+             return;
+         }
+
+         reX += 1;
+         if(y == hei/2){
+             reY = hei/2;
+         }else{
+             var c = Math.abs((drawXY[i].x-drawXY[i-1].x)/(drawXY[i].y-drawXY[i-1].y));
+             var _yt = (reX-drawXY[i-1].x)/c;
+
+             if(drawXY[i].y < drawXY[i-1].y){
+                 reY = drawXY[i-1].y - _yt;
+             }else{
+                 reY = drawXY[i-1].y + _yt;
+             }
+         }
+         cc();
+     }
+
+    function cc(){
+        if(i == drawXY.length){
+             pan.closePath();
+             clearInterval(index);
+             index = 0;
+             x = 0;
+             y = hei/2;
+             flag = true;
+             i = 0;
+         }else{
+             pan.lineTo(reX, reY);
+             pan.stroke();
+         }
+    }
+ 
+</script>
+</body>
+</html>

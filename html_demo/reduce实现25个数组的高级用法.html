@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数组reduce的高级用法</title>
+</head>
+<body>
+    <script>
+//         <-------------- js中!和!!的区别及用法 -------------------->
+
+
+//          js中!的用法是比较灵活的，它除了做逻辑运算常常会用！做类型判断，可以用！与上对象来求得一个布尔值，
+//          1、！可将变量转换成boolean类型，0, null、undefined和空字符串取反都为false，其余都为true。
+
+    //   例如：     !null=true
+
+                // !undefined=true
+
+                // !''=true
+
+                // !0=true
+
+                // !100=false
+
+                // !'abc'=false
+
+        // 2、！！常常用来做类型判断，在第一步!（变量）之后再做逻辑取反运算，在js中新手常常会写这样臃肿的代码：
+
+        // 判断变量a为非空，未定义或者非空串才能执行方法体的内容
+
+                // var a;
+                // if(a!=null && typeof(a)!=undefined && a!=''){
+                //     //a有内容才执行的代码  
+                // }
+
+        // 实际上我们只需要写一个判断表达：
+
+                // if(!!a){
+                //     //a有内容才执行的代码...  
+                // }
+
+
+            // 就能和上面达到同样的效果。a是有实际含义的变量才执行方法，否则变量null，undefined和''空串都不会执行以下代码。
+
+            // 可以总结出来，“！”是逻辑与运算，并且可以与任何变量进行逻辑与将其转化为布尔值，“!!”则是逻辑与的取反运算，尤其后者在判断类型时代码简洁高效，省去了多次判断null、undefined和空字符串的冗余代码。
+     </script>
+    <script>
+
+        // <----------掘金参考： https://juejin.im/post/6844904063729926152  ------------------------>
+
+        
+        // 1、代替reverse
+
+            function ReverseRight (arr = []) {
+                return arr.reduceRight((t, v) => (t.push(v), t), []);
+            }
+
+            console.log(ReverseRight([1,6,8,7,8,9,1,2,3]))
+
+        // 2. 实现过滤 filter 
+            function Reverse (arr = []) {
+                return arr.reduce((t, v) => !!v ? [...t, v] : t ,[])
+            }
+            console.log(Reverse([1,0,'0',{ name: '测试' },8,7,8,9,1,2,3, '', null, undefined ]))
+
+
+        // 3. 数组扁平
+
+            function Flat (arr = []) {
+                return arr.reduce((t, v) => t.concat(Array.isArray(v) ? Flat(v) : v), [])
+            }
+
+            const arr1 = [0, 1, [2, 3], [4, 5, [6, 7]], [8, [9, 10, [11, 12, [110, 220]]]]];
+            console.log(arr1, Flat(arr1))
+          
+            
+
+        // 数组转对象
+
+            const people = [
+                { area: "GZ", name: "YZW", age: 27 },
+                { area: "SZ", name: "TYJ", age: 25 }
+            ];
+            
+            function switchObject (arr = []) {
+                if (!Array.isArray(arr)) return arr;
+                const map = arr.reduce((t, v) => {
+                    const { name, ...rest } = v;
+                    t[name] = rest;
+                    return t;
+                }, {});
+                return map;
+            }
+
+            console.log(switchObject(people))
+
+
+
+
+       // Redux Componse 函数原理
+
+            // 正序
+            function Componse(...funcs) {
+                if (funcs.length === 0) {
+                    return arg => arg
+                }
+                if (funcs.length === 1) {
+                    return funcs[0];
+                }
+                return funcs.reduce((t, v) => (...args) => t(v(...args)));
+            }
+
+            // 反序
+            function Componse2(...funcs) { 
+                if (funcs.length === 0) {
+                    return arg => arg
+                }
+                if (funcs.length === 1) {
+                    return funcs[0];
+                }
+                return funcs.reduceRight((t, v) => (...args) => t(v(...args)));  // 区别在于 reduceRight
+            }
+
+            function fn1 (x) {
+                return x * 2
+            }
+            function fn2 (x) {
+                return x + 2
+            }
+            function fn3 (x) {
+                return Math.pow(x, 2)
+            }
+
+            console.log(Componse(fn1, fn2, fn3)(0), 4);
+            console.log(Componse(fn1, fn2, fn3)(2), 12)
+            console.log(Componse(fn1, fn2, fn3)(4), 36)
+
+            console.log(Componse2(fn3, fn2, fn1)(4), 36)
+
+            // reduce是从左到右处理（从第一个成员到最后一个成员），reduceRight则是从右到左（从最后一个成员到第一个成员），其他完全一样。
+
+            var maxCallback = ( acc, cur ) => Math.max( acc, cur );
+            console.log([1, 3].reduce( maxCallback ))
+
+
+
+            //  redux Compose 函数原理
+
+            function test_Componse (...funs) {
+                if (funs.length === 0) {
+                    return args => args
+                }
+                if (funs.length === 1) {
+                    return funs[0]
+                }
+
+                // return funs.reduce((t, v) => (...args) => t(v(...args)))
+                return funs.reduce(function (t, v) {
+                    return function(args) {
+                        return t(v(args))
+                    }
+                })
+            } 
+
+            console.log(test_Componse(fn1, fn2, fn3)(2), 12)
+
+            // reduce 实现数组去重
+            Array.prototype.uniq = function () {
+                return this.reduce(function (cal, cur) {
+                    if (cal.indexOf(cur) === -1) {
+                        cal.push(cur)
+                    }
+                    return cal
+                }, [])
+            }
+            var a = [1, 1, 2, 3, 4, 4, 5, 6, 6, 6, 7];
+            var t_a = a.uniq()
+            console.log(t_a, Array.from(new Set(a)))
+
+
+
+
+            function h_filter (arr) {
+                return arr.reduce((cal, cur) => {
+                    if (cur === 9) {
+                        cal.push(cur)
+                    }
+                    return cal
+                }, [])
+            }
+
+            console.log(h_filter(a))
+
+
+
+            // map函数结合 Promise 同步写法
+            // 链接：https://www.jianshu.com/p/61f6a25dd937
+            async function doo(){
+                console.log("程序开始运行");
+                let pl = [1, 2, 3].map(async (value, index)=>{
+                    await new Promise((resolve, reject)=>{
+                        setTimeout(()=>{
+                            console.log("=距离程序开始运行已经过了=", value*value, "秒");
+                            resolve();
+                        }, value*value*1000)
+
+                    })
+                });
+
+                // for (let i = 0; i<pl.length; i++){
+                //     await pl[i];
+                // }
+                await Promise.all(pl)
+
+                console.log("程序结束了");
+            }
+
+            doo();
+
+
+        // 九九乘法口诀
+
+        // let jjNumber =  [...new Array(9).keys()].reduce((t, v, i) => t+ [...new Array(i+1).keys()].reduce((u, w, j) => `${u} ${i+1} x ${j+1} = ${(i+1) * (j+1)}`, "").trim()+'\n', '\n');
+        // document.write(jjNumber.replace(/\n/g, '<br>'))
+        // console.log(jjNumber)
+
+
+
+
+
+        // 创建一个长度为100000的数组
+            const list = [...new Array(1000000).keys()];
+
+            // for
+            console.time("for");
+            let result1 = 0;
+            for (let i = 0; i < list.length; i++) {
+                result1 += i + 1;
+            }
+            console.log(result1);
+            console.timeEnd("for");
+
+            // forEach
+            console.time("forEach");
+            let result2 = 0;
+            list.forEach(v => (result2 += v + 1));
+            console.log(result2);
+            console.timeEnd("forEach");
+
+            // map
+            console.time("map");
+            let result3 = 0;
+            list.map(v => (result3 += v + 1, v));
+            console.log(result3);
+            console.timeEnd("map");
+
+            // reduce
+            console.time("reduce");
+            const result4 = list.reduce((t, v) => t + v + 1, 0);
+            console.log(result4);
+            console.timeEnd("reduce");
+
+
+        // 数字千分化
+        function FormatMoney(price = 0) {
+            if (isNaN(Number(price))) return price
+            const str = (+price).toString().split(".");
+            const int = nums => nums.split("").reverse().reduceRight((t, v, i) => t + (i % 3 ? v : `${v},`), "").replace(/^,|,$/g, "");
+            const dec = nums => nums.split("").reduce((t, v, i) => t + ((i + 1) % 3 ? v : `${v},`), "").replace(/^,|,$/g, "");
+            return str.length > 1 ? `${int(str[0])}.${dec(str[1])}` : int(str[0]);
+
+        }
+        console.log(FormatMoney('1121.11'))
+        
+     </script>
+</body>
+</html>

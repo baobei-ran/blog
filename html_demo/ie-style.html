@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>兼容IE</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.4.4/jquery.js"></script>
+</head>
+<body>
+    <h1>向HEAD中插入style样式和修改style中的内容</h1>
+    <button class="btn">更改css</button>
+    <script>
+        var style = document.createElement("style");
+        style.type = "text/css";
+        style.media = 'print'
+        try{
+        　　style.appendChild(document.createTextNode("body{background-color:red}"));
+
+        }catch(ex){
+            console.log(ex)
+        　　style.styleSheet.cssText = "body{background-color:red}";//针对IE
+        }
+        var head = document.getElementsByTagName("head")[0];
+        head.appendChild(style);
+
+        
+            $('.btn').click(function () {
+                console.log(this, $("style[media=print]")[0].innerHTML)
+                if ($("style[media=print]").length > 0) {
+                    try {
+                        // $("style[media=print]")[0].innerHTML = "body{background-color: blue}"
+                        $("style[media=print]")[0].innerText = "body{background-color: blue}"
+                    } catch (e) {
+                        $("style[media=print]")[0].styleSheet.cssText = "body{background-color: blue}"
+                    }
+                }
+            })
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>demo</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.1/animate.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.js"></script>
+	<style type="text/css">
+		.demo{
+			width: 200px;
+			height: 200px;
+			background: red;
+		}
+		.demo1{
+			width: 200px;
+			height: 200px;
+			background: green;
+		}
+		/*1、定义动画*/
+		@keyframes bounce{
+			0%{transform: scale(0);}
+			50%{transform: scale(1.5);}
+			100%{transform: scale(1);}
+		}
+		/*2、调用动画*/
+		.bounceIn{
+			transform-origin: left top;
+			animation: bounce 1s;
+		}
+		.bounceOut{
+			transform-origin: left top;
+			animation: bounce 1s reverse;
+		}
+
+	</style>
+	
+</head>
+<body>
+	<div id="root">
+		<transition 
+			enter-active-class="bounceIn animated fadeInLeft"
+			leave-active-class="bounceOut animated fadeOutDownBig"
+			name="fade">
+			<div class="demo" v-show="status"></div>
+		</transition>
+		<button @click="handleClick">toggle</button>
+	</div>
+	<script type="text/javascript">
+		var root = new Vue({
+			el:'#root',
+			data:{
+				status:false
+			},
+			methods:{
+				handleClick(){
+					this.status = !this.status;
+				}
+			}
+		})
+	</script>
+</body>
+</html>

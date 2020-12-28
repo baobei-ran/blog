@@ -1,0 +1,233 @@
+<!--
+ * @Author: 清风
+ * @Date: 2020-12-15 11:41:50
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前端算法系统练习: 链表篇完结</title>
+</head>
+
+<body>
+    <a href="https://mp.weixin.qq.com/s/aMZPridvWdu8ouV-YHKHjA" target="_blank" rel="noopener noreferrer">参考链接</a>
+    <script>
+
+        /**
+            链表主题分为以下：
+
+                   |————  反转链表系列    
+                   |
+            链表篇 <|————  环形链表系列
+                   |
+                   |————  合并链表系列
+                   |
+                   |————  求链表中间节点
+        **/
+
+
+
+        /**
+         * <-- # 反转链表 ----------->
+
+                反转链表这里一共有三个题目供大家训练。分别是原地单链表的反转、两个一组反转链表和K个一组反转链表，难度由阶梯式上升。
+                而在面试当中凡是遇到链表，反转类的题目出现的频率也是数一数二的，因此把它当做链表开篇的训练类型，希望大家能引起足够的重视
+         * 
+         * 
+        */
+       // No.1 简单的反转链表
+    //    反转一个单链表。
+    //     示例:
+    //     输入: 1->2->3->4->5->NULL
+    //     输出: 5->4->3->2->1->NULL
+
+    
+    /**
+     (1) 循环解决方案
+        这道题是链表中的经典题目，充分体现链表这种数据结构操作思路简单, 但是实现上并没有那么简单的特点。
+
+        那在实现上应该注意一些什么问题呢？
+
+        保存后续节点。作为新手来说，很容易将当前节点的 next指针直接指向前一个节点，但其实当前节点下一个节点的指针也就丢失了。因此，需要在遍历的过程当中，先将下一个节点保存，然后再操作next指向。
+    */
+
+
+    // 链表结构声定义如下:
+        
+        function ListNode (val) {
+            this.val = val;
+            this.next = null
+        }
+
+    // 实现如下：
+        
+        /**
+        * @param {ListNode} head
+        * @return {ListNode}
+        */
+        let reverseList = (head) => {
+            if(!head) 
+                return null;
+
+            let pre = null, cur = head;
+
+            while(cur) {
+                // 关键：保存下一个节点的值
+                let next = cur.next;
+                cur.next = pre;
+                pre = cur;
+                cur = next;
+            }
+            return pre;
+        }
+
+    /*
+        由于逻辑比较简单，代码直接一气呵成。不过仅仅写完还不够，对于链表问题，边界检查的习惯能帮助我们进一步保证代码的质量。具体来说:
+
+        当 head 节点为空时，我们已经处理，通过 ✅
+        当链表只包含一个节点时, 此时我们希望直接返回这个节点，对上述代码而言，进入循环后 pre 被赋值为cur，也就是head，没毛病，通过 ✅
+        运行在 LeetCode, 成功 AC ✌
+
+        但作为系统性的训练而言，单单让程序通过未免太草率了，我们后续会尽可能地用不同的方式去解决相同的问题，达到融会贯通的效果，也是对自己思路的开拓，有时候或许能达到更优解。
+    */
+
+
+        
+        // (2) 递归解决方案
+        //         由于之前的思路已经介绍得非常清楚了，因此在这我们贴上代码，大家好好体会：
+
+
+        let reverseList2 = (head) =>{
+            let reverse = (pre, cur) => {
+                if(!cur) return pre;
+                // 保存 next 节点
+                let next = cur.next;
+                cur.next = pre;
+                return reverse(cur, next);
+            }
+            return reverse(null, head);
+        }
+
+
+
+
+
+    /**
+        No.2 区间反转
+
+            反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。
+
+            说明:1 ≤ m ≤ n ≤ 链表长度。
+
+            示例:
+
+            输入: 1->2->3->4->5->NULL, m = 2, n = 4
+            输出: 1->4->3->2->5->NULL
+            来源: LeetCode 第 92 题
+
+            思路
+            这一题相比上一个整个链表反转的题，其实是换汤不换药。我们依然有两种类型的解法：循环解法和递归解法。
+
+            需要注意的问题就是前后节点的保存(或者记录)，什么意思呢？看这张图你就明白了。
+
+            图片        需要反转
+
+            ——————————————^————————————————
+            1      2      3       4       5
+           记录                          记录
+            
+            关于前节点和后节点的定义，大家在图上应该能看的比较清楚了，后面会经常用到。
+
+            反转操作上一题已经拆解过，这里不再赘述。值得注意的是反转后的工作，那么对于整个区间反转后的工作，其实就是一个移花接木的过程，首先将前节点的 next 指向区间终点，然后将区间起点的 next 指向后节点。因此这一题中有四个需要重视的节点: 前节点、后节点、区间起点和区间终点。接下来我们开始实际的编码操作。
+
+        循环解法
+    */
+
+        /**
+        * @param {ListNode} head
+        * @param {number} m
+        * @param {number} n
+        * @return {ListNode}
+        */
+        var reverseBetween = function(head, m, n) {
+            let count = n - m;
+            let p = dummyHead = new ListNode();
+            let pre, cur, start, tail;
+            p.next = head;
+            for(let i = 0; i < m - 1; i ++) {
+                p = p.next;
+            }
+            // 保存前节点
+            front = p;
+            // 同时保存区间首节点
+            pre = tail = p.next;
+            cur = pre.next;
+            // 区间反转
+            for(let i = 0; i < count; i++) {
+                let next = cur.next;
+                cur.next = pre;
+                pre = cur;
+                cur = next;
+            }
+            // 前节点的 next 指向区间末尾
+            front.next = pre;
+            // 区间首节点的 next 指向后节点(循环完后的cur就是区间后面第一个节点，即后节点)
+            tail.next = cur;
+            return dummyHead.next;
+        };
+        
+
+        /**
+            递归解法
+                对于递归解法，唯一的不同就在于对于区间的处理，采用递归程序进行处理，大家也可以趁着复习一下递归反转的实现。
+
+        */
+
+        var reverseBetween = function(head, m, n) {
+            // 递归反转函数
+            let reverse = (pre, cur) => {
+                if(!cur) return pre;
+                // 保存 next 节点
+                let next = cur.next;
+                cur.next = pre;
+                return reverse(cur, next);
+            }
+            let p = dummyHead = new ListNode();
+            dummyHead.next = head;
+            let start, end; //区间首尾节点
+            let front, tail; //前节点和后节点
+            for(let i = 0; i < m - 1; i++) {
+                p = p.next;
+            }
+            front = p; //保存前节点
+            start = front.next;
+            for(let i = m - 1; i < n; i++) {
+                p = p.next;
+            }
+            end = p;
+            tail = end.next; //保存后节点
+            end.next = null;
+            // 开始穿针引线啦，前节点指向区间首，区间首指向后节点
+            front.next = reverse(null, start);
+            start.next = tail;
+            return dummyHead.next;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

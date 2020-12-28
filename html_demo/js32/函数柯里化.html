@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #model {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id='model'>hello world!!!</div>
+        <button>按钮</button>
+    </div>
+    <script>
+        // 函数柯里化
+
+            /**
+                指的是将一个接受多个参数的函数 变为 接受一个参数返回一个函数的固定形式，这样便于再次调用，例如f(1)(2)
+
+                经典面试题：实现add(1)(2)(3)(4)=10; 、 add(1)(1,2,3)(2)=9;
+            */
+
+            function add() { 
+                let args = Array.from(arguments);
+                function fn() { 
+                    args.push(...arguments);
+                    return fn
+                }
+                fn.toString = function () { 
+                   return args.reduce((t, v) => t + v)
+                }
+                return fn;
+            }
+
+
+            
+
+
+
+            function add2 () {  
+                var _args = Array.prototype.slice.call(arguments);
+                var _adder = function () {
+                    _args.push(...arguments);
+                    return _adder;
+                }
+
+                _adder.toString = function () {
+                    return _args.reduce(function (a, b) {
+                        return a + b
+                    })
+                }
+                return _adder;
+            }
+
+
+            function add3 () {
+                // // 第一次执行时，定义一个数组专门用来存储所有的参数
+                var _args = [].slice.call(arguments);
+
+                // 在内部声明一个函数，利用闭包的特性保存 _args 并收集所有的参数值；
+                var  adder = function () {  
+                    var _adder = function () {  
+                        // [].push.apply(_args, [].slice.call(arguments));
+                        _args.push(...arguments);
+
+                        return _adder;
+                    }
+
+                    // 利用隐式转换的特性，当最后执行时隐式转换，并计算最终的值返回
+                    _adder.toString = function () {  
+                        return _args.reduce(function (t, v) {  
+                            return t + v
+                        })
+                    }
+
+                    return _adder;
+                }
+
+                return adder(..._args);
+            }
+
+
+
+            console.log(add3(1)(2)(3))
+            console.log(add3(add3(50)(10, 40), 1, 2, 3)(2)(3, 2, 1), add3(1)(2)(3)(4)(5) )
+
+
+        /*
+            // 我们在做项目的过程中，封装一些dom操作可以说再常见不过，下面第一种写法也是比较常见，
+            // 但是我们看看第二种写法，它相对一第一种写法就是自执行然后返回一个新的函数，这样其实就是提前确定了会走哪一个方法，避免每次都进行判断
+
+
+            var on = function(element, event, handler) {
+                if (document.addEventListener) {
+                    if (element && event && handler) {
+                        element.addEventListener(event, handler, false);
+                    }
+                } else {
+                    if (element && event && handler) {
+                        element.attachEvent('on' + event, handler);
+                    }
+                }
+            }
+
+
+            var on = (function() {
+                if (document.addEventListener) {
+                    return function(element, event, handler) {
+                        if (element && event && handler) {
+                            element.addEventListener(event, handler, false);
+                        }
+                    };
+                } else {
+                    return function(element, event, handler) {
+                        if (element && event && handler) {
+                            element.attachEvent('on' + event, handler);
+                        }
+                    };
+                }
+            })();
+
+
+            var on = (function() {
+                if (document.addEventListener) {
+                    return function(element, event, handler) {
+                        if (element && event && handler) {
+                            element.addEventListener(event, handler, false);
+                        }
+                    };
+                } else {
+                    return function(element, event, handler) {
+                        if (element && event && handler) {
+                            element.attachEvent('on' + event, handler);
+                        }
+                    };
+                }
+            })();
+
+            //换一种写法可能比较好理解一点，上面就是把isSupport这个参数给先确定下来了
+            var on = function(isSupport, element, event, handler) {
+                isSupport = isSupport || document.addEventListener;
+                if (isSupport) {
+                    return element.addEventListener(event, handler, false);
+                } else {
+                    return element.attachEvent('on' + event, handler);
+                }
+            }
+
+        */
+
+
+        
+        
+            var addEvent = (function(){
+                if (window.addEventListener) {
+                    return function(el, sType, fn, capture) {
+                        el.addEventListener(sType, function(e) {
+                            fn.call(el, e);
+                        }, (capture));
+                    };
+                } else if (window.attachEvent) {
+                    return function(el, sType, fn, capture) {
+                        el.attachEvent("on" + sType, function(e) {
+                            fn.call(el, e);
+                        });
+                    };
+                }
+            })();
+        
+        
+            addEvent(document.querySelector('button'), 'click', function (e) {
+                console.log(e)
+                document.querySelector('#model').style.display = 'block'
+            }, false)
+        
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>
