@@ -7,11 +7,14 @@
 
 -   [瓶子君总结的面试问题](https://github.com/sisterAn/JavaScript-Algorithms/issues)
 
--   [瓶子君](https://github.com/sisterAn/JavaScript-Algorithms)
+-   [瓶子君-前端算法](https://github.com/sisterAn/JavaScript-Algorithms)
 
--   [前端工匠](https://github.com/ljianshu/Blog)
+-   [前端工匠-加深js理解和学习](https://github.com/ljianshu/Blog)
 
--   [github-Bulandent](https://github.com/Bulandent/blog/issues/)
+-   [github-Bulandent-js学习和提问](https://github.com/Bulandent/blog/issues/)
+
+-   [木易杨前端进阶-博客](https://muyiy.cn/question/css/73.html)
+
 
 
 ## 前端开源项目
@@ -30,6 +33,9 @@
 -   [高阶的函数技术](https://mp.weixin.qq.com/s/MtlazhwlKObRUgVDgaNtEQ)
 
 -   [25个你不得不知道的数组reduce高级用法](https://juejin.cn/post/6844904063729926152)
+
+-   [JavaScript 20年](https://cn.history.js.org/index.html)
+
 
 
 # ES6
