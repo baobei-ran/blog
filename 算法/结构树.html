@@ -1,0 +1,131 @@
+<!--
+ * @Author: 清风
+ * @Date: 2021-01-27 19:12:40
+ * @Description: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <a href="https://mp.weixin.qq.com/s?__biz=MzU2Mzk1NzkwOA==&mid=2247486031&idx=2&sn=80f8e1859791b52a873f39cbc97aac08&chksm=fc5313b4cb249aa26c271e37ad78a11185201bf1e743a316b8eb66a45feef11c9615f1e06589&scene=132#wechat_redirect">参考</a>
+  <script>
+
+    /*
+      递归和尾递归
+
+        简单的说，递归就是函数自己调用自己，它做为一种算法在程序设计语言中广泛应用。其核心思想是把一个大型复杂的问题层层转化为一个与原问题相似的规模较小的问题来求解。一般来说，递归需要有边界条件、递归前进阶段和递归返回阶段。当边界条件不满足时，递归前进；当边界条件满足时，递归返回。
+
+        但是作为一个合格的程序员，我们也因该知道，递归算法相对常用的算法如普通循环等，运行效率较低。因此，应该尽量避免使用递归，除非没有更好的算法或者某种特定情况，递归更为适合的时候。在递归调用的过程当中系统为每一层的返回点、局部量等开辟了栈来存储，递归次数过多容易造成栈溢出等。
+
+        这个时候，我们就需要用到尾递归，即一个函数中所有递归形式的调用都出现在函数的末尾，对于尾递归来说，由于只存在一个调用记录，所以永远不会发生"栈溢出"错误。
+
+        举个例子，我们来实现一下阶乘，如果用普通的递归，实现将是这样的：
+    */
+
+    function factorial(n) {
+      if (n === 1) return 1;
+      return n * factorial(n - 1)
+    }
+    factorial(5); // 120
+
+
+    // 最多需要保存n个调用栈，复杂度 O(n)，如果我们使用尾递归：
+
+    function factorial_ (n, total = 1) {
+      if (n === 1) return total;
+      return factorial_(n-1, n * total)
+    }
+
+    factorial_(5);  // 120
+
+    // 此时只需要保存一个调用栈，复杂度 O(1) 。通过这个案例，你是否已经慢慢理解其精髓了呢？接下来我将介绍几个常用的递归应用的案例，并在其后实现本文标题剖出的树的实现。
+
+  
+  // < ------------- 递归的常用应用案例  ---------->
+// 1. 数组求和
+
+//  对于已知数组arr，求arr各项之和。
+
+  function sumArray(arr, total) {
+      if(arr.length === 1) {
+          return total
+      }
+      return sumArray(arr, total + arr.pop())
+  }
+
+  let arr = [1,2,3,4];
+  let allNum = sumArray(arr, arr[0]) // 10    ---> 该方法给函数传递一个数组参数和初始值，也就是数组的第一项，通过迭代来实现数组求和。
+  console.log(allNum)
+
+
+
+
+// 2. 斐波那且数列
+
+
+// 
+  function factorial_1 (n) { // 斐波那契数列
+    if (n <= 2) {
+      return 1
+    }
+    return factorial_1(n - 1) + factorial_1(n - 2)
+  }
+
+  // 尾递归优化
+
+  function factorial_2 (n, start = 1, total = 1) {
+    if (n <= 2) {
+      return start
+    }
+    return factorial_2(n -1, total, start + start)
+  }
+
+
+
+  // 6. 爬梯问题
+  /*   一共有n个台阶，每次只能走一个或两个台阶，问要走完这个台阶，一共有多少种走法。
+
+    n =1; result = 1  --> 1
+    n =2; result = 2  --> 11 2
+    n =3; result = 3  --> 111 12 21
+    ...
+    如果第一步走1个台阶，由以上规律可以发现剩下的台阶有n-1种走法；
+    如果第一步走2个台阶，由以上规律可以发现剩下的台阶有n-2种走法；
+    则一共有fn(n-1) + fn(n-2) 种走法
+  */
+    function steps(n) {
+        if(n <= 1) {
+            return 1
+        }
+        return steps(n-1) + steps(n-2)
+    }
+    console.log(steps(2))
+
+
+//   10. 扁平化数组Flat
+//        数组拍平实际上就是把一个嵌套的数组，展开成一个数组，如下案例：
+
+  let a = [1,2,3, [1,2,3, [1,2,3]]]
+  // 变成
+  // let a = [1,2,3,1,2,3,1,2,3]
+  // 具体实现
+  function flat(arr = [], result = []) {
+      arr.forEach(v => {
+          if(Array.isArray(v)) {
+              result = result.concat(flat(v, []))
+          }else {
+              result.push(v)
+          }
+      })
+      return result
+  }
+
+  console.log(flat(a))
+  
+  </script>
+</body>
+</html>
