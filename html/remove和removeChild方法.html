@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>js的remove和removeChild方法</title>
+</head>
+<body>
+  
+  <script>
+    var el = document.createElement("a");
+    el.href = "https://baidu.com";
+    el.innerHTML="百度";
+    document.body.appendChild(el)
+    setTimeout(function () {
+      el.click()  // 单击
+      if (window.remove) {
+        el.remove() // 删除
+      } else {
+        document.body.removeChild(el) // 删除
+      }     
+    }, 3000)
+
+    /**
+     *  remove 方法
+     *    - 删除元素本身
+     *    - IE 不兼容
+     * 
+     *  removeChild 方法
+     *    - 父元素删除子元素
+     *    - 浏览器全部识别（IE 可使用这个方法）
+     * 
+     * 
+    */
+  </script>
+  <a href="#" target="_blank">百度2</a>
+</body>
+</html>
