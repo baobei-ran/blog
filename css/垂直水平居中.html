@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>已知宽高，进行水平垂直居中</title>
+    <style>
+      .outer {
+        position: relative;
+        width: 400px;
+        height: 600px;
+        background: #f1f1f1;
+      }
+
+      .inner {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: red;
+        left: 50%;
+        top: 50%;
+        margin: -100px 0 0 -100px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="outer">
+      <div class="inner"></div>
+    </div>
+
+    <div>
+      用css2和css3分别写一下垂直居中和水平居中
+
+      CSS2
+      水平居中：
+
+      div + margin: auto;
+      span + text-align
+      垂直居中
+
+      使用 position 然后 left/top 和 margin 的方式垂直居中（已知宽高和未知宽高）
+      使用 position + margin
+      使用 display: table-cell;
+    </div>
+  </body>
+</html>
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>宽高未知，比如 内联元素，进行水平垂直居中</title>
+    <style>
+      .outer {
+        width: 400px;
+        height: 600px;
+        /* background: blue; */
+        border: 1px solid red;
+        background-color: transparent;
+        position: relative;
+      }
+
+      .inner {
+        position: absolute;
+        background: red;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="outer">
+      <span class="inner">我想居中显示</span>
+    </div>
+  </body>
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>绝对定位的 div 水平垂直居中</title>
+    <style>
+      .outer {
+        width: 400px;
+        height: 600px;
+        /* background: blue; */
+        border: 1px solid red;
+        background-color: transparent;
+        position: relative;
+      }
+
+      .inner {
+        position: absolute;
+        background: red;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        width: 200px;
+        height: 300px;
+        margin: auto;
+        border: 1px solid blue;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="outer">
+      <div class="inner">我想居中显示</div>
+    </div>
+  </body>
+</html> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>图片和其他元素使用 display: table-cell; 进行垂直居中</title>
+    <style>
+      .outer {
+        width: 400px;
+        height: 600px;
+        /* background: blue; */
+        border: 1px solid red;
+        background-color: transparent;
+        display: table-cell;
+        vertical-align: middle;
+      }
+
+      .inner {
+        background: red;
+        width: 200px;
+        height: 300px;
+        border: 1px solid blue;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="outer">
+      <div class="inner">我想居中显示</div>
+    </div>
+  </body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>css3 flex 实现垂直、水平居中</title>
+    <style>
+      .outer {
+        width: 400px;
+        height: 600px;
+
+        display: flex;
+        
+        /* 垂直居中 */
+        align-items: center;
+        
+        /* 水平居中 */
+        justify-content: center;
+        border: 1px solid red;
+        background-color: transparent;
+      }
+
+      .inner {
+        background: red;
+        width: 200px;
+        height: 300px;
+        border: 1px solid blue;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="outer">
+      <div class="inner">我想居中显示</div>
+    </div>
+  </body>
+</html> -->

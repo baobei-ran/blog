@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input type="text">
+  <script>
+   
+    function getMonthLength(month) {
+      const date = new Date(month);
+      const year = date.getFullYear();
+      // 月份是从 0 开始计算的
+      const _month = date.getMonth() + 1;
+      return new Date(year, _month, 0).getDate();
+    }
+    console.log(getMonthLength('2021-02-03'))
+    console.log((() => 1).length === 0)
+
+
+    // var i = 1;
+    // Object.defineProperty(window, 'a', {
+    //   get () {
+    //     return i++;
+    //   }
+    // })
+
+    var a = {
+      i: 0,
+      // toString: function () {
+      //   return a.i ++
+      // }
+      valueOf: () => {
+        return ++a.i
+      }
+    }
+    console.log(a == 1 && a == 2 && a == 3) // true
+
+
+
+    //  ~ 的用途
+
+    // 我们知道在 JavaScript 中假值有：undefined、null、false、+0、-0、NaN、''，其他都为真值，
+    // 所以负数也是真值，那么我们就可以拿着 ~ 和 indexOf 一起检结果强制类型转换为 真/假 值
+
+    const str = 'hello world';
+  
+    ~str.indexOf('lo'); // -4，真值
+    if (~str.indexOf('lo')) {
+      // true
+      // 找到匹配
+    }
+    ~str.indexOf('ol'); // 0，假值
+    !~str.indexOf('ol'); // true
+    if (!~str.indexOf('ol')) {
+      // true
+      // 没有找到匹配
+    }
+
+    var arr = [1, 10, 30, 100]
+    console.log(~arr.indexOf(100))
+    
+  // ~ 要比 >=0 和 == -1 更简洁
+    
+    
+  </script>
+</body>
+</html>
