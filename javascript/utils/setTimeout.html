@@ -1,0 +1,72 @@
+<!--
+ * @Description: 
+ * @Author: 清风浩明月
+ * @Date: 2021-03-22 09:36:37
+ * @version: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>实现setTimeout函数</title>
+</head>
+<body>
+  <a href="https://mp.weixin.qq.com/s/KCxEUUNR2PHlAAEq-IkFeA" target="_blank" rel="noopener noreferrer">介绍 setTimeout 实现机制与原理，手写一个实现</a>
+  <script src="promise.min.js"></script>
+  <script>
+    // <---------- 深入 setTimeout 实现机制与原理，手写一个实现 --------------------------------------->
+    let setTimeout1 = function (fn, timeout) {
+      if (!fn && typeof fn !== "function") {
+        throw new Error(typeof fn +"不是一个函数")
+      }
+      let args = arguments;
+      // 初始当前时间
+      let start = +new Date();
+      let timer, now;
+      const loop = function () {
+        timer = window.requestAnimationFrame(loop);
+
+        // 再次运行时获取当前时间
+        now = +new Date()
+
+        // 当前运行时间 - 初始当前时间 >= 等待时间 ===> 跳出
+        if (now - start >= timeout) {
+          fn.apply(this, args)
+          window.cancelAnimationFrame(timer)
+        }
+      }
+      window.requestAnimationFrame(loop);
+    }
+
+    function showName () {
+      console.log("hello")
+    }
+    let timerID = setTimeout1(showName, 1000);
+    console.log(timerID)
+
+
+
+// <-------------- 使用 promise 实现一个 setTimeout  -------------------->
+
+  var MySetTimeout = function MySetTimeout(cb, time) {
+    var t = Date.now();
+    return new Promise(function (reslove) {
+      var looper = function looper() {
+        var rnf = requestAnimationFrame(looper);
+        if (Date.now() >= t + time) {
+          cb();
+          cancelAnimationFrame(rnf);
+          reslove();
+        }
+      };
+      requestAnimationFrame(looper);
+    });
+  };
+
+    MySetTimeout(showName, 3000).then(function (res) {
+      console.log("aaaa")
+    })
+  </script>
+</body>
+</html>
