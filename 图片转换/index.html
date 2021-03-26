@@ -1,0 +1,145 @@
+<!--
+ * @Description: 
+ * @Author: 清风浩明月
+ * @Date: 2021-03-26 09:58:39
+ * @version: 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input type="file" id="input-wrap" accept="image/*">
+  <script src="tofile.js"></script>
+  <script src="conversion.js"></script>
+
+  <script>
+    // tofile.js 使用
+    let getdata = new ToFiles();
+    // 使用方式
+  //   document.querySelector('#input-wrap').onchange = function (e) {
+  //     let files = e.target.files;
+  //     console.log(files)
+  //     getdata.fileToFile(files[0], null, function (file) {
+  //       let url = URL.createObjectURL(file)
+  //       append(url)
+  // 　　　 console.log(file);
+  //     }, (err) => {
+  //       console.log(err)
+  //     })
+  //   }
+
+  function append(url) {
+    let img = document.createElement('img');
+    img.src = url;
+    img.onload = function(e) {
+      URL.revokeObjectURL(this.src); // 释放createObjectURL创建得对象
+    }
+    document.body.appendChild(img)
+  }
+
+
+
+
+
+  /* conversion.js 使用  
+  
+  
+    ES6 使用
+
+    import {compress, compressAccurately} from 'image-conversion'
+
+
+
+  // compress            // 使用 0.9 质量压缩图像，根据文件质量压缩
+  // compressAccurately  // 压缩影像至 200kb, 压缩文件大小
+
+
+  具体可查看官网：https://www.npmjs.com/package/image-conversion
+
+  */
+
+  console.log(imageConversion)  // 查看内置事件
+
+  document.querySelector('#input-wrap').onchange = function (e) {
+    let files = e.target.files;
+    console.log(files)
+    imageConversion.compress(files[0], {
+      quality: 0.8,   // 质量为 0.8
+      width: 500      // 图片宽度最大 500
+    }).then(file => {
+      let url = URL.createObjectURL(file)
+      append(url)
+      let newFile = file.size < files[0].size ?  blobToFile(file, files[0].name) : file
+　　　 console.log(newFile);
+    }, (err) => {
+      console.log(err)
+    })
+  }
+  // blob 转为 file
+  function blobToFile (theBlob, fileName) {
+    console.log('aaa')
+    theBlob.lastModifiedDate = new Date();
+    theBlob.name = fileName;
+    return theBlob;
+  }
+  
+
+
+  /**
+   * compress 使用的两种方式
+   * 
+   * 
+   *  // number
+        imageConversion.compress(file,0.8)
+        
+        //or
+        
+        // object
+        imageConversion.compress(file,{
+          quality: 0.8,
+          type: "image/jpeg",
+          width: 300,
+          height: 200,
+          orientation:2,
+          scale: 0.5,
+        })
+   */
+
+
+
+
+
+
+
+
+
+
+  // url 转 base64
+   function getImgToBase64(url,callback) {
+    var canvas = document.createElement('canvas'),
+      ctx = canvas.getContext('2d'),
+      img = new Image;
+    img.crossOrigin = 'anonymous';
+    img.onload = function(){
+      canvas.height = img.height;
+      canvas.width = img.width;
+      ctx.drawImage(img,0,0);
+      var dataURL = canvas.toDataURL('image/png');
+      callback(dataURL);
+      canvas = null;
+    };
+    img.src = url;
+  }
+
+  getImgToBase64('https://weiliicimg9.pstatp.com/weili/l/812318142703992845.webp',function(base64data) {
+    // console.log(base64data)
+    append(base64data)
+  })
+  </script>
+</body>
+</html>
