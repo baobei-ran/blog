@@ -1,0 +1,67 @@
+<!--
+ * @Description: 
+ * @Author: 清风浩明月
+ * @Date: 2021-03-30 11:02:56
+ * @version: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <script>
+    const beforeUnloadListener = (event) => {
+      event.preventDefault();
+      if (event) {
+        event.returnValue = "去你大爷的?";
+      }
+      return true
+    };
+
+    
+      
+      window.onclick  = function () {
+        console.log('111')
+      };
+
+      let a = document.createElement('a');
+      document.body.appendChild(a)
+      setTimeout(() => {
+        a.click()
+      }, 16)
+
+
+      function unloadPage() {     
+        console.log('aaa')
+        
+      }
+
+      function loadPage () {
+        console.log('bbb')
+      }
+
+      window.addEventListener("beforeunload", beforeUnloadListener, {capture: true});
+      window.addEventListener("unload", unloadPage, false);
+      window.addEventListener("load", loadPage, false);
+
+
+      /**
+       *
+       * onunload和onbeforeunload都是在页面刷新和关闭前的动作，但是onbeforeunload是先于onunload的，并且 onunload是无法阻止页面的更新和关闭的。而 Onbeforeunload 可以做到
+
+        页面加载：onload
+        页面关闭：onbeforeunload →onunload
+        页面刷新：onbeforeunload →onunload→onload
+
+
+          原文链接：https://blog.csdn.net/qq_41547882/article/details/114304782 
+       */
+        
+    
+  </script>
+</body>
+</html>
